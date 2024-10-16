@@ -1,118 +1,65 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import {useState} from 'react';
+import {View, Button, Image, StyleSheet, Text, Alert} from 'react-native';
+import {CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const App = () => {
+    const [pickedImagePath, setPickedImagePath] = useState<string>('');
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+    const getImage = async (fromImageLibrary : boolean) => {
+        const cameraOptions : CameraOptions = {
+            mediaType: 'photo'
+        }
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+        const result = fromImageLibrary
+            ? await launchImageLibrary(cameraOptions)
+            : await launchCamera(cameraOptions);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+        if(result.didCancel) console.log('Camera Error:', result.errorMessage);
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+        if(result.assets) {
+            setPickedImagePath(result.assets[0].uri);
+        }
+    };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    return (
+        <View style={styles.screen}>
+            <View style={styles.buttonContainer}>
+                <Button onPress={() => getImage(true)} title="Choisir une ordonnance"/>
+                <Button onPress={() => getImage(false)} title="Scanner l'ordonnance"/>
+            </View>
+            <View style={styles.imageContainer}>
+                {pickedImagePath !== '' && <Image source={{uri: pickedImagePath}} style={styles.image}/>}
+            </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+    );
+};
 
 export default App;
+
+
+const styles = StyleSheet.create({
+    screen: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 32,
+        height: '100%',
+        width: '100%'
+    },
+    buttonContainer: {
+        width: '100%',
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        gap: 8
+    },
+    imageContainer: {
+        padding: 30,
+    },
+    image: {
+        width: 400,
+        height: 300,
+        resizeMode: 'cover',
+    },
+});
