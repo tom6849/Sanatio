@@ -14,11 +14,9 @@ const App = () => {
             ? await launchImageLibrary(cameraOptions)
             : await launchCamera(cameraOptions);
 
-        console.log(result);
         if(result.didCancel) console.log('Camera Error:', result.errorMessage);
 
         if(result.assets) {
-            console.log(result.assets);
             setPickedImagePath(result.assets[0].uri);
         }
     };
