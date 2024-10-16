@@ -1,12 +1,14 @@
 import {useState} from 'react';
+import MlkitOcr from 'react-native-mlkit-ocr';
 import {View, Button, Image, StyleSheet, Text, Alert} from 'react-native';
 import {CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const App = () => {
     const [pickedImagePath, setPickedImagePath] = useState<string>('');
+    const [result, setResult] = useState<string>('');
 
-    const getImage = async (fromImageLibrary : boolean) => {
-        const cameraOptions : CameraOptions = {
+    const getImage = async (fromImageLibrary: boolean) => {
+        const cameraOptions: CameraOptions = {
             mediaType: 'photo'
         }
 
@@ -14,10 +16,26 @@ const App = () => {
             ? await launchImageLibrary(cameraOptions)
             : await launchCamera(cameraOptions);
 
-        if(result.didCancel) console.log('Camera Error:', result.errorMessage);
+        if (result.didCancel) console.log('Camera Error:', result.errorMessage);
 
-        if(result.assets) {
+        if (result.assets) {
             setPickedImagePath(result.assets[0].uri);
+        }
+    };
+
+    const getTextFromOCR = async () => {
+        if (pickedImagePath !== '') {
+            try {
+                const resultFromUri: any = await MlkitOcr.detectFromUri(pickedImagePath)
+                const text = resultFromUri.reduce((acc, value) => {
+                    return acc + value.text + '\n';
+                }, "")
+                setResult(text)
+            } catch (error) {
+                console.log('OCR failed', error)
+            }
+        } else {
+            Alert.alert('Please select an image first')
         }
     };
 
@@ -30,6 +48,8 @@ const App = () => {
             <View style={styles.imageContainer}>
                 {pickedImagePath !== '' && <Image source={{uri: pickedImagePath}} style={styles.image}/>}
             </View>
+            <Button onPress={getTextFromOCR} title='OCR' />
+            {result !== '' && <Text>{result}</Text>}
         </View>
     );
 };
