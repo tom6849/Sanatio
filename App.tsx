@@ -1,85 +1,94 @@
-import {useState} from 'react';
-import MlkitOcr from 'react-native-mlkit-ocr';
-import {View, Button, Image, StyleSheet, Text, Alert} from 'react-native';
-import {CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary} from 'react-native-image-picker';
+// App.tsx
+
+import 'react-native-gesture-handler'; 
+import React from 'react';
+import { Text, View, StyleSheet, ImageBackground } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SettingsScreen from './src/components/screen/SettingsScreen';
+import HomeScreen from './src/components/screen/HomeScreen';
+import PillScreen from './src/components/OcrScanner';
+import CalendarScreen from './src/components/screen/CalendarScreen';
+import ImgHome from './src/img/ImgHome';
+import ImgCalendar from './src/img/ImgCalendar';
+import ImgPill from './src/img/ImgPill';
+import ImgSettings from './src/img/ImgSettings';
+
+
+
+const Tab = createBottomTabNavigator();
 
 const App = () => {
-    const [pickedImagePath, setPickedImagePath] = useState<string>('');
-    const [result, setResult] = useState<string>('');
-
-    const getImage = async (fromImageLibrary: boolean) => {
-        const cameraOptions: CameraOptions = {
-            mediaType: 'photo'
-        }
-
-        const result = fromImageLibrary
-            ? await launchImageLibrary(cameraOptions)
-            : await launchCamera(cameraOptions);
-
-        if (result.didCancel) console.log('Camera Error:', result.errorMessage);
-
-        if (result.assets) {
-            setPickedImagePath(result.assets[0].uri);
-        }
-    };
-
-    const getTextFromOCR = async () => {
-        if (pickedImagePath !== '') {
-            try {
-                const resultFromUri: any = await MlkitOcr.detectFromUri(pickedImagePath)
-                const text = resultFromUri.reduce((acc, value) => {
-                    return acc + value.text + '\n';
-                }, "")
-                setResult(text)
-            } catch (error) {
-                console.log('OCR failed', error)
-            }
-        } else {
-            Alert.alert('Please select an image first')
-        }
-    };
-
+    const homeBadgeCount = 0; 
     return (
-        <View style={styles.screen}>
-            <View style={styles.buttonContainer}>
-                <Button onPress={() => getImage(true)} title="Choisir une ordonnance"/>
-                <Button onPress={() => getImage(false)} title="Scanner l'ordonnance"/>
-            </View>
-            <View style={styles.imageContainer}>
-                {pickedImagePath !== '' && <Image source={{uri: pickedImagePath}} style={styles.image}/>}
-            </View>
-            <Button onPress={getTextFromOCR} title='OCR' />
-            {result !== '' && <Text>{result}</Text>}
-        </View>
+        <NavigationContainer>
+            <Tab.Navigator>
+
+                <Tab.Screen 
+                name="Home" 
+                component={HomeScreen} 
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
+                            <ImgHome size={size} color={color} />
+                        </View>
+                    ),
+                    tabBarBadge: homeBadgeCount > 0 ? homeBadgeCount : undefined, 
+                }} 
+                />
+
+                <Tab.Screen 
+                name="Calendar" 
+                component={CalendarScreen} 
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => 
+                    <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
+                        <ImgCalendar size={size} color={color} />
+                    </View>
+                }} 
+                />
+
+                <Tab.Screen name="Pill"
+                 component={PillScreen} 
+                 options={{
+                    tabBarIcon: ({ focused, color, size }) => 
+                        <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
+                            <ImgPill size={size} color={color} />
+                        </View>
+                    
+                }} 
+                />
+
+                <Tab.Screen 
+                name="Settings" 
+                component={SettingsScreen} 
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => 
+                    <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
+                        <ImgSettings size={size} color={color} />
+                    </View>
+                }} 
+                />
+            </Tab.Navigator>
+        </NavigationContainer>
     );
 };
 
-export default App;
-
-
+// Styles
 const styles = StyleSheet.create({
     screen: {
-        display: "flex",
-        flexDirection: "column",
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 32,
-        height: '100%',
-        width: '100%'
+        backgroundColor: '#F4F5F6', 
     },
-    buttonContainer: {
-        width: '100%',
-        display: "flex",
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        gap: 8
-    },
-    imageContainer: {
-        padding: 30,
-    },
-    image: {
-        width: 400,
-        height: 300,
-        resizeMode: 'cover',
+    iconContainer: {
+        width: 30, 
+        height: 30, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20, 
     },
 });
+
+export default App;
