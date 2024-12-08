@@ -22,12 +22,21 @@ const App = () => {
     const homeBadgeCount = 0; 
     return (
         <NavigationContainer>
-            <Tab.Navigator>
-
+            <Tab.Navigator
+                screenOptions={{
+                tabBarStyle: { 
+                    height: 60
+                 },
+                tabBarLabelStyle: {
+                    marginBottom: 5, 
+                    fontSize: 13, 
+                },
+                }}>
                 <Tab.Screen 
                 name="Home" 
                 component={HomeScreen} 
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => (
                         <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
                             <ImgHome size={size} color={color} />
@@ -41,6 +50,7 @@ const App = () => {
                 name="Calendar" 
                 component={CalendarScreen} 
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => 
                     <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
                         <ImgCalendar size={size} color={color} />
@@ -51,6 +61,7 @@ const App = () => {
                 <Tab.Screen name="Pill"
                  component={PillScreen} 
                  options={{
+                    headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => 
                         <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
                             <ImgPill size={size} color={color} />
@@ -63,6 +74,7 @@ const App = () => {
                 name="Settings" 
                 component={SettingsScreen} 
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => 
                     <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
                         <ImgSettings size={size} color={color} />
@@ -76,12 +88,6 @@ const App = () => {
 
 // Styles
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F4F5F6', 
-    },
     iconContainer: {
         width: 30, 
         height: 30, 
