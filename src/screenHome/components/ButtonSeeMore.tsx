@@ -1,13 +1,13 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import ImgArrowRight from '../img/ImgArrowRight';
+import { Pressable, Text, StyleSheet } from 'react-native';
+import ImgArrowRight from '../../img/ImgArrowRight';
 
 const ButtonSeeMore = () => {
     return (
-        <TouchableOpacity style={styles.button}>
+        <Pressable style={styles.button}>
             <Text style={styles.text}>Voir plus </Text>  
             <ImgArrowRight/>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

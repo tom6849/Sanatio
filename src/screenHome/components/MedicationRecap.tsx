@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Action from './Action'
+import ButtonSeeMore from './ButtonSeeMore';
+import Medicaments from './Medicaments';
 
-const QuickAction = () => {
+const MedicationRecap = () => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Actions rapides</Text>
+            <Text style={styles.title}>Aujourd'hui</Text>
             <View style={styles.info}>
-                <Action/>
-                <Action/>
-                <Action/>
+                    <Medicaments />
+                    <Medicaments />
+                <View style={styles.button}>
+                    <ButtonSeeMore />
+                </View>
             </View>
         </View>
     );
@@ -18,26 +21,28 @@ const QuickAction = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1, 
-        marginTop : 32
     },
     info: {
-        flex : 1, 
+        flex: 1, 
         backgroundColor: 'white',
         padding: 16, 
         marginTop: 8, 
         borderRadius: 5, 
         elevation: 3, 
-        rowGap : 8
     },
-    title : {
-        color : "#0073C5",
-        fontSize : 18,
+    title: {
+        color: "#0073C5",
+        fontSize: 18,
     },
     text: {
         color: '#002467',
         fontSize: 20, 
         fontWeight: 'semibold',
     },
+    button: {
+        alignSelf: 'flex-end',
+    },
+    
 });
 
-export default QuickAction;
+export default MedicationRecap;

@@ -6,7 +6,7 @@ import { Text, View, StyleSheet, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './src/components/screen/SettingsScreen';
-import HomeScreen from './src/components/screen/HomeScreen';
+import HomeScreen from './src/screenHome/HomeScreen';
 import PillScreen from './src/components/OcrScanner';
 import CalendarScreen from './src/components/screen/CalendarScreen';
 import ImgHome from './src/img/ImgHome';
