@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './src/components/screen/SettingsScreen';
 import HomeScreen from './src/screenHome/HomeScreen';
 import PillScreen from './src/components/OcrScanner';
-import CalendarScreen from './src/components/screen/CalendarScreen';
+import CalendarScreen from './src/screenCalendar/CalendarScreen';
 import ImgHome from './src/img/ImgHome';
 import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
