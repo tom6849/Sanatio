@@ -5,7 +5,7 @@ import React from 'react';
 import { Text, View, StyleSheet, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SettingsScreen from './src/components/screen/SettingsScreen';
+import ProfilScrenn from './src/screenProfil/ProfilScreen';
 import HomeScreen from './src/screenHome/HomeScreen';
 import PillScreen from './src/components/OcrScanner';
 import CalendarScreen from './src/screenCalendar/CalendarScreen';
@@ -13,6 +13,7 @@ import ImgHome from './src/img/ImgHome';
 import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
 import ImgSettings from './src/img/ImgSettings';
+import ImgProfil from './src/img/ImgProfil';
 
 
 
@@ -71,13 +72,13 @@ const App = () => {
                 />
 
                 <Tab.Screen 
-                name="Settings" 
-                component={SettingsScreen} 
+                name="You" 
+                component={ProfilScrenn} 
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => 
                     <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
-                        <ImgSettings size={size} color={color} />
+                        <ImgProfil size={size} color={color} />
                     </View>
                 }} 
                 />
