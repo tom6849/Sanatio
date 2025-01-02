@@ -7,7 +7,7 @@ import ContainerChoice from './components/ContainerChoice';
 import Stats from './components/Stats';
 
 const ProfileScreen = () => {
-  const [selectedButton, setSelectedButton] = useState<number | null>(null);
+  const [selectedButton, setSelectedButton] = useState<number | null>(0);
 
   const handleChoiceChange = (choice: number | null) => {
     setSelectedButton(choice);

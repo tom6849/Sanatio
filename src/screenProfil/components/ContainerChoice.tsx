@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import ButtonChoice from './ButtonChoice';
 
 const ContainerChoice = ({ onChoiceChange }: { onChoiceChange: (choice: number | null) => void }) => {
-  const [pressedButton, setPressedButton] = useState<number | null>(null);
+  const [pressedButton, setPressedButton] = useState<number | null>(0);
 
   const handlePress = (index: number) => {
     setPressedButton(index);
-    onChoiceChange(index); // Appel du callback pour remonter l'information
+    onChoiceChange(index); 
   };
 
   return (

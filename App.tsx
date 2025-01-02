@@ -7,8 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfilScrenn from './src/screenProfil/ProfilScreen';
 import HomeScreen from './src/screenHome/HomeScreen';
-import PillScreen from './src/components/OcrScanner';
+import Pharmacy from './src/screenPharmarcie/PharmacieScreen';
 import CalendarScreen from './src/screenCalendar/CalendarScreen';
+
 import ImgHome from './src/img/ImgHome';
 import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
@@ -59,8 +60,8 @@ const App = () => {
                 }} 
                 />
 
-                <Tab.Screen name="Pill"
-                 component={PillScreen} 
+                <Tab.Screen name="Pharmacy"
+                 component={Pharmacy} 
                  options={{
                     headerShown: false,
                     tabBarIcon: ({ focused, color, size }) => 
