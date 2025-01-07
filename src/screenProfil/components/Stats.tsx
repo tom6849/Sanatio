@@ -1,17 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const chartConfig = {
-  backgroundGradientFrom: '#f8f9fa', 
+  backgroundGradientFrom: '#f8f9fa',
   backgroundGradientFromOpacity: 1,
   backgroundGradientTo: '#f8f9fa',
   backgroundGradientToOpacity: 1,
-  color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`, 
-  strokeWidth: 3, 
+  color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
+  strokeWidth: 3,
   barPercentage: 0.5,
   useShadowColorFromDataset: false,
 };
@@ -22,38 +22,35 @@ const data = {
     {
       data: [1, 5, 3, 2, 9, 0, 1],
       color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
-      strokeWidth: 4, 
+      strokeWidth: 4,
     },
   ],
-  legend: ['Nombre de médicaments'], 
+  legend: ['Nombre de médicaments'],
 };
 
 const Stats = () => {
+
   return (
     <View style={styles.container}>
-      {/* Titre */}
-      <Text style={styles.title}>Consommation de médicaments hebdomadaire</Text>
-
-      {/* Graphique */}
-      <LineChart
-        data={data}
-        width={screenWidth - 40} 
-        height={260} 
-        chartConfig={chartConfig}
-        bezier 
-        fromZero 
-        style={styles.chartStyle}
-      />
-
-     
+      <View style={styles.chartWrapper}>
+        <LineChart
+          data={data}
+          width={screenWidth - 40} 
+          height={ screenHeight * 0.25} 
+          chartConfig={chartConfig}
+          bezier
+          fromZero
+          style={styles.chartStyle}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop : 10, 
     flex: 1,
+    marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -62,13 +59,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+    marginBottom: 10,
+  },
+  chartWrapper: {
+    width: '90%', 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chartStyle: {
+    width: '100%',
     borderRadius: 16,
     elevation: 2,
-    marginVertical: 10,
   },
-
 });
 
 export default Stats;

@@ -16,7 +16,6 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Gradient Header */}
       <LinearGradient 
         colors={['#4D82F3', '#C9E0F8']}
         style={styles.linearGradient}
