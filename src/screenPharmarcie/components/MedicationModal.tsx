@@ -21,12 +21,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
   const [time, setTime] = useState<string>('');
   const [selectedDays, setSelectedDays] = useState<{ [key: string]: boolean }>({});
 
-  useEffect(() => {
-    if (!medication) return;
-    setStartDate(medication.isoStartDate); 
-    setEndDate(medication.isoEndDate);
-    setTime(medication.time);
-  }, [medication]);
+  if (!medication) return;
 
   const handleSelectDays = (days: { [key: string]: boolean }) => {
     setSelectedDays(days);
@@ -59,9 +54,9 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
       const newMedication: Medication = {
         isoStartDate,
         isoEndDate,
-        name: medication?.name || '',
-        pharmaForm: medication?.pharmaForm || '',
-        administrationRoutes: medication?.administrationRoutes || '',
+        name: medication.name ,
+        pharmaForm: medication.pharmaForm,
+        administrationRoutes: medication.administrationRoutes,
         time,
         jours: selectedDays,
         date: generateDatesToTake()
@@ -70,9 +65,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
       existingMedications.push(newMedication);
       setMedications(existingMedications);
-
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
-
       setStartDate('');
       setEndDate('');
       setTime('');
