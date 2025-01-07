@@ -1,72 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert } from 'react-native';
 import CloseModal from '../../img/CloseModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SelectedDay from './SelectDay';
+import { useMedication } from '../../context/MedicationContext';
+import { Medication } from '../../context/MedicationContext';
 
-const MedicationModal = ({ visible, onClose, medication }: { visible: boolean; onClose: () => void; medication: { name: string; pharmaForm: string; administrationRoutes: string } | null }) => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [duration, setDuration] = useState('');
-  const [time, setTime] = useState('');
 
-  if (!medication) return null;
 
-  // Validation des champs
-  const isValidDate = (date: string) => {
-    const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
-    return datePattern.test(date);
+type MedicationModalProps = {
+  visible: boolean;
+  onClose: () => void;
+  medication: Medication | null;
+};
+
+const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, medication }) => {
+  const { medications, setMedications } = useMedication();
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const [time, setTime] = useState<string>('');
+  const [selectedDays, setSelectedDays] = useState<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    if (!medication) return;
+    setStartDate(medication.isoStartDate); 
+    setEndDate(medication.isoEndDate);
+    setTime(medication.time);
+  }, [medication]);
+
+  const handleSelectDays = (days: { [key: string]: boolean }) => {
+    setSelectedDays(days);
   };
 
-  const isValidTime = (time: string) => {
-    const timePattern = /^([0-1]?[0-9]|2[0-3]):([0-5]?[0-9])$/;
-    return timePattern.test(time);
+  const convertToISODate = (date: string): string => {
+    const [day, month, year] = date.split('/');
+    return `${year}-${month}-${day}`;
   };
 
-  const handleAddMedication = () => {
-    // Vérification de la validité des champs
-    if (!startDate || !endDate || !duration || !time) {
+  const generateDatesToTake = (): string[] => {
+    const dates: string[] = [];
+    let currentDate = new Date(convertToISODate(startDate));
+    const FinDate = new Date(convertToISODate(endDate));
+    while (currentDate <= FinDate) {
+      const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
+      if (selectedDays[dayName]) {
+        const formattedDate = currentDate.toISOString().split('T')[0];
+        dates.push(formattedDate);
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dates;
+  };
+
+  const addLocalPrescription = async (): Promise<void> => {
+    try {
+      const isoStartDate = convertToISODate(startDate);
+      const isoEndDate = convertToISODate(endDate);
+      const newMedication: Medication = {
+        isoStartDate,
+        isoEndDate,
+        name: medication?.name || '',
+        pharmaForm: medication?.pharmaForm || '',
+        administrationRoutes: medication?.administrationRoutes || '',
+        time,
+        jours: selectedDays,
+        date: generateDatesToTake()
+      };
+      const storedMedications = await AsyncStorage.getItem('medications');
+      const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
+      existingMedications.push(newMedication);
+      setMedications(existingMedications);
+
+      Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
+
+      setStartDate('');
+      setEndDate('');
+      setTime('');
+      setSelectedDays({});
+      onClose();
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement du médicament :", error);
+      Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');
+    }
+  };
+
+  const handleAddMedication = (): void => {
+    if (!startDate || !endDate || !time) {
       Alert.alert('Erreur', 'Tous les champs doivent être remplis.');
       return;
     }
-
-    if (!isValidDate(startDate) || !isValidDate(endDate)) {
-      Alert.alert('Erreur', 'Les dates doivent être au format DD/MM/YYYY.');
-      return;
-    }
-
-    if (!isValidTime(time)) {
-      Alert.alert('Erreur', 'L\'heure doit être au format HH:MM.');
-      return;
-    }
-
-    // Ici, tu peux ajouter la logique pour ajouter le médicament
-    // Par exemple, envoyer les données à une API ou les enregistrer dans l'état global
-
-    // Réinitialiser les champs après avoir ajouté le médicament
-    setStartDate('');
-    setEndDate('');
-    setDuration('');
-    setTime('');
-
-    onClose(); // Fermer la modal après l'ajout
+    addLocalPrescription();
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <Modal transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          {/* Close Button */}
           <Pressable style={styles.closeButton} onPress={onClose}>
             <CloseModal size={40} color="#1e3a8a" />
           </Pressable>
 
-          <Text style={styles.modalTitle}>{medication.name}</Text>
-          <Text style={styles.modalSubTitle}>Type : {medication.pharmaForm}</Text>
-          <Text style={styles.modalSubTitle}>Endroit : {medication.administrationRoutes}</Text>
+          <Text style={styles.modalTitle}>{medication?.name}</Text>
+          <Text style={styles.modalSubTitle}>Type : {medication?.pharmaForm}</Text>
+          <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
 
           <ScrollView contentContainerStyle={styles.formContainer}>
             <Text style={styles.label}>Date de début (DD/MM/YYYY) :</Text>
@@ -87,15 +123,6 @@ const MedicationModal = ({ visible, onClose, medication }: { visible: boolean; o
               keyboardType="numeric"
             />
 
-            <Text style={styles.label}>Durée (en jours) :</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              value={duration}
-              onChangeText={setDuration}
-              placeholder="Durée en jours"
-            />
-
             <Text style={styles.label}>Heure (HH:MM) :</Text>
             <TextInput
               style={styles.input}
@@ -104,6 +131,7 @@ const MedicationModal = ({ visible, onClose, medication }: { visible: boolean; o
               placeholder="HH:MM"
               keyboardType="numeric"
             />
+            <SelectedDay onSelectDays={handleSelectDays} />
           </ScrollView>
 
           <Pressable style={styles.addButton} onPress={handleAddMedication}>
@@ -123,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalContent: {
-    width: '90%', 
+    width: '90%',
     maxHeight: '80%',
     backgroundColor: '#FFFFFF',
     borderRadius: 25,
@@ -141,9 +169,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1e3a8a',
     marginBottom: 10,
-    textAlign: 'center', 
-    flexWrap: 'wrap',    
-    maxWidth: '90%',     
+    textAlign: 'center',
+    flexWrap: 'wrap',
+    maxWidth: '90%',
   },
   modalSubTitle: {
     fontSize: 16,
@@ -161,7 +189,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 12,
     paddingLeft: 20,
-    marginBottom: 20, 
+    marginBottom: 20,
     fontSize: 16,
     color: '#333',
     borderWidth: 1,
@@ -170,7 +198,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingBottom: 20, 
+    paddingBottom: 20,
   },
   addButton: {
     paddingVertical: 12,
