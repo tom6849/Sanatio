@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, Pressable } from 'react-native';
 import MedicationModal from './MedicationModal'; // Import du composant Modal
 
-interface Medication {
+type Medication ={
   id: number;
   name: string;
   pharmaForm: string;
   administrationRoutes: string;
 }
+
 
 const SearchMed: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -71,7 +72,7 @@ const SearchMed: React.FC = () => {
             <Pressable style={styles.medicationItem} onPress={() => openModal(item)}>
               <Text style={styles.MedicationName}>{item.name}</Text>
               <Text style={styles.MedicationType}>Type : {item.pharmaForm}</Text>
-              <Text style={styles.MedicationType}>Endroit : {item.administrationRoutes}</Text>
+              <Text style={styles.MedicationType}>Administration : {item.administrationRoutes}</Text>
             </Pressable>
           )}
         />

@@ -9,7 +9,7 @@ import ProfilScrenn from './src/screenProfil/ProfilScreen';
 import HomeScreen from './src/screenHome/HomeScreen';
 import Pharmacy from './src/screenPharmarcie/PharmacieScreen';
 import CalendarScreen from './src/screenCalendar/CalendarScreen';
-
+import { MedicationProvider } from './src/context/MedicationContext';
 import ImgHome from './src/img/ImgHome';
 import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
@@ -23,6 +23,7 @@ const Tab = createBottomTabNavigator();
 const App = () => {
     const homeBadgeCount = 0; 
     return (
+        <MedicationProvider>
         <NavigationContainer>
             <Tab.Navigator
                 screenOptions={{
@@ -85,6 +86,7 @@ const App = () => {
                 />
             </Tab.Navigator>
         </NavigationContainer>
+        </MedicationProvider>
     );
 };
 
