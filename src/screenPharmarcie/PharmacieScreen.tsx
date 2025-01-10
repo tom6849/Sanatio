@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Choice from './components/Choice';
 import { createStackNavigator } from '@react-navigation/stack';
 import SearchMed from './components/SearchMed';
-import ScanOrd from './components/ScanOrd';
+import OcrScanner from './components/ScanOrd';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +36,7 @@ const Pharmacy = () => {
             />
             <Stack.Screen
                 name="ScanScreen"
-                component={ScanOrd}
+                component={OcrScanner}
                 options={{
                     headerTitle: '',
                     headerBackTitleVisible: false,
