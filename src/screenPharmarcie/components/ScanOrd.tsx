@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Image, StyleSheet, Text, Alert, ScrollView } from 'react-native';
+import { View, Button, Image, StyleSheet, Text, Alert, ScrollView,TouchableOpacity} from 'react-native';
 import MlkitOcr from 'react-native-mlkit-ocr';
 import { CameraOptions, launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import data from './data/data.json';
@@ -102,25 +102,24 @@ const OcrScanner = () => {
     return (
         <View style={styles.screen}>
             {showForm ? (
-                <FormOcr />
+                <FormOcr  />
             ) : (
-                <View style={styles.screen}>
-                    <View style={styles.buttonContainer}>
-                        <Button onPress={() => getImage(true)} title="Choisir une ordonnance" />
-                        <Button onPress={() => getImage(false)} title="Scanner l'ordonnance" />
-                    </View>
-                    <View style={styles.imageContainer}>
-                        {pickedImagePath !== '' && <Image source={{ uri: pickedImagePath }} style={styles.image} />}
-                    </View>
-                    <Button onPress={getResultFormat} title='OCR' />
-                    <Button onPress={viewFormulair} title='visualiser le formulaire'/>
-                    <ScrollView>
-                        {result !== '' && <Text>Résultat OCR : {'\n'}{result}</Text>}
-                    </ScrollView>
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={() => getImage(true)} style={styles.containerChoice} >
+                        <Image 
+                            source={require('../../img/UploadOrdonnance.png')} // Remplacez par le chemin de votre logo
+                            style={styles.elements}
+                        />
+                        <Text style={styles.elements}>Add a Medication</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => getImage(false)} style={styles.containerChoice}>
+                        <Image 
+                            source={require('../../img/ScanLogo.png')} // Remplacez par le chemin de votre logo
+                            style={styles.elements}
+                        />
+                    </TouchableOpacity>
                 </View>
             )}
-            
-            
         </View>
     );
 };
@@ -129,28 +128,31 @@ const OcrScanner = () => {
 const styles = StyleSheet.create({
     screen: {
         display: "flex",
-        flexDirection: "column",
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 32,
-        height: '100%',
-        width: '100%'
+        flex: 1,
+        backgroundColor:'white',
     },
-    buttonContainer: {
-        width: '100%',
-        display: "flex",
+    container: {
+        flex: 1,  // Occuper tout l'espace restant
+        paddingTop: '7%',
         flexDirection: 'column',
-        justifyContent: 'space-around',
-        gap: 8
+        justifyContent: 'center', // Centrer verticalement
+        alignItems: 'center',     // Centrer horizontalement
     },
-    imageContainer: {
-        padding: 30,
+    containerChoice: {
+        flex:2,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',  // Centrer le contenu des boutons
+        gap: 10,                   // Espace entre les éléments
+        marginBottom: 20,          // Ajoute un espacement sous chaque option
     },
-    image: {
-        width: 400,
-        height: 300,
-        resizeMode: 'cover',
-    },
+    elements: {
+        flex:1, 
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        resizeMode: 'contain',
+    }
 });
 
 export default OcrScanner;

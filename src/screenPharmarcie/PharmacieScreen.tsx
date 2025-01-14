@@ -60,7 +60,7 @@ const Pharmacy = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingTop: '7%',
         backgroundColor: '#F3F6FB',
     },
     title: {

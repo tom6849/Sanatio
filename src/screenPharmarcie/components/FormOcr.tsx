@@ -58,7 +58,7 @@ const FormOcr = () => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.formContainer}>
+            <View style={styles.formContainer}>                
                 <Text style={styles.label}>Nom du médicament :</Text>
                 <TextInput
                     style={styles.input}
