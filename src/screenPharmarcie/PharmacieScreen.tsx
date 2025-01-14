@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 
 const PharmacyMain = ({ navigation }: { navigation: any }) => (
     <View style={styles.container}>
-        <Text style={styles.title}>Ajouter un médicament</Text>
+        <Text style={styles.title}>Add a Medication</Text>
         <Pressable
             style={styles.choiceButton}
             onPress={() => navigation.navigate('ScanScreen')}
