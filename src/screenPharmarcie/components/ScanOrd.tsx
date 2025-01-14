@@ -82,7 +82,6 @@ const OcrScanner = () => {
     };
 
     const getTextFromOCR = async () => {
-        setShowForm(true)
         if (pickedImagePath !== '') {
             try {
                 const resultFromUri: any = await MlkitOcr.detectFromUri(pickedImagePath);
@@ -95,6 +94,10 @@ const OcrScanner = () => {
             Alert.alert('Please select an image first');
         }
     };
+
+    const viewFormulair = async () => {
+        setShowForm(true)
+    }
 
     return (
         <View style={styles.screen}>
@@ -110,6 +113,7 @@ const OcrScanner = () => {
                         {pickedImagePath !== '' && <Image source={{ uri: pickedImagePath }} style={styles.image} />}
                     </View>
                     <Button onPress={getResultFormat} title='OCR' />
+                    <Button onPress={viewFormulair} title='visualiser le formulaire'/>
                     <ScrollView>
                         {result !== '' && <Text>Résultat OCR : {'\n'}{result}</Text>}
                     </ScrollView>

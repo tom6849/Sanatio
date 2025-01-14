@@ -6,8 +6,8 @@ import Search from '../../img/ImgSearchMed';
 const { width, height } = Dimensions.get('window');
 
 const Choice = ({ value }: { value: number }) => {
-    const title = value === 1 ? 'Scanner Ordonnance' : 'Rechercher un médicament';
-    const subtitle = value === 1 ? 'Scannez vos ordonnances ici' : 'Trouvez rapidement des informations';
+    const title = value === 1 ? 'By Ordonnance' : 'By Research';
+    const subtitle = value === 1 ? 'Scan your prescriptions here' : 'Quickly find information';
 
     return (
         <View style={styles.container}>
