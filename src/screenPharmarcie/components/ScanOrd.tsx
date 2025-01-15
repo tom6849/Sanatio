@@ -105,19 +105,23 @@ const OcrScanner = () => {
                 <FormOcr  />
             ) : (
                 <View style={styles.container}>
-                    <TouchableOpacity onPress={() => getImage(true)} style={styles.containerChoice} >
-                        <Image 
-                            source={require('../../img/UploadOrdonnance.png')} // Remplacez par le chemin de votre logo
-                            style={styles.elements}
-                        />
-                        <Text style={styles.elements}>Add a Medication</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => getImage(false)} style={styles.containerChoice}>
-                        <Image 
-                            source={require('../../img/ScanLogo.png')} // Remplacez par le chemin de votre logo
-                            style={styles.elements}
-                        />
-                    </TouchableOpacity>
+                    <Text style={styles.title}>Choose your method</Text>
+                    <View style={styles.containerChoices}>
+                        <TouchableOpacity onPress={() => getImage(true)} style={styles.containerChoice} >
+                            <Image 
+                                source={require('../../img/UploadOrdonnance.png')} // Remplacez par le chemin de votre logo
+                                style={styles.icon}
+                            />
+                            <Text style={styles.subtitle}>Upload your Prescription</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => getImage(false)} style={styles.containerChoice}>
+                            <Image 
+                                source={require('../../img/ScanLogo.png')} // Remplacez par le chemin de votre logo
+                                style={styles.icon}
+                            />
+                            <Text style={styles.subtitle}>Scan your prescription</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )}
         </View>
@@ -127,32 +131,45 @@ const OcrScanner = () => {
 
 const styles = StyleSheet.create({
     screen: {
-        display: "flex",
-        flex: 1,
-        backgroundColor:'white',
+        flex:1,
+        backgroundColor: 'white',
+       
     },
     container: {
-        flex: 1,  // Occuper tout l'espace restant
-        paddingTop: '7%',
+        flex:1,
         flexDirection: 'column',
-        justifyContent: 'center', // Centrer verticalement
         alignItems: 'center',     // Centrer horizontalement
+        gap:'10%'
+        
+        
     },
     containerChoice: {
-        flex:2,
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',  // Centrer le contenu des boutons
-        gap: 10,                   // Espace entre les éléments
-        marginBottom: 20,          // Ajoute un espacement sous chaque option
+        flex:1,
+        alignItems:"center"
+
+
     },
-    elements: {
-        flex:1, 
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
+    containerChoices :{
+        flex:1,
+        alignItems:"center",
+        gap:'50%'
+        
+    },
+    icon: {
+        flex:1,
+        maxHeight:'70%',
         resizeMode: 'contain',
+    },
+    title: {
+        fontSize:24,
+        fontWeight:'900',
+        color:'blue'
+    },
+    subtitle: {
+        fontSize:24,
+        fontWeight:'900',
     }
 });
+
 
 export default OcrScanner;

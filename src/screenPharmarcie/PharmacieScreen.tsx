@@ -60,8 +60,10 @@ const Pharmacy = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: '7%',
+        padding: '7%',
         backgroundColor: '#F3F6FB',
+        alignItems:"center",
+        gap:"100%"
     },
     title: {
         fontSize: 28,
@@ -72,19 +74,7 @@ const styles = StyleSheet.create({
     },
     choiceButton: {
         flex: 1,
-    },
-    screenContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F3F6FB',
-        paddingHorizontal: 20,
-    },
-    screenText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#002467',
-        textAlign: 'center',
+        width:"80%",
     },
 });
 

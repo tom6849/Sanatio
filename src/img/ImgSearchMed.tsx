@@ -1,10 +1,8 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const ImgSearchMed = ({ size = 24, color = "#292F35" }) => (
+const ImgSearchMed = ({ color = "#292F35" }) => (
   <Svg
-    width={size}
-    height={size}
     viewBox="0 0 24 24"
     fill="none"
   >

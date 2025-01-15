@@ -7,17 +7,19 @@ const { width, height } = Dimensions.get('window');
 
 const Choice = ({ value }: { value: number }) => {
     const title = value === 1 ? 'By Ordonnance' : 'By Research';
-    const subtitle = value === 1 ? 'Scan your prescriptions here' : 'Quickly find information';
+    const subtitle = value === 1 ? 'Scan or upload your prescriptions here' : 'Quickly find information';
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{subtitle}</Text>
-            {value === 1 ? (
-                <ScanIcon size={Math.min(width, height) * 0.5} color="#0073C5" />
-            ) : (
-                <Search size={Math.min(width, height) * 0.5} color="#0073C5" />
-            )}
+            <View style={styles.iconContainer}>
+                {value === 1 ? (
+                    <ScanIcon color="#0073C5"/>
+                ) : (
+                    <Search color="#0073C5"/>
+                )}
+            </View>
         </View>
     );
 };
@@ -31,8 +33,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#F3F6FB',
-        elevation: 5,
-        margin: 10,
+        gap:"5%",
+
     },
     title: {
         fontSize: 22,
@@ -40,13 +42,20 @@ const styles = StyleSheet.create({
         color: '#005fa3',
         marginBottom: 8,
         textAlign: 'center',
+        textAlignVertical:'center'
     },
     subtitle: {
         fontSize: 16,
         color: '#555',
         marginBottom: 15,
         textAlign: 'center',
+        textAlignVertical:'top'
     },
+    iconContainer: {
+        flex: 1, // Utilise l'espace restant pour l'icône
+        width:"100%",
+        height:"100%"
+    }
 });
 
 export default Choice;
