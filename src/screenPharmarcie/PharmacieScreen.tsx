@@ -2,13 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Choice from './components/Choice';
 import { createStackNavigator } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
 import SearchMed from './components/SearchMed';
 import OcrScanner from './components/ScanOrd';
 
 const Stack = createStackNavigator();
 
 const PharmacyMain = ({ navigation }: { navigation: any }) => (
-    <View style={styles.container}>
+    <LinearGradient 
+            colors={['#4D82F3', '#C9E0F8']}
+            style={styles.container}
+            start={{ x: 0.9, y: 0 }}
+        >
+        
         <Text style={styles.title}>Add a Medication</Text>
         <Pressable
             style={styles.choiceButton}
@@ -22,7 +28,7 @@ const PharmacyMain = ({ navigation }: { navigation: any }) => (
         >
             <Choice value={2} />
         </Pressable>
-    </View>
+    </LinearGradient>
 );
 
 // Stack Navigator

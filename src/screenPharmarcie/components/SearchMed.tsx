@@ -22,7 +22,7 @@ const SearchMed: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://10.0.2.2:3000/api/v1/item');
+      const response = await fetch("https://10.0.2.2:3000/api/v1");
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
       const data: Medication[] = await response.json();
       setMedications(data);
