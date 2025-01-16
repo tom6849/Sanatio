@@ -8,7 +8,7 @@ const windowWidth = Dimensions.get('window').width;
 type AgendaItem = {
     name: string;
     time: string;
-    comprime : number;
+    endroit : string;
   };
 const Item = (item: AgendaItem) => {
     
@@ -20,7 +20,7 @@ const Item = (item: AgendaItem) => {
         <Image source={require('../../img/Exemple.png')} style={styles.image} resizeMode="cover" />
         <View  style={styles.valeur}>
           <Text style={styles.itemTime}>{item.time}</Text>
-          <Text style={styles.itemTime}>{item.comprime} {item.comprime > 1 ? 'comprimés' : 'comprimé'}</Text>
+          <Text style={styles.itemTime}>{item.endroit}</Text>
 
           <ButtonValidate/>
         </View>
