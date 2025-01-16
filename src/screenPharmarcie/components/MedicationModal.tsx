@@ -104,7 +104,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
               value={startDate}
               onChangeText={setStartDate}
               placeholder="DD/MM/YYYY"
-              keyboardType="numeric"
+      
             />
 
             <Text style={styles.label}>Date de fin (DD/MM/YYYY) :</Text>
@@ -113,7 +113,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
               value={endDate}
               onChangeText={setEndDate}
               placeholder="DD/MM/YYYY"
-              keyboardType="numeric"
+  
             />
 
             <Text style={styles.label}>Heure (HH:MM) :</Text>
@@ -122,7 +122,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
               value={time}
               onChangeText={setTime}
               placeholder="HH:MM"
-              keyboardType="numeric"
+            
             />
             <SelectedDay onSelectDays={handleSelectDays} />
           </ScrollView>
