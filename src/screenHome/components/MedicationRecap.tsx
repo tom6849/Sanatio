@@ -1,48 +1,43 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import ButtonSeeMore from './ButtonSeeMore';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Medicaments from './Medicaments';
 
 const MedicationRecap = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Aujourd'hui</Text>
-            <View style={styles.info}>
+            <ScrollView style={styles.info} horizontal  showsHorizontalScrollIndicator={false}>
+                <View style={styles.medicament}>
                     <Medicaments />
-                    <Medicaments />
-                <View style={styles.button}>
-                    <ButtonSeeMore />
                 </View>
-            </View>
+                <View style={styles.medicament}>
+                    <Medicaments />
+                </View>
+                <View style={styles.medicament2}>
+                    <Medicaments />
+                </View>
+            </ScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
-    },
-    info: {
-        flex: 1, 
-        backgroundColor: 'white',
-        padding: 16, 
-        marginTop: 8, 
-        borderRadius: 5, 
-        elevation: 3, 
+        flex: 0.7,
     },
     title: {
-        color: "#0073C5",
-        fontSize: 18,
+        color : "#0073C5",
+        fontSize : 18,
+        marginBottom: 8,
     },
-    text: {
-        color: '#002467',
-        fontSize: 20, 
-        fontWeight: 'semibold',
+    info: {
+        flexDirection: 'row',
     },
-    button: {
-        alignSelf: 'flex-end',
+    medicament: {
+        marginRight: 16,
     },
-    
+    medicament2: {
+    }
 });
 
 export default MedicationRecap;

@@ -22,13 +22,11 @@ const ButtonValidate = () => {
 
 const styles = StyleSheet.create({
     button: {
-        flex: 1,
+        width: '100%', 
+        height: 40, 
         backgroundColor: '#0073C5', 
-        paddingVertical: 8,
-        paddingHorizontal: 24,
-        borderRadius: 5,
+        borderRadius: 8,
         alignItems: 'center',
-        flexDirection: 'row',
         justifyContent: 'center',
     },
     buttonClicked: {
@@ -36,8 +34,8 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#FFFFFF',
-        fontSize: 14,
-        fontWeight: 'regular',
+        fontSize: 16, 
+        fontWeight: '500',
     },
 });
 

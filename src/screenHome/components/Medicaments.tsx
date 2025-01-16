@@ -1,50 +1,83 @@
 import React from 'react';
 import { StyleSheet, View, Image, Dimensions, Text } from 'react-native';
-import ImgInfo from '../../img/ImgInfo';
-
+import ButtonValidate from '../../screenCalendar/components/ButtonValidate';
 
 const { width } = Dimensions.get('window');
+
 const Medicaments = () => {
     return (
-        <View style={styles.container}>
-            <View style={styles.container}>
-                <Image 
-                    source={require('../../img/Exemple.png')} 
-                    style={styles.image} 
-                    resizeMode="cover" 
-                />
-                <View  >
-                    <Text  style={styles.title}>Dafalgan 500mg</Text>
-                    <Text style={styles.description}>Dans une heure, pendant le repas </Text>
+        <View style={styles.card}>
+            <View>
+                <View style={styles.medicineContainer}>
+                    <Text style={styles.medicineText}>Dafalgan 500mg</Text>
+                </View>
+                <View style={styles.content}>
+                    <Image  
+                        source={require('../../img/Exemple.png')} 
+                        style={styles.image} 
+                        resizeMode="contain" 
+                    />
+                    <View style={styles.timeContainer}>
+                        <Text style={styles.time}>20:30</Text>
+                        <Text style={styles.route}>Oral</Text>
+                    </View>
                 </View>
             </View>
-            <ImgInfo/>
+            <ButtonValidate/>
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection : 'row',
-        flex : 1
+    card: {
+        width: 220,
+        height: '100%',
+        borderRadius: 12,
+        padding: 12,
+        backgroundColor: '#FFF',
+        borderWidth: 1,
+        borderColor: '#4D82F3',
+        elevation: 3,
+        justifyContent : 'space-between'
+    },
+    medicineContainer: {
+        marginBottom: 10,
+        justifyContent: 'center',
+        width: '100%',
+        alignItems: 'flex-start',
+    },
+    medicineText: {
+        fontSize: 18, 
+        color: '#292F35',
+        fontWeight: 'bold',
+        flexWrap : 'wrap'
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        paddingBottom : 5
     },
     image: {
-        width: width * 0.15, 
-        height: width * 0.15, 
-        marginRight : 5 
+        width: width * 0.18,
+        height: width * 0.18,
+        borderRadius: 8,
+        backgroundColor: '#F5F5F5',
     },
-    info: {
-        flex : 1 , 
-        alignItems : 'flex-end'
-    }, 
-    title : {
-        fontSize : 18, 
-        color: '#292F35'
+    timeContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        marginLeft: 10,
     },
-    description: {
-        fontSize : 11,
-        color: '#B6BDC4'
-
+    time: {
+        color: '#4D82F3',
+        fontSize: 20, 
+        fontWeight: 'bold',
+    },
+    route: {
+        color: '#B6BDC4',
+        fontSize: 16, 
     },
 });
 
