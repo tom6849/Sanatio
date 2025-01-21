@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import ScanIcon from '../../img/ScanIcon';
 import Search from '../../img/ImgSearchMed';
-import PilePlus from '../../img/ImgPilePlus'
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,7 +17,7 @@ const Choice = ({ value }: { value: number }) => {
                 {value === 1 ? (
                     <ScanIcon color="#0073C5"/>
                 ) : (
-                    <PilePlus />
+                    <Search color="#0073C5" />
                 )}
             </View>
         </View>
@@ -56,7 +55,8 @@ const styles = StyleSheet.create({
         flex: 1, // Utilise l'espace restant pour l'icône
         width:"100%",
         height:"100%"
-    }
+    },
+    
 });
 
 export default Choice;

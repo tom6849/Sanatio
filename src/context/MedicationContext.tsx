@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  * Représente un médicament avec ses informations essentielles.
  * 
  * @typedef {Object} Medication
+ * @property {string} id 
+ * @property {number} count
  * @property {string} isoStartDate 
  * @property {string} isoEndDate
  * @property {string} name 
@@ -16,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  * @property {string[]} [datesToTake] 
  */
 export type Medication = {
+  id: string;
   isoStartDate: string;
   isoEndDate: string;
   name: string;
@@ -24,6 +27,7 @@ export type Medication = {
   time: string;
   jours: { [key: string]: boolean };
   date?: string[];
+  count?:number;
 };
 
 /**

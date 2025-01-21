@@ -5,6 +5,7 @@ import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../context/MedicationContext';
+import PilePlus from '../../img/ImgPilePlus';
 
 
 
@@ -17,6 +18,7 @@ const SearchMed: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
   const headerText = searchQuery.trim() === '' ? 'Mes médicaments' : `Recherche de "${searchQuery.trim()}"`;
+  
   const fetchMedications = async () => {
     setLoading(true);
     setError(null);
@@ -67,6 +69,7 @@ const SearchMed: React.FC = () => {
   const closeModal = () => {
     setModalVisible(false);
     setSelectedMed(null);
+    loadStoredMedications();
   };
 
   return (
@@ -91,12 +94,23 @@ const SearchMed: React.FC = () => {
       ) : filteredMedications.length > 0 ? (
         <FlatList
           data={searchQuery.trim() === '' ? storedMedications : filteredMedications}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable style={styles.medicationItem} onPress={() => openModal(item)}>
-              <Text style={styles.MedicationName}>{item.name}</Text>
-              <Text style={styles.MedicationType}>Type : {item.pharmaForm}</Text>
-              <Text style={styles.MedicationType}>Administration : {item.administrationRoutes}</Text>
+              <View style={styles.medicationIcon}>
+                <PilePlus/>
+              </View>
+              <View style={styles.infoMedication}>
+                <View>
+                  <Text>{item.isoStartDate != undefined ? item.isoStartDate : "null"}</Text>
+                  <Text>{item.isoEndDate}</Text>
+                </View>
+                <Text style={styles.MedicationName}>{item.name}</Text>
+                <Text style={styles.MedicationType}>Type : {item.pharmaForm}</Text>
+                <Text style={styles.MedicationType}>Administration : {item.administrationRoutes}</Text>
+                <Text style={styles.MedicationType}>Nombre de cette article{item.count}</Text>
+              </View>
+              
             </Pressable>
           )}
         />
@@ -135,10 +149,23 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   medicationItem: {
-    fontSize: 18,
-    borderBottomColor: '#EEE',
-    borderBottomWidth: 1,
-    color: '#002467',
+    backgroundColor: 'white',
+    display:'flex',
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    alignItems:'center',
+    padding:"5%",
+    gap:"50%"
+    
+  },
+  infoMedication: {
+    display: 'flex',
+    flexDirection:'column',
+  },
+  medicationIcon: {
+    display:'flex',
+    flex:1
+    
   },
   NoResultsText: {
     fontSize: 16,
@@ -169,7 +196,8 @@ const styles = StyleSheet.create({
     marginVertical:'4%',
     fontSize: 20,
     color: '#0073C5',
-  }
+  },
+
 });
 
 export default SearchMed;
