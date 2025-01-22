@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import CloseModal from '../../img/CloseModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SelectedDay from './SelectDay';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../context/MedicationContext';
-
-
+import DatePicker from 'react-native-modern-datepicker';
+import SelectedDay from './SelectDay';
 
 type MedicationModalProps = {
   visible: boolean;
@@ -20,8 +19,9 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
   const [endDate, setEndDate] = useState<string>('');
   const [time, setTime] = useState<string>('');
   const [selectedDays, setSelectedDays] = useState<{ [key: string]: boolean }>({});
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  if (!medication) return;
+  if (!medication) return null;
 
   const handleSelectDays = (days: { [key: string]: boolean }) => {
     setSelectedDays(days);
@@ -52,18 +52,30 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
       const isoStartDate = convertToISODate(startDate);
       const isoEndDate = convertToISODate(endDate);
       const newMedication: Medication = {
+        id: medication.id,
         isoStartDate,
         isoEndDate,
-        name: medication.name ,
+        name: medication.name,
         pharmaForm: medication.pharmaForm,
         administrationRoutes: medication.administrationRoutes,
         time,
         jours: selectedDays,
-        date: generateDatesToTake()
+        date: generateDatesToTake(),
+        count: 1,
       };
       const storedMedications = await AsyncStorage.getItem('medications');
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
-      existingMedications.push(newMedication);
+
+      const existingMedicationIndex = existingMedications.findIndex((med) => med.id === newMedication.id);
+      if (existingMedicationIndex !== -1) {
+        // Incrémenter le count du médicament existant
+        existingMedications[existingMedicationIndex].count =
+          (existingMedications[existingMedicationIndex].count || 1) + 1;
+      } else {
+        // Ajouter le nouveau médicament si aucun duplicata n'existe
+        existingMedications.push(newMedication);
+      }
+      await AsyncStorage.setItem('medications', JSON.stringify(existingMedications));
       setMedications(existingMedications);
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
       setStartDate('');
@@ -96,16 +108,23 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
           <Text style={styles.modalTitle}>{medication?.name}</Text>
           <Text style={styles.modalSubTitle}>Type : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
-
           <ScrollView contentContainerStyle={styles.formContainer}>
+
             <Text style={styles.label}>Date de début (DD/MM/YYYY) :</Text>
-            <TextInput
-              style={styles.input}
-              value={startDate}
-              onChangeText={setStartDate}
-              placeholder="DD/MM/YYYY"
-      
-            />
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.input}>{startDate || 'Sélectionner la date'}</Text>
+            </TouchableOpacity>
+
+            {showDatePicker && (
+              <DatePicker
+                mode="calendar"
+                selected={startDate}
+                onDateChange={(date) => {
+                  setStartDate(date);
+                  setShowDatePicker(false); // Fermer le DatePicker après sélection
+                }}
+              />
+            )}
 
             <Text style={styles.label}>Date de fin (DD/MM/YYYY) :</Text>
             <TextInput
@@ -113,7 +132,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
               value={endDate}
               onChangeText={setEndDate}
               placeholder="DD/MM/YYYY"
-  
             />
 
             <Text style={styles.label}>Heure (HH:MM) :</Text>
@@ -122,8 +140,8 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
               value={time}
               onChangeText={setTime}
               placeholder="HH:MM"
-            
             />
+
             <SelectedDay onSelectDays={handleSelectDays} />
           </ScrollView>
 
@@ -135,6 +153,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
     </Modal>
   );
 };
+
 
 const styles = StyleSheet.create({
   modalOverlay: {

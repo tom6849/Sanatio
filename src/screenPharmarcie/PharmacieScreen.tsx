@@ -2,14 +2,20 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Choice from './components/Choice';
 import { createStackNavigator } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
 import SearchMed from './components/SearchMed';
-import ScanOrd from './components/ScanOrd';
+import OcrScanner from './components/ScanOrd';
 
 const Stack = createStackNavigator();
 
 const PharmacyMain = ({ navigation }: { navigation: any }) => (
-    <View style={styles.container}>
-        <Text style={styles.title}>Ajouter un médicament</Text>
+    <LinearGradient 
+            colors={['#4D82F3', '#C9E0F8']}
+            style={styles.container}
+            start={{ x: 0.9, y: 0 }}
+        >
+        
+        <Text style={styles.title}>Add a Medication</Text>
         <Pressable
             style={styles.choiceButton}
             onPress={() => navigation.navigate('ScanScreen')}
@@ -22,7 +28,7 @@ const PharmacyMain = ({ navigation }: { navigation: any }) => (
         >
             <Choice value={2} />
         </Pressable>
-    </View>
+    </LinearGradient>
 );
 
 // Stack Navigator
@@ -36,7 +42,7 @@ const Pharmacy = () => {
             />
             <Stack.Screen
                 name="ScanScreen"
-                component={ScanOrd}
+                component={OcrScanner}
                 options={{
                     headerTitle: '',
                     headerBackTitleVisible: false,
@@ -60,8 +66,10 @@ const Pharmacy = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: '7%',
         backgroundColor: '#F3F6FB',
+        alignItems:"center",
+        gap:"100%"
     },
     title: {
         fontSize: 28,
@@ -72,19 +80,7 @@ const styles = StyleSheet.create({
     },
     choiceButton: {
         flex: 1,
-    },
-    screenContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F3F6FB',
-        paddingHorizontal: 20,
-    },
-    screenText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#002467',
-        textAlign: 'center',
+        width:"80%",
     },
 });
 
