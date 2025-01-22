@@ -23,9 +23,17 @@ const SearchMed: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://10.0.2.2:3000/api/v1/item");
+      console.log("1 ");
+      const response = await fetch("http://192.168.1.95:8089/api/v1/cisbdpm?query=do&page=1");
+      console.log("2 ");
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
-      const data: Medication[] = await response.json();
+      const jsonResponse = await response.json();
+      console.log("Médicaments récupérés :", jsonResponse);
+      const data: Medication[] = jsonResponse.elements;
+      if (!data || !Array.isArray(data)) {
+        throw new Error("Les données sont mal formatées ou 'elements' est manquant.");
+      }
+      console.log("Médicaments récupérés :", data);
       setFilteredMedications(data); // Initialise la liste affichée avec les médicaments par défaut
     } catch (err: any) {
       setError(err.message);
