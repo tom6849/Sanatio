@@ -58,8 +58,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
 
   const addLocalPrescription = async (): Promise<void> => {
     try {
-      const isoStartDate = convertToISODate(startDate);
-      const isoEndDate = convertToISODate(endDate);
       const newMedication: Medication = {
         id: medication.id,
         isoStartDate : startDate,
@@ -120,7 +118,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
 
 
           <Text style={styles.modalTitle}>{medication?.name}</Text>
-          <Text style={styles.modalSubTitle}>Type : {medication?.pharmaForm}</Text>
+          <Text style={styles.modalSubTitle}>Type(s) : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
 
 
