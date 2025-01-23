@@ -14,8 +14,6 @@ const PharmacyMain = ({ navigation }: { navigation: any }) => (
             style={styles.container}
             start={{ x: 0.9, y: 0 }}
         >
-        
-        <Text style={styles.title}>Add a Medication</Text>
         <Pressable
             style={styles.choiceButton}
             onPress={() => navigation.navigate('ScanScreen')}

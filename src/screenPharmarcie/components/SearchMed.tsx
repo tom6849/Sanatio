@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, Pressable } from 'react-native';
-import MedicationModal from './MedicationModal'; // Import du composant Modal
+import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
+import StoredMedicationItem from './StoredMedicamtionItem';
+import FilteredMedicationItem from './FilteredMedicationItem';
+import MedicationModal from './MedicationModal';
 import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../context/MedicationContext';
-import PilePlus from '../../img/ImgPilePlus';
-
-
 
 const SearchMed: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -17,53 +15,41 @@ const SearchMed: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
-  const headerText = searchQuery.trim() === '' ? 'Mes médicaments' : `Recherche de "${searchQuery.trim()}"`;
-  
-  const fetchMedications = async () => {
-    setLoading(true);
-    setError(null);
+
+  const loadStoredMedications = async () => {
     try {
-      const response = await fetch("http://192.168.1.95:8089/api/v1/cisbdpm?query=do&page=1");
-      if (!response.ok) throw new Error('Impossible de charger les médicaments.');
-      const jsonResponse = await response.json();
-      const data: Medication[] = jsonResponse.elements;
-      if (!data || !Array.isArray(data)) {
-        throw new Error("Les données sont mal formatées ou 'elements' est manquant.");
-      }
-      setFilteredMedications(data); // Initialise la liste affichée avec les médicaments par défaut
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      const storedData = await AsyncStorage.getItem('medications');
+      const parsedMedications: Medication[] = storedData ? JSON.parse(storedData) : [];
+      setStoredMedications(parsedMedications);
+    } catch (err) {
+      setError("Erreur lors du chargement des médicaments locaux.");
     }
   };
-  const loadStoredMedications = async () => {
-    const storedData = await AsyncStorage.getItem('medications');
-    const parsedMedications: Medication[] = storedData ? JSON.parse(storedData) : [];
-    setStoredMedications(parsedMedications);  // Stocke les médicaments en local
-  };
-
-  useEffect(() => {
-    fetchMedications();
-    loadStoredMedications();
-  }, []);
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
-    // Sinon, appeler l'API pour rechercher
+    if (query.trim() === '') {
+      setFilteredMedications([]);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://10.0.2.2:3000/api/v1/item?search=${query}`);
+      const response = await fetch(`http://172.20.10.4:8089/api/v1/cisbdpm?query=${query}&page=1`);
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
-      const data: Medication[] = await response.json();
-      setFilteredMedications(data);
+      const jsonResponse = await response.json();
+      setFilteredMedications(jsonResponse.elements || []);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadStoredMedications();
+  }, []);
 
   const openModal = (item: Medication) => {
     setSelectedMed(item);
@@ -76,6 +62,9 @@ const SearchMed: React.FC = () => {
     loadStoredMedications();
   };
 
+  const medicationsToDisplay = searchQuery.trim() === '' ? storedMedications : filteredMedications;
+  const headerText = searchQuery.trim() === '' ? 'Mes médicaments' : 'Recherche de "' + searchQuery.trim()+'"';
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBar}>
@@ -84,42 +73,23 @@ const SearchMed: React.FC = () => {
           style={styles.searchText}
           placeholder="Rechercher un médicament"
           value={searchQuery}
-          onChangeText={handleSearch} // Appel de la fonction handleSearch
+          onChangeText={handleSearch}
           placeholderTextColor="#808080C0"
         />
       </View>
       <Text style={styles.titleDisplay}>{headerText}</Text>
-      
 
       {loading ? (
         <ActivityIndicator size="large" color="#002467" />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
-      ) : filteredMedications.length > 0 ? (
-        <FlatList
-          data={searchQuery.trim() === '' ? storedMedications : filteredMedications}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Pressable style={styles.medicationItem} onPress={() => openModal(item)}>
-              <View style={styles.medicationIcon}>
-                <PilePlus/>
-              </View>
-              <View style={styles.infoMedication}>
-                <View>
-                  <Text>{item.isoStartDate != undefined ? item.isoStartDate : "null"}</Text>
-                  <Text>{item.isoEndDate}</Text>
-                </View>
-                <Text style={styles.MedicationName}>{item.name}</Text>
-                <Text style={styles.MedicationType}>Type : {item.pharmaForm}</Text>
-                <Text style={styles.MedicationType}>Administration : {item.administrationRoutes}</Text>
-                <Text style={styles.MedicationType}>Nombre de cette article{item.count}</Text>
-              </View>
-              
-            </Pressable>
-          )}
-        />
       ) : (
-        <Text style={styles.NoResultsText}>Aucun médicament trouvé</Text>
+        searchQuery.trim() === '' ? (
+          <StoredMedicationItem medications={storedMedications} onPress={openModal} />
+        ) : (
+          <FilteredMedicationItem medications={filteredMedications} onPress={openModal} />
+        )
+        
       )}
       <MedicationModal
         visible={modalVisible}
@@ -139,43 +109,16 @@ const styles = StyleSheet.create({
   searchBar: {
     alignItems: 'center',
     flexDirection: 'row',
-    width: '100%',
-    height: '7%',
     backgroundColor: '#FFF',
     borderRadius: 8,
     paddingHorizontal: 10,
     borderColor: '#CCC',
     borderWidth: 1,
-    gap: '20%',
   },
   searchText: {
     fontSize: 16,
     color: '#333',
-  },
-  medicationItem: {
-    backgroundColor: 'white',
-    display:'flex',
-    flexDirection: 'row',
-    justifyContent: "flex-start",
-    alignItems:'center',
-    padding:"5%",
-    gap:"50%"
-    
-  },
-  infoMedication: {
-    display: 'flex',
-    flexDirection:'column',
-  },
-  medicationIcon: {
-    display:'flex',
-    flex:1
-    
-  },
-  NoResultsText: {
-    fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
-    marginTop: 20,
+    flex: 1,
   },
   errorText: {
     fontSize: 16,
@@ -183,25 +126,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-  MedicationName: {
-    fontSize: 18,
-    color: '#002467',
-  },
-  MedicationType: {
-    fontSize: 14,
-    color: 'gray',
-  },
   icon: {
     maxWidth: '7%',
   },
   titleDisplay: {
-    display: 'flex',
-    alignItems:'center',
-    marginVertical:'4%',
+    marginVertical: '4%',
     fontSize: 20,
     color: '#0073C5',
   },
-
 });
 
 export default SearchMed;
+
+

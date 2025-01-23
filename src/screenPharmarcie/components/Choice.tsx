@@ -6,8 +6,8 @@ import Search from '../../img/ImgSearchMed';
 const { width, height } = Dimensions.get('window');
 
 const Choice = ({ value }: { value: number }) => {
-    const title = value === 1 ? 'By Ordonnance' : 'By Research';
-    const subtitle = value === 1 ? 'Scan or upload your prescriptions here' : 'Quickly find information';
+    const title = value === 1 ? 'Ajouter une Ordonnance' : 'Ajouter un médicament';
+    const subtitle = value === 1 ? 'Scan ou ajoute ton ordonannce depuis tes fichier' : 'cherche ton médicament';
 
     return (
         <View style={styles.container}>
@@ -53,8 +53,7 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         flex: 1, // Utilise l'espace restant pour l'icône
-        width:"100%",
-        height:"100%"
+        width:"60%",
     },
     
 });
