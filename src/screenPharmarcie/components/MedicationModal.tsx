@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import {Modal,View,Text,StyleSheet,Pressable,TextInput,ScrollView,Alert,TouchableOpacity,KeyboardAvoidingView,Platform,} from 'react-native';
 import CloseModal from '../../img/CloseModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
@@ -7,30 +7,38 @@ import { Medication } from '../../context/MedicationContext';
 import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
 
+
 type MedicationModalProps = {
   visible: boolean;
   onClose: () => void;
   medication: Medication | null;
 };
 
-const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, medication }) => {
+
+const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClose=()=>{}, medication=null }) => {
   const { medications, setMedications } = useMedication();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [time, setTime] = useState<string>('');
   const [selectedDays, setSelectedDays] = useState<{ [key: string]: boolean }>({});
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartDatePicker, setshowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setshowEndDatePicker] = useState(false);
+  const [showTimePicker, setshowTimePicker] = useState(false);
+
 
   if (!medication) return null;
+
 
   const handleSelectDays = (days: { [key: string]: boolean }) => {
     setSelectedDays(days);
   };
 
+
   const convertToISODate = (date: string): string => {
     const [day, month, year] = date.split('/');
     return `${year}-${month}-${day}`;
   };
+
 
   const generateDatesToTake = (): string[] => {
     const dates: string[] = [];
@@ -47,18 +55,19 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
     return dates;
   };
 
+
   const addLocalPrescription = async (): Promise<void> => {
     try {
       const isoStartDate = convertToISODate(startDate);
       const isoEndDate = convertToISODate(endDate);
       const newMedication: Medication = {
         id: medication.id,
-        isoStartDate,
-        isoEndDate,
+        isoStartDate : startDate,
+        isoEndDate:endDate,
         name: medication.name,
         pharmaForm: medication.pharmaForm,
         administrationRoutes: medication.administrationRoutes,
-        time,
+        time : time,
         jours: selectedDays,
         date: generateDatesToTake(),
         count: 1,
@@ -66,13 +75,12 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
       const storedMedications = await AsyncStorage.getItem('medications');
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
 
+
       const existingMedicationIndex = existingMedications.findIndex((med) => med.id === newMedication.id);
       if (existingMedicationIndex !== -1) {
-        // Incrémenter le count du médicament existant
         existingMedications[existingMedicationIndex].count =
           (existingMedications[existingMedicationIndex].count || 1) + 1;
       } else {
-        // Ajouter le nouveau médicament si aucun duplicata n'existe
         existingMedications.push(newMedication);
       }
       await AsyncStorage.setItem('medications', JSON.stringify(existingMedications));
@@ -89,6 +97,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
     }
   };
 
+
   const handleAddMedication = (): void => {
     if (!startDate || !endDate || !time) {
       Alert.alert('Erreur', 'Tous les champs doivent être remplis.');
@@ -97,58 +106,88 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible, onClose, med
     addLocalPrescription();
   };
 
+
   return (
     <Modal transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+        <KeyboardAvoidingView
+          style={styles.modalContent}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
           <Pressable style={styles.closeButton} onPress={onClose}>
             <CloseModal size={40} color="#1e3a8a" />
           </Pressable>
 
+
           <Text style={styles.modalTitle}>{medication?.name}</Text>
           <Text style={styles.modalSubTitle}>Type : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
-          <ScrollView contentContainerStyle={styles.formContainer}>
 
+
+          <ScrollView
+            contentContainerStyle={[styles.formContainer, { flexGrow: 1 }]}
+            keyboardShouldPersistTaps="handled"
+          >
             <Text style={styles.label}>Date de début (DD/MM/YYYY) :</Text>
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.input}>{startDate || 'Sélectionner la date'}</Text>
+            <TouchableOpacity onPress={() => setshowStartDatePicker(true)} style={styles.input}>
+              <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
             </TouchableOpacity>
 
-            {showDatePicker && (
+
+            {showStartDatePicker && (
               <DatePicker
                 mode="calendar"
                 selected={startDate}
                 onDateChange={(date) => {
                   setStartDate(date);
-                  setShowDatePicker(false); // Fermer le DatePicker après sélection
+                  setshowStartDatePicker(false);
                 }}
               />
             )}
 
+
             <Text style={styles.label}>Date de fin (DD/MM/YYYY) :</Text>
-            <TextInput
-              style={styles.input}
-              value={endDate}
-              onChangeText={setEndDate}
-              placeholder="DD/MM/YYYY"
-            />
+            <TouchableOpacity onPress={() => setshowEndDatePicker(true)} style={styles.input}>
+              <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
+            </TouchableOpacity>
+
+
+            {showEndDatePicker && (
+              <DatePicker
+                mode="calendar"
+                selected={endDate}
+                onDateChange={(date) => {
+                  setEndDate(date);
+                  setshowEndDatePicker(false);
+                }}
+              />
+            )}
+
 
             <Text style={styles.label}>Heure (HH:MM) :</Text>
-            <TextInput
-              style={styles.input}
-              value={time}
-              onChangeText={setTime}
-              placeholder="HH:MM"
-            />
+            <TouchableOpacity onPress={() => setshowTimePicker(true)} style={styles.input}>
+              <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
+            </TouchableOpacity>
+            {showTimePicker && (
+              <DatePicker
+                mode="time"
+                selected={time}
+                onTimeChange={(time) => {
+                  setTime(time);
+                  setshowTimePicker(false);
+                }}
+              />
+            )}
+
 
             <SelectedDay onSelectDays={handleSelectDays} />
           </ScrollView>
 
+
           <Pressable style={styles.addButton} onPress={handleAddMedication}>
             <Text style={styles.addButtonText}>Ajouter le médicament</Text>
           </Pressable>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   );
@@ -196,23 +235,24 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-    width: '100%',
     height: 50,
     backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
     borderRadius: 12,
     paddingLeft: 20,
-    marginBottom: 20,
-    fontSize: 16,
     color: '#333',
     borderWidth: 1,
     borderColor: '#ddd',
+    marginBottom: 15,
+  },
+  inputText: {
+    fontSize: 16,
   },
   formContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingBottom: 20,
+    padding: 10,
   },
   addButton: {
+    marginTop: 20,
     paddingVertical: 12,
     backgroundColor: '#1e3a8a',
     borderRadius: 12,
@@ -227,4 +267,8 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default MedicationModal;
+
+
+
