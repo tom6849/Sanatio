@@ -121,12 +121,14 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
           <Text style={styles.modalSubTitle}>Type(s) : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
 
-
+          <Pressable >
+            <Text></Text>
+          </Pressable>
           <ScrollView
             contentContainerStyle={[styles.formContainer, { flexGrow: 1 }]}
             keyboardShouldPersistTaps="handled"
           >
-            <Text style={styles.label}>Date de début (DD/MM/YYYY) :</Text>
+            <Text style={styles.label}>Date de début (Facultatif) :</Text>
             <TouchableOpacity onPress={() => setshowStartDatePicker(true)} style={styles.input}>
               <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
             </TouchableOpacity>
@@ -144,7 +146,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
             )}
 
 
-            <Text style={styles.label}>Date de fin (DD/MM/YYYY) :</Text>
+            <Text style={styles.label}>Date de fin (Facultatif) :</Text>
             <TouchableOpacity onPress={() => setshowEndDatePicker(true)} style={styles.input}>
               <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
             </TouchableOpacity>
@@ -162,7 +164,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
             )}
 
 
-            <Text style={styles.label}>Heure (HH:MM) :</Text>
+            <Text style={styles.label}>Heure de prise (Facultatif) :</Text>
             <TouchableOpacity onPress={() => setshowTimePicker(true)} style={styles.input}>
               <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
             </TouchableOpacity>
