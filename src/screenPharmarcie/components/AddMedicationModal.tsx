@@ -46,9 +46,12 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
 
 
   const generateDatesToTake = (): string[] => {
+    console.log(startDate, endDate)
+    
     const dates: string[] = [];
     let currentDate = new Date(convertToISODate(startDate));
     const FinDate = new Date(convertToISODate(endDate));
+    console.log(currentDate, endDate)
     while (currentDate <= FinDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
       if (selectedDays[dayName]) {
@@ -83,6 +86,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
       };
   
       // Récupération des médicaments stockés dans AsyncStorage
+  
       const storedMedications = await AsyncStorage.getItem('medications');
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
   
@@ -124,10 +128,11 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
       onClose();
   
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement du médicament :", error);
+      console.error('Erreur lors de l\'enregistrement du médicament :', error);
       Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');
     }
   };
+  
   
 
 

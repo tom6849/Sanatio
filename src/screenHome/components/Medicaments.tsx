@@ -6,6 +6,7 @@ const { width } = Dimensions.get('window');
 
 const Medicaments = () => {
     return (
+        
         <View style={styles.card}>
             <View>
                 <View style={styles.medicineContainer}>
@@ -32,15 +33,16 @@ const Medicaments = () => {
 const styles = StyleSheet.create({
     card: {
         width: 220,
-        height: '100%',
+        height: '90%',
         borderRadius: 12,
         padding: 12,
         backgroundColor: '#FFF',
-        borderWidth: 1,
-        borderColor: '#4D82F3',
-        elevation: 3,
-        justifyContent : 'space-between'
+        justifyContent: 'space-between',
+        elevation: 10, 
+        overflow : 'visible',
     },
+    
+    
     medicineContainer: {
         marginBottom: 10,
         justifyContent: 'center',
