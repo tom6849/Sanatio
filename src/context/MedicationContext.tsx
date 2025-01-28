@@ -41,6 +41,7 @@ export type Medication = {
 type MedicationContextType = {
   medications: Medication[];
   setMedications: (medications: Medication[]) => void;
+  medToday : Medication[]
 };
 
 // Création du contexte MedicationContext avec une valeur par défaut de undefined.
@@ -70,8 +71,8 @@ export const useMedication = (): MedicationContextType => {
  * @returns {JSX.Element} - Le composant `MedicationProvider` qui enveloppe les enfants.
  */
 export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // État local pour stocker la liste des médicaments.
   const [medications, setMedications] = useState<Medication[]>([]);
+  const [medToday, setMedToday] = useState<Medication[]>([]);
 
   /**
    * Fonction pour charger les médicaments depuis AsyncStorage au démarrage de l'application.
@@ -79,7 +80,6 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
    */
   const loadMedications = async () => {
     try {
-      // Tente de récupérer les médicaments sauvegardés dans AsyncStorage.
       const storedMedications = await AsyncStorage.getItem('medications');
       if (storedMedications) {
         // Si des médicaments sont trouvés, on les parse et les met dans l'état.
@@ -89,11 +89,17 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
       console.error('Erreur lors du chargement des médicaments:', error);
     }
   };
-
-  // Utilisation de useEffect pour appeler loadMedications une seule fois au démarrage.
   useEffect(() => {
     loadMedications();
-  }, []); // Le tableau vide [] garantit que l'effet est exécuté une seule fois lors du montage.
+  }, []); 
+
+  useEffect(() => {
+    if (medications.length > 0) {
+      countMedicationsForToday(medications);
+    }
+  }, [medications]);
+
+
 
   /**
    * Fonction pour mettre à jour les médicaments dans l'état local et dans AsyncStorage.
@@ -106,8 +112,30 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
     await AsyncStorage.setItem('medications', JSON.stringify(newMedications));
   };
 
+
+  const countMedicationsForToday = (medications: Medication[]) => {
+    const dateObject = new Date();
+    const dateString = dateObject.toLocaleDateString('fr-FR');
+    const [jour, mois, annee] = dateString.split('/');
+    const todayIso = `${annee}-${mois}-${jour}`;
+  
+    let medicationsForToday: Medication[] = [];
+  
+    medications.forEach((elem) => {
+      elem.date?.forEach((date) => {
+        console.log("test :", date, todayIso)
+        if (date === todayIso) {
+          medicationsForToday.push(elem);  
+        }
+      });
+    });
+  
+    setMedToday(medicationsForToday);  
+  };
+  
+
   return (
-    <MedicationContext.Provider value={{ medications, setMedications: updateMedications }}>
+    <MedicationContext.Provider value={{ medications, setMedications: updateMedications, medToday  }}>
       {children}
     </MedicationContext.Provider>
   );

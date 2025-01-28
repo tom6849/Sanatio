@@ -1,26 +1,28 @@
 import React from 'react';
 import { StyleSheet, View, Image, Dimensions, Text } from 'react-native';
 import ButtonValidate from '../../screenCalendar/components/ButtonValidate';
+import { Medication } from '../../context/MedicationContext';
 
 const { width } = Dimensions.get('window');
 
-const Medicaments = () => {
+const Medicaments = ({ medication }: { medication: Medication }) => {
+
     return (
-        
         <View style={styles.card}>
             <View>
                 <View style={styles.medicineContainer}>
-                    <Text style={styles.medicineText}>Dafalgan 500mg</Text>
+                <Text style={styles.medicineText} numberOfLines={1}  ellipsizeMode="tail" >{medication.name}</Text>
+
                 </View>
                 <View style={styles.content}>
                     <Image  
-                        source={require('../../img/Exemple.png')} 
+                        source={require('../../img/PilePlus.png')} 
                         style={styles.image} 
                         resizeMode="contain" 
                     />
                     <View style={styles.timeContainer}>
-                        <Text style={styles.time}>20:30</Text>
-                        <Text style={styles.route}>Oral</Text>
+                        <Text style={styles.time}>{medication.time}</Text>
+                        <Text style={styles.route}>{medication.administrationRoutes}</Text>
                     </View>
                 </View>
             </View>
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         justifyContent: 'space-between',
         elevation: 10, 
-        overflow : 'visible',
+        overflow : 'hidden',
     },
     
     
@@ -50,11 +52,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     medicineText: {
-        fontSize: 18, 
+        fontSize: 18,
         color: '#292F35',
         fontWeight: 'bold',
-        flexWrap : 'wrap'
+        flexWrap: 'wrap',
     },
+    
     content: {
         flexDirection: 'row',
         alignItems: 'center',
