@@ -41,9 +41,12 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
 
 
   const generateDatesToTake = (): string[] => {
+    console.log(startDate, endDate)
+    
     const dates: string[] = [];
     let currentDate = new Date(convertToISODate(startDate));
     const FinDate = new Date(convertToISODate(endDate));
+    console.log(currentDate, endDate)
     while (currentDate <= FinDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
       if (selectedDays[dayName]) {
@@ -60,29 +63,21 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
     try {
       const newMedication: Medication = {
         id: medication.id,
-        isoStartDate : startDate,
-        isoEndDate:endDate,
+        isoStartDate: startDate,
+        isoEndDate: endDate,
         name: medication.name,
         pharmaForm: medication.pharmaForm,
         administrationRoutes: medication.administrationRoutes,
-        time : time,
+        time: time,
         jours: selectedDays,
         date: generateDatesToTake(),
         count: 1,
       };
+  
       const storedMedications = await AsyncStorage.getItem('medications');
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
-
-
-      const existingMedicationIndex = existingMedications.findIndex((med) => med.id === newMedication.id);
-      if (existingMedicationIndex !== -1) {
-        existingMedications[existingMedicationIndex].count =
-          (existingMedications[existingMedicationIndex].count || 1) + 1;
-      } else {
-        existingMedications.push(newMedication);
-      }
-      await AsyncStorage.setItem('medications', JSON.stringify(existingMedications));
-      setMedications(existingMedications);
+      const updatedMedications = [...existingMedications, newMedication];
+      setMedications(updatedMedications);
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
       setStartDate('');
       setEndDate('');
@@ -90,10 +85,11 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
       setSelectedDays({});
       onClose();
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement du médicament :", error);
+      console.error('Erreur lors de l\'enregistrement du médicament :', error);
       Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');
     }
   };
+  
 
 
   const handleAddMedication = (): void => {
