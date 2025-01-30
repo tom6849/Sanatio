@@ -40,31 +40,34 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
   };
   
   const generateDatesToTake = () => {
-    const dates: string[] = [];
+    const dates: { date: string; taken: boolean }[] = [];
     let currentDate = new Date(convertToISODate(startDate));
     const finDate = new Date(convertToISODate(endDate));
   
-   
     while (currentDate <= finDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
   
       if (selectedDays[dayName]) {
         const formattedDate = currentDate.toISOString().split('T')[0];
-        dates.push(formattedDate);
+        dates.push({ date: formattedDate, taken: false });
       }
-
+  
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    console.log(dates)
+  
     return dates;
   };
   
+  
+  const generateUniqueId = () => {
+    return 'med-' + new Date().getTime();  
+  };
 
 
   const addLocalPrescription = async (): Promise<void> => {
     try {
       const newMedication: Medication = {
-        id: medication.id,
+        id: generateUniqueId(),
         isoStartDate : startDate,
         isoEndDate:endDate,
         name: medication.name,
@@ -73,7 +76,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
         time : time,
         jours: selectedDays,
         date: generateDatesToTake(),
-        count: 1,
       };
       const storedMedications = await AsyncStorage.getItem('medications');
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
