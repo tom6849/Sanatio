@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication, useMedication } from '../../context/MedicationContext';
 
 const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>("Prendre le médicament");
     const [isTaken, setIsTaken] = useState<boolean>(false);
     const { medications, setMedications } = useMedication(); 
     useEffect(() => {
