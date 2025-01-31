@@ -2,19 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import Item from './components/Item';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMedication } from './../context/MedicationContext';
 
 type AgendaItem = {
   name: string;
   time: string;
   endroit: string;
+  id : string;
+  date : string
 };
 
 const Calendar: React.FC = () => {
+  const { medications } = useMedication();
   const [items, setItems] = useState<{ [key: string]: AgendaItem[] }>({});
+  const [date, setDate] = useState<{ [key: string]: AgendaItem[] }>({});
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
-
+  useEffect(() => {
+    const medicationByDate: { [key: string]: AgendaItem[] } = {};
+    medications.forEach((med) => {
+      med.date.forEach((elem) => {
+        if (medicationByDate[elem.date] == null) {
+          medicationByDate[elem.date] = [];
+        }
+        medicationByDate[elem.date].push({
+          name: med.name,
+          time: med.time,
+          endroit: med.administrationRoutes,
+          id: med.id,
+          date: elem.date
+        
+        });
+        console.log(elem.date)
+      });
+    });
+    setItems(medicationByDate);
+  }, [medications]); 
+  
 
   const getMonthYear = (date: string) => {
     const options: Intl.DateTimeFormatOptions = { month: 'long', year: 'numeric' };
@@ -48,7 +72,6 @@ const Calendar: React.FC = () => {
   };
   LocaleConfig.defaultLocale = 'fr';
 
-  // Calendar theme
   const customTheme = {
     backgroundColor: '#F4F5F6',
     calendarBackground: '#ffffff',

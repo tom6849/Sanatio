@@ -36,7 +36,7 @@ const SearchMed: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://192.168.70.220:8089/api/v1/cisbdpm?query=${query}&page=1`);
+      const response = await fetch(`http://192.168.1.20:8089/api/v1/cisbdpm?query=${query}&page=1`);
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
       const jsonResponse = await response.json();
       setFilteredMedications(jsonResponse.elements || []);

@@ -20,13 +20,13 @@ const Ordonnance = () => {
         return (
           <View key={index} style={styles.ordonnance}>
             <Image
-              source={require('../../img/Exemple.png')}
+              source={require('../../img/PilePlus.png')}
               style={styles.image}
               resizeMode="cover"
             />
             <View style={styles.title}>
-              <Text style={styles.medicationName}>{elem.name}</Text>
-              <Text style={styles.medicationInfo}>{elem.pharmaForm}</Text>
+              <Text style={styles.medicationName} numberOfLines={1} ellipsizeMode="tail" >{elem.name}</Text>
+              <Text style={styles.medicationInfo} numberOfLines={2} ellipsizeMode="tail" >{elem.pharmaForm}</Text>
               <Text style={styles.dateText}>{elem.isoStartDate} ➡ {elem.isoEndDate}</Text>
             </View>
 
@@ -34,7 +34,7 @@ const Ordonnance = () => {
               style={styles.activateButton}
               onPress={() => handleActivate(elem)}
             >
-              <Text style={styles.buttonText}>Réactiver</Text>
+              <Text style={styles.buttonText}>+</Text>
             </TouchableOpacity>
           </View>
         );
@@ -46,7 +46,6 @@ const Ordonnance = () => {
 const styles = StyleSheet.create({
   container: {
     margin: 20,
-    flexGrow: 1,
   },
   ordonnance: {
     flexDirection: 'row',
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 50,
     fontWeight: 'bold',
   },
 });

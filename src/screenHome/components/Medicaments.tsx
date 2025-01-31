@@ -4,7 +4,7 @@ import ButtonValidate from '../../screenCalendar/components/ButtonValidate';
 import { Medication } from '../../context/MedicationContext';
 
 const Medicaments = ({ medication }: { medication: Medication }) => {
-
+    const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
     return (
         <View style={styles.card}>
             <Text style={styles.medicineText} numberOfLines={1} ellipsizeMode="tail" >{medication.name}</Text>
@@ -19,7 +19,7 @@ const Medicaments = ({ medication }: { medication: Medication }) => {
                     <Text style={styles.route} numberOfLines={2} ellipsizeMode="tail">{medication.administrationRoutes}</Text>
                 </View>
             </View>
-            <ButtonValidate id={medication.id} />
+            <ButtonValidate id={medication.id} date={todayIso}/>
         </View>
     );
 };

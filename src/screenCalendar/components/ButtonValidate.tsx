@@ -3,48 +3,50 @@ import { Pressable, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication, useMedication } from '../../context/MedicationContext';
 
-const ButtonValidate = ({ id }: { id: string }) => {
-    const [message, setMessage] = useState<string>("Prendre le médicament");
-    const [clicked, setClicked] = useState<boolean>(false);
+const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
+    const [message, setMessage] = useState<string>("");
     const [isTaken, setIsTaken] = useState<boolean>(false);
     const { medications, setMedications } = useMedication(); 
     useEffect(() => {
     }, [setMedications]);
-    const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
 
     useEffect(() => {
         const checkIfTaken = async () => {
             if (medications != null) {
                 const medicationIndex = medications.findIndex((med: Medication) => med.id == id);
                 if (medicationIndex !== -1) {
-                    const isTakenToday = medications[medicationIndex].date.some((entry: { date: string; taken: boolean }) =>
-                        entry.date == todayIso && entry.taken == true
-                    );
-                    setIsTaken(isTakenToday); 
-                    setMessage("Médicament Pris !");
+                    const takenEntry = medications[medicationIndex].date.find(elem => elem.date === date);
+                    if (takenEntry) {
+                        setIsTaken(takenEntry.taken);
+                        setMessage(takenEntry.taken ? "Médicament Pris !" : "Prendre le médicament");
+                    }
                 }
             }
         };
         checkIfTaken();
-    }, []); 
+    }, [medications, id, date]); 
+    
     
 
     const handlePress = async () => {
         try {
-            const storedMedications = await AsyncStorage.getItem('medications');
-            if (storedMedications) {
-                const medicationsList = JSON.parse(storedMedications);
-                const medicationIndex = medicationsList.findIndex((med: Medication) => med.id === id);
+            if (medications) {
+                const medicationIndex = medications.findIndex((med: Medication) => med.id === id);
                 if (medicationIndex !== -1) {
-                    medicationsList[medicationIndex].date = medicationsList[medicationIndex].date.map((entry: { date: string; taken: boolean }) =>
-                        entry.date === todayIso
-                            ? { ...entry, taken: true }  
-                            : entry  
-                    );
-                    setMedications([...medicationsList]);
-                    setIsTaken(true); 
+                    const updatedMedications = medications.map((med, index) => {
+                        if (index === medicationIndex) {
+                            return {
+                                ...med,
+                                date: med.date.map((entry) => 
+                                    entry.date === date ? { ...entry, taken: true } : entry
+                                )
+                            };
+                        }
+                        return med;
+                    });
+    
+                    setMedications(updatedMedications);
                     setMessage("Médicament Pris !");
-                    setClicked(true);
                 } else {
                     console.log(`Médicament ${id} introuvable.`);
                 }
@@ -55,10 +57,11 @@ const ButtonValidate = ({ id }: { id: string }) => {
             console.error("Erreur lors de la mise à jour du médicament :", error);
         }
     };
+    
 
     return (
         <Pressable 
-            style={[styles.button, clicked && styles.buttonClicked, isTaken && styles.buttonClicked]} 
+            style={[styles.button, isTaken && styles.buttonClicked]} 
             onPress={handlePress}
         >
             <Text style={styles.text}>{message}</Text>

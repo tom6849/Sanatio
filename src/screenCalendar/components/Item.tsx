@@ -9,20 +9,19 @@ type AgendaItem = {
     name: string;
     time: string;
     endroit : string;
+    id : string;
+    date : string;
   };
 const Item = (item: AgendaItem) => {
-    
-
     return (
         <View style={styles.itemContainer}>
       <Text style={styles.itemName}>{item.name}</Text>
       <View style={styles.organisation}>
-        <Image source={require('../../img/Exemple.png')} style={styles.image} resizeMode="cover" />
+        <Image source={require('../../img/PilePlus.png')} style={styles.image} resizeMode="cover" />
         <View  style={styles.valeur}>
           <Text style={styles.itemTime}>{item.time}</Text>
           <Text style={styles.itemTime}>{item.endroit}</Text>
-
-          <ButtonValidate/>
+          <ButtonValidate id={item.id} date={item.date}/>
         </View>
       </View>
     </View>
