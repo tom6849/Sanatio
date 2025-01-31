@@ -5,12 +5,12 @@ import MedicationRecap from './components/MedicationRecap';
 import QuickAction from './components/QuickAction';
 
 
-const HomeScreen = () => (
+const HomeScreen = ({ navigation }: { navigation: any }) => (
     <View style={styles.container}>
         <HeaderHome ></HeaderHome>
         <View style={styles.info} >
             <MedicationRecap></MedicationRecap>
-            <QuickAction></QuickAction>
+            <QuickAction navigation={navigation}></QuickAction>
         </View>
     </View>
     

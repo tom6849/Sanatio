@@ -29,7 +29,6 @@ const PharmacyMain = ({ navigation }: { navigation: any }) => (
     </LinearGradient>
 );
 
-// Stack Navigator
 const Pharmacy = () => {
     return (
         <Stack.Navigator>

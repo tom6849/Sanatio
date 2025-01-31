@@ -1,24 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image  } from 'react-native';
+import { View, Text, StyleSheet, Pressable  } from 'react-native';
 import Action from './Action';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const QuickAction = () => {
+const Stack = createStackNavigator();
+
+const QuickAction = ({ navigation }: { navigation: any }) =>  {
     return (
         <View style={styles.container}>
                 <View style={styles.row}>
-                    <View style={styles.box}>
+                    <Pressable style={styles.box} onPress={() => navigation.navigate('ScanScreen')}>
                         <Text style={styles.boxTitle}>Ajouter une ordonnance</Text>
                         <Action logo="photo" />
-                    </View>
-                    <View style={styles.box}>
+                        
+                    </Pressable>
+                    <Pressable style={styles.box} onPress={() => navigation.navigate('SearchMedScreen')}>
                         <Text style={styles.boxTitle}>Rechercher un médicament</Text>
                         <Action logo="search" />
-                    </View>
+                    </Pressable>
                 </View>
-                <View style={styles.fullWidthBox} >
-                <Text style={styles.boxTitle}>Signaler un effet secondaire </Text>
+                <Pressable style={styles.fullWidthBox} >
+                    <Text style={styles.boxTitle}>Signaler un effet secondaire </Text>
                      <Action logo="effet" />
-                </View>
+                </Pressable>
                
         </View>
     );
