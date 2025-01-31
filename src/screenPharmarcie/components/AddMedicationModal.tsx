@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import {Modal,View,Text,StyleSheet,Pressable,TextInput,ScrollView,Alert,TouchableOpacity,KeyboardAvoidingView,Platform,} from 'react-native';
+import {Modal,View,Text,StyleSheet,Pressable,TextInput,ScrollView,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from 'react-native';
 import CloseModal from '../../img/CloseModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../context/MedicationContext';
+import { PillStock } from '../../context/PillStockContext';
 import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
 
@@ -14,6 +15,7 @@ type MedicationModalProps = {
   medication: Medication | null;
 };
 
+type SetShowFunction = React.Dispatch<React.SetStateAction<boolean>>;
 
 const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClose=()=>{}, medication=null }) => {
   const { medications, setMedications } = useMedication();
@@ -24,7 +26,10 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
   const [showStartDatePicker, setshowStartDatePicker] = useState(false);
   const [showEndDatePicker, setshowEndDatePicker] = useState(false);
   const [showTimePicker, setshowTimePicker] = useState(false);
-
+  const [nbboite,setnbboite] = useState(0);
+  const [nbpill,setnbmedicament] = useState(0);
+  const [showPartStock,setshowPartStock] = useState(false);
+  const [showPartPrise,setshowPartPrise] = useState(false);
 
   if (!medication) return null;
 
@@ -81,17 +86,19 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
       const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
       setMedications([...existingMedications, newMedication]);
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
+  
+      // Réinitialisation des champs du formulaire
       setStartDate('');
       setEndDate('');
       setTime('');
       setSelectedDays({});
       onClose();
+  
     } catch (error) {
       console.error("Erreur lors de l'enregistrement du médicament :", error);
       Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');
     }
   };
-
 
   const handleAddMedication = (): void => {
     if (!startDate || !endDate || !time) {
@@ -101,6 +108,20 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
     addLocalPrescription();
   };
 
+  const onChangenb = (text:string , type:string) => {
+    // Allow only numbers
+    const numericValue = text.replace(/[^0-9]/g, "");
+    const numberValue = numericValue ? parseInt(numericValue, 10) : 0;
+    if(type == 'medicament'){
+      setnbmedicament(numberValue);
+    }else{
+      setnbboite(numberValue);
+    }
+  };
+  const setshow= (setShowFunc: SetShowFunction) => {
+    setShowFunc(prev => !prev);
+  }
+  
 
   return (
     <Modal transparent={true} visible={visible} onRequestClose={onClose}>
@@ -117,67 +138,83 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
           <Text style={styles.modalTitle}>{medication?.name}</Text>
           <Text style={styles.modalSubTitle}>Type(s) : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
-
-          <Pressable >
-            <Text></Text>
-          </Pressable>
+          
           <ScrollView
             contentContainerStyle={[styles.formContainer, { flexGrow: 1 }]}
             keyboardShouldPersistTaps="handled"
           >
-            <Text style={styles.label}>Date de début (Facultatif) :</Text>
-            <TouchableOpacity onPress={() => setshowStartDatePicker(true)} style={styles.input}>
-              <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
+            <TouchableOpacity onPress={() => setshow(setshowPartStock)} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Ajouter au stock</Text>
             </TouchableOpacity>
-
-
-            {showStartDatePicker && (
-              <DatePicker
-                mode="calendar"
-                selected={startDate}
-                onDateChange={(date) => {
-                  setStartDate(date);
-                  setshowStartDatePicker(false);
-                }}
-              />
+            {showPartStock && (
+              <View style={styles.bloc}>
+                <Text style={styles.label}> Nombre de boite :</Text>
+                <TextInput keyboardType="numeric" placeholder="Type numbers here" value={nbboite.toString()} onChangeText={Text=>onChangenb(Text,'boite')} style={styles.input}/>
+                <Text style={styles.label}>Nombre de médicament par boite :</Text>
+                <TextInput keyboardType="numeric" placeholder="Type numbers here" value={nbpill.toString()} onChangeText={Text=>onChangenb(Text,'medicament')} style={styles.input}/>
+              </View>
             )}
 
-
-            <Text style={styles.label}>Date de fin (Facultatif) :</Text>
-            <TouchableOpacity onPress={() => setshowEndDatePicker(true)} style={styles.input}>
-              <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
+            <TouchableOpacity onPress={() => setshow(setshowPartPrise)} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Ajouter au Prises</Text>
             </TouchableOpacity>
+            
+            {showPartPrise && (
+              <View style={styles.bloc}>
+                <Text style={styles.label}>Date de début (Facultatif) :</Text>
+                <TouchableOpacity onPress={() => setshow(setshowStartDatePicker)} style={styles.input}>
+                  <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
+                </TouchableOpacity>
 
 
-            {showEndDatePicker && (
-              <DatePicker
-                mode="calendar"
-                selected={endDate}
-                onDateChange={(date) => {
-                  setEndDate(date);
-                  setshowEndDatePicker(false);
-                }}
-              />
+                {showStartDatePicker && (
+                  <DatePicker
+                    mode="calendar"
+                    selected={startDate}
+                    onDateChange={(date) => {
+                      setStartDate(date);
+                      setshow(setshowStartDatePicker);
+                    }}
+                  />
+                )}
+
+
+                <Text style={styles.label}>Date de fin (Facultatif) :</Text>
+                <TouchableOpacity onPress={() => setshow(setshowEndDatePicker)} style={styles.input}>
+                  <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
+                </TouchableOpacity>
+
+
+                {showEndDatePicker && (
+                  <DatePicker
+                    mode="calendar"
+                    selected={endDate}
+                    onDateChange={(date) => {
+                      setEndDate(date);
+                      setshow(setshowEndDatePicker);
+                    }}
+                  />
+                )}
+
+
+                <Text style={styles.label}>Heure de prise (Facultatif) :</Text>
+                <TouchableOpacity onPress={() => setshow(setshowTimePicker)} style={styles.input}>
+                  <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
+                </TouchableOpacity>
+                {showTimePicker && (
+                  <DatePicker
+                    mode="time"
+                    selected={time}
+                    onTimeChange={(time) => {
+                      setTime(time);
+                      setshow(setshowTimePicker);
+                    }}
+                  />
+                )}
+                <SelectedDay onSelectDays={handleSelectDays} />
+              </View>
             )}
-
-
-            <Text style={styles.label}>Heure de prise (Facultatif) :</Text>
-            <TouchableOpacity onPress={() => setshowTimePicker(true)} style={styles.input}>
-              <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
-            </TouchableOpacity>
-            {showTimePicker && (
-              <DatePicker
-                mode="time"
-                selected={time}
-                onTimeChange={(time) => {
-                  setTime(time);
-                  setshowTimePicker(false);
-                }}
-              />
-            )}
-
-
-            <SelectedDay onSelectDays={handleSelectDays} />
+            
           </ScrollView>
 
 
@@ -262,6 +299,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
+  bloc: {
+    marginTop:'2%'
+  }
 });
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import StoredMedicationItem from './StoredMedicamtionItem';
 import FilteredMedicationItem from './FilteredMedicationItem';
-import MedicationModal from './MedicationModal';
+import MedicationModal from './AddMedicationModal';
 import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication } from '../../context/MedicationContext';
@@ -32,7 +32,6 @@ const SearchMed: React.FC = () => {
       setFilteredMedications([]);
       return;
     }
-
     setLoading(true);
     setError(null);
     try {
