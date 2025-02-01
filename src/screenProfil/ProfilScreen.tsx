@@ -6,6 +6,7 @@ import ContainerProfil from './components/ContainerProfil';
 import ContainerChoice from './components/ContainerChoice';
 import Stats from './components/Stats';
 import Ordonnance from './components/Ordonnance';
+import Effets from './components/Effets';
 
 const ProfileScreen = () => {
   const [selectedButton, setSelectedButton] = useState<number | null>(0);
@@ -31,7 +32,7 @@ const ProfileScreen = () => {
 
       <View style={styles.dynamicContent}>
         {selectedButton === 0 ? <Stats /> : null}
-        {selectedButton === 1 ? <Text style={styles.text}>Historique sélectionné</Text> : null}
+        {selectedButton === 1 ? <Effets /> : null}
         {selectedButton === 2 ? <Ordonnance /> : null}
       </View>
     </View>

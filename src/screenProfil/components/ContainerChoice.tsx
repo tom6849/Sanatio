@@ -18,7 +18,7 @@ const ContainerChoice = ({ onChoiceChange }: { onChoiceChange: (choice: number |
         onPress={() => handlePress(0)}
       />
       <ButtonChoice
-        text="Historique"
+        text="Effets"
         isPressed={pressedButton === 1}
         onPress={() => handlePress(1)}
       />

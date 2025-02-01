@@ -19,9 +19,9 @@ const QuickAction = ({ navigation }: { navigation: any }) =>  {
                         <Action logo="search" />
                     </Pressable>
                 </View>
-                <Pressable style={styles.fullWidthBox} >
+                <Pressable style={styles.fullWidthBox} onPress={() => navigation.navigate('You')}>
                     <Text style={styles.boxTitle}>Signaler un effet secondaire </Text>
-                     <Action logo="effet" />
+                    <Action logo="effet" />
                 </Pressable>
                
         </View>
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
         height : '60%',
         paddingTop : 32,
     },
-    
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -64,9 +63,6 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         fontWeight: 'bold',
         textAlign: 'center',
-        textShadowColor: '#00000',
-        textShadowOffset: { width: 1, height: 2 },
-        textShadowRadius: 6,
     },
     
 });
