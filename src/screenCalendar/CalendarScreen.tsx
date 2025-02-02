@@ -92,7 +92,7 @@ const Calendar: React.FC = () => {
       <View style={styles.calendar}>
         <Agenda
           items={items}
-          renderItem={Item}
+          renderItem={(item : AgendaItem) => <Item item={item} />}
           showOnlySelectedDayItems={true}
           pastScrollRange={12}
           futureScrollRange={12}
