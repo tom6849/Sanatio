@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable  } from 'react-native';
 import Action from './Action';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
 
 const QuickAction = ({ navigation }: { navigation: any }) =>  {
     return (

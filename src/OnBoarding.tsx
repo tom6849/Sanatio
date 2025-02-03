@@ -1,40 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, Image } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-export default class SignUpScreen extends Component<{}, { pagePosition: number }> {
-  constructor(props: {}) {
-    super(props);
-    this.state = { pagePosition: 1 };
-  }
 
-  next = () => {
-    const nextPage = this.state.pagePosition + 1;
+const OnBoarding = ({ navigation }: { navigation: any }) => {
+  const [pagePosition, setPagePosition] = useState(1);
+
+  const next = () => {
+    const nextPage = pagePosition + 1;
     if (nextPage <= 3) {
-      this.setState({ pagePosition: nextPage });
+      setPagePosition(nextPage);
     }
   };
 
-  signUp = () => {
-    this.props.navigation.navigate('SignUp');
+  const signUp = () => {
+    navigation.navigate('SignUp');
   };
 
-  signIn = () => {
-    // TODO: Navigate to sign-in screen
+  const signIn = () => {
+    navigation.navigate('SignUp');
+    
   };
 
-  onScrollHandler = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onScrollHandler = (event: any) => {
     const scrollViewAbscissa = event.nativeEvent.contentOffset.x;
     const pageWidth = Dimensions.get('window').width;
-    const pagePosition = Math.round(scrollViewAbscissa / pageWidth) + 1;
-    if (this.state.pagePosition !== pagePosition) {
-      this.setState({ pagePosition });
+    const newPagePosition = Math.round(scrollViewAbscissa / pageWidth) + 1;
+    if (newPagePosition !== pagePosition) {
+      setPagePosition(newPagePosition);  
     }
   };
 
-  render() {
-    const circleBackgroundColor = ['transparent', 'transparent', 'transparent'];
-    circleBackgroundColor[this.state.pagePosition - 1] = '#0073C5';
+  const circleBackgroundColor = ['transparent', 'transparent', 'transparent'];
+  circleBackgroundColor[pagePosition - 1] = '#0073C5';
 
     return (
       <SafeAreaView style={styles.container}>
@@ -44,9 +42,9 @@ export default class SignUpScreen extends Component<{}, { pagePosition: number }
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
-            onScroll={this.onScrollHandler}
+            onScroll={onScrollHandler}
             scrollEventThrottle={16}
-            contentOffset={{ x: (this.state.pagePosition - 1) * Dimensions.get('window').width, y: 0 }} 
+            contentOffset={{ x: (pagePosition - 1) * Dimensions.get('window').width, y: 0 }} 
           >
             <View style={styles.onboardingView}>
               <View style={styles.color}>
@@ -93,7 +91,7 @@ export default class SignUpScreen extends Component<{}, { pagePosition: number }
             </View>
           </ScrollView>
 
-          <TouchableOpacity onPress={this.next} style={styles.closeButton}>
+          <TouchableOpacity onPress={next} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Passer</Text>
           </TouchableOpacity>
 
@@ -104,11 +102,11 @@ export default class SignUpScreen extends Component<{}, { pagePosition: number }
               ))}
             </View>
 
-            <TouchableOpacity onPress={this.signUp} style={styles.signUpButton}>
+            <TouchableOpacity onPress={signUp} style={styles.signUpButton}>
               <Text style={styles.signUpButtonText}>S’INSCRIRE GRATUITEMENT</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={this.signIn} style={styles.signInButton}>
+            <TouchableOpacity onPress={signIn} style={styles.signInButton}>
               <Text style={styles.signInButtonText}>SE CONNECTER</Text>
             </TouchableOpacity>
           </View>
@@ -116,7 +114,6 @@ export default class SignUpScreen extends Component<{}, { pagePosition: number }
       </SafeAreaView>
     );
   }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -246,3 +243,4 @@ const styles = StyleSheet.create({
     marginTop: -6,
   },
 });
+export default OnBoarding

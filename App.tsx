@@ -14,11 +14,25 @@ import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
 import ImgProfil from './src/img/ImgProfil';
 import OnBoarding from './src/OnBoarding';
-import RegisterScreen from "./src/RegisterScreen";
+import RegisterScreen from './src/RegisterScreen';
+
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const App = () => {
+  const [onBoarding, setonBoarding] = useState(false);
+  if (onBoarding == false){
+    return(
+      <NavigationContainer>
+      <Stack.Navigator initialRouteName="OnBoarding">
+        <Stack.Screen name="OnBoarding" component={OnBoarding} options={{ headerShown: false }}  />
+        <Stack.Screen name="SignUp" component={RegisterScreen} options={{ headerShown: false }}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+    )
+  }
   return (
     <MedicationProvider> 
       <NavigationContainer>
