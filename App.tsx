@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +13,8 @@ import ImgHome from './src/img/ImgHome';
 import ImgCalendar from './src/img/ImgCalendar';
 import ImgPill from './src/img/ImgPill';
 import ImgProfil from './src/img/ImgProfil';
+import OnBoarding from './src/OnBoarding';
+import RegisterScreen from "./src/RegisterScreen";
 
 const Tab = createBottomTabNavigator();
 
