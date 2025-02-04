@@ -5,7 +5,7 @@ import FilteredMedicationItem from './FilteredMedicationItem';
 import MedicationModal from './AddMedicationModal';
 import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Medication } from '../../context/MedicationContext';
+import { Medication } from '../../type/Medication';
 
 const SearchMed: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -35,7 +35,7 @@ const SearchMed: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://192.168.1.20:8089/api/v1/cisbdpm?query=${query}&page=1`);
+      const response = await fetch(`http://192.168.1.116:8089/api/v1/cisbdpm?query=${query}&page=1`);
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
       const jsonResponse = await response.json();
       setFilteredMedications(jsonResponse.elements || []);

@@ -18,7 +18,7 @@ const OnBoarding = ({ navigation }: { navigation: any }) => {
   };
 
   const signIn = () => {
-    navigation.navigate('SignUp');
+    navigation.navigate('Connect');
     
   };
 
@@ -54,7 +54,7 @@ const OnBoarding = ({ navigation }: { navigation: any }) => {
                 <Path fill="#0073C5" d="M0,160L17.1,144C34.3,128,69,96,103,80C137.1,64,171,64,206,74.7C240,85,274,107,309,138.7C342.9,171,377,213,411,229.3C445.7,245,480,235,514,218.7C548.6,203,583,181,617,192C651.4,203,686,245,720,250.7C754.3,256,789,224,823,208C857.1,192,891,192,926,181.3C960,171,994,149,1029,154.7C1062.9,160,1097,192,1131,186.7C1165.7,181,1200,139,1234,144C1268.6,149,1303,203,1337,224C1371.4,245,1406,235,1423,229.3L1440,224L1440,320L1422.9,320C1405.7,320,1371,320,1337,320C1302.9,320,1269,320,1234,320C1200,320,1166,320,1131,320C1097.1,320,1063,320,1029,320C994.3,320,960,320,926,320C891.4,320,857,320,823,320C788.6,320,754,320,720,320C685.7,320,651,320,617,320C582.9,320,549,320,514,320C480,320,446,320,411,320C377.1,320,343,320,309,320C274.3,320,240,320,206,320C171.4,320,137,320,103,320C68.6,320,34,320,17,320L0,320Z" />
               </Svg>
               <View style={styles.textContainer}>
-                <Text style={styles.welcomeTitle}>Bienvenue sur notre App !</Text>
+                <Text style={styles.welcomeTitle}>Bienvenue sur Sanatio !</Text>
                 <Text style={styles.welcomeSubtitle}>
                   Gérez vos médicaments facilement et ne manquez jamais une prise.
                 </Text>

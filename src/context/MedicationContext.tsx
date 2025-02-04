@@ -1,22 +1,10 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'react-native-svg';
+import { User } from '../type/User';
+import { Medication } from '../type/Medication';
 
-/**
- * Définition du type Medication.
- * Représente un médicament avec ses informations essentielles.
- */
-export type Medication = {
-  id: string;
-  isoStartDate: string;
-  isoEndDate: string;
-  name: string;
-  pharmaForm: string;
-  administrationRoutes: string;
-  time: string;
-  jours: { [key: string]: boolean };
-  date: { date: string; taken: boolean }[];
-};
+
 
 /**
  * Type pour le contexte des médicaments.
@@ -49,9 +37,7 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
   const [medications, setMedications] = useState<Medication[]>([]);
   const [medToday, setMedToday] = useState<Medication[]>([]);
 
-  /**
-   * Fonction pour charger les médicaments depuis AsyncStorage au démarrage de l'application.
-   */
+ 
   const loadMedications = async () => {
     try {
       const storedMedications = await AsyncStorage.getItem('medications');

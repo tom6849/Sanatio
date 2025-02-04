@@ -1,17 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import Profil from './Profil'
 import ProgressBar from '../../screenHome/components/ProgessBar'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { User } from '../../type/User'
 
 
 const ContainerProfil = () => {
+    const [user, setUser] = useState<User | null>(null);
+    useEffect(() => {
+        const checkUserUpdate = async () => {
+            try {
+                const savedUser = await AsyncStorage.getItem('lastUser');
+                if (savedUser) {
+                    const parsedUser = JSON.parse(savedUser);
+                    if (JSON.stringify(parsedUser) !== JSON.stringify(user)) { 
+                        setUser(parsedUser); 
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'utilisateur", error);
+            }
+        };
+
+        const interval = setInterval(checkUserUpdate, 0);
+
+        return () => clearInterval(interval); 
+    }, [user]);
     return (
         <View style={styles.container}>
-            <Profil/>
+            {user && <Profil user={user} />} 
             <View style={styles.Presentation}>
                 <View style={styles.Info}>
                     <Text style={styles.Nom}>
-                        Mia WALLACE
+                        {user?.username}
                     </Text>
                     <Text style={styles.date}>
                         25 / 06 / 2004
