@@ -5,9 +5,9 @@ export type User = {
   id : string
   email: string;
   password: string;
-  selectedAvatar: string;
+  selectedAvatar: string| null;
   username: string;
   height: string;
   weight: string;
-  med : Medication
+  med : Medication |null
 };

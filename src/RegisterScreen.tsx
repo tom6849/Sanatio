@@ -79,7 +79,7 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
             emailExists = true; 
           }
         });
-        return emailExists; 
+        return emailExists;   
       }
       return false;
     } catch (error) {
@@ -89,7 +89,7 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
   };
   
   const addUserBd = async () => {
-    const newUser = {
+    const newUser : User = {
       id: new Date().toISOString(), 
       email,
       password,
@@ -97,8 +97,8 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
       username,
       height,
       weight,
+      med : null
     };
-  
     try {
       const storedUsers = await AsyncStorage.getItem('users');
       let users = storedUsers ? JSON.parse(storedUsers) : [];

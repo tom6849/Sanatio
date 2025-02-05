@@ -37,6 +37,7 @@ const App = () => {
       try {
         const savedUser = await AsyncStorage.getItem('lastUser');
         if (savedUser) {
+          setOnBoarding(true)
           setUser(JSON.parse(savedUser));
         }
       } catch (error) {

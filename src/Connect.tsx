@@ -11,19 +11,31 @@ const Connect = ({ route, navigation }: { route: any, navigation: any }) => {
   const { setUser } = route.params;
 
   const handleRegister = async () => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email.match(emailPattern)) {
+      Alert.alert("Email invalide", "Veuillez entrer une adresse email valide.");
+      return;
+    }
+  
+    if (password.length < 6) {
+      Alert.alert("Mot de passe invalide", "Le mot de passe doit comporter au moins 6 caractères.");
+      return;
+    }
+  
     try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      if (storedUsers) {
-        const users: User[] = JSON.parse(storedUsers);
-        const existingUser = users.find((elem) => elem.email == email);
+        const storedUsers = await AsyncStorage.getItem('users');
+        let users = storedUsers ? JSON.parse(storedUsers) : [];
+        const existingUser = users.find((elem: User) => elem.email === email && elem.password === password);
         if (existingUser) {
           setUser(existingUser);
-          return true; 
+          return true;
+        } else {
+          Alert.alert("Échec de l'authentification", "Email ou mot de passe incorrect.");
+          return false;
         }
-      }
-      return false; 
-    } catch (error) {
-      console.error("Erreur lors de la vérification de l'email:", error);
+      } catch (error) {
+      console.error("Erreur lors de l'authentification :", error);
+      Alert.alert("Erreur", "Une erreur est survenue lors de l'authentification.");
       return false;
     }
   };

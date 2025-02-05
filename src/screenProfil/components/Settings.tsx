@@ -62,8 +62,17 @@ const SettingsPage = ({ route }: SettingsPageProps) => {
         return;
       }
   
-      const updatedUser = { ...user, password: newPassword, weight: newWeight, height: newHeight };
+      const updatedUser = { ...user, password: newPassword };
+
       await AsyncStorage.setItem('lastUser', JSON.stringify(updatedUser));
+
+      const user_dataBase = await AsyncStorage.getItem("users");
+      const users = user_dataBase ? JSON.parse(user_dataBase) : [];
+      const updatedUsers = users.map((elem : User) => 
+        elem.id === user.id ? { ...elem, password: newPassword} : elem
+      );
+      await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
+
       setUser(updatedUser);  
       setActualPassword("")
       setNewPassword("")
