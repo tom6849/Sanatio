@@ -3,10 +3,10 @@ import {Modal,View,Text,StyleSheet,Pressable,TextInput,ScrollView,Alert,Touchabl
 import CloseModal from '../../img/CloseModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
-import { Medication } from '../../context/MedicationContext';
-import { PillStock } from '../../context/PillStockContext';
+import { Medication } from '../../type/Medication';
 import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
+import {User} from './../../type/User'
 
 
 type MedicationModalProps = {
@@ -18,7 +18,7 @@ type MedicationModalProps = {
 type SetShowFunction = React.Dispatch<React.SetStateAction<boolean>>;
 
 const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClose=()=>{}, medication=null }) => {
-  const { medications, setMedications } = useMedication();
+  const { setMedications } = useMedication();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [time, setTime] = useState<string>('');
@@ -82,12 +82,15 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
         jours: selectedDays,
         date: generateDatesToTake(),
       };
-      const storedMedications = await AsyncStorage.getItem('medications');
-      const existingMedications: Medication[] = storedMedications ? JSON.parse(storedMedications) : [];
-      setMedications([...existingMedications, newMedication]);
+      const lastUser = await AsyncStorage.getItem('lastUser');
+      if (!lastUser) {
+        Alert.alert('Erreur', 'Aucun utilisateur connecté.');
+        return;
+      }
+      let currentUser: User = JSON.parse(lastUser);
+      const updatedMedications = currentUser.medications ? [...currentUser.medications, newMedication] : [newMedication];
+      setMedications(updatedMedications)
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
-  
-      // Réinitialisation des champs du formulaire
       setStartDate('');
       setEndDate('');
       setTime('');
@@ -109,7 +112,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
   };
 
   const onChangenb = (text:string , type:string) => {
-    // Allow only numbers
     const numericValue = text.replace(/[^0-9]/g, "");
     const numberValue = numericValue ? parseInt(numericValue, 10) : 0;
     if(type == 'medicament'){

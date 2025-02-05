@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, Pressable } from 'react-native';
 import ButtonValidate from '../../screenCalendar/components/ButtonValidate';
-import { Medication } from '../../context/MedicationContext';
+import { Medication } from '../../type/Medication';
 import { launchCamera } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

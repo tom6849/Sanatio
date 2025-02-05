@@ -1,21 +1,20 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Image } from 'react-native-svg';
 import { User } from '../type/User';
 import { Medication } from '../type/Medication';
-
-
 
 /**
  * Type pour le contexte des médicaments.
  */
 type MedicationContextType = {
-  medications: Medication[];
+  medications: Medication[] | null;
   setMedications: (medications: Medication[]) => void;
   medToday: Medication[];
 };
 
-// Création du contexte MedicationContext
+/**
+ * Création du contexte MedicationContext
+ */
 const MedicationContext = createContext<MedicationContextType | undefined>(undefined);
 
 /**
@@ -34,15 +33,25 @@ export const useMedication = (): MedicationContextType => {
  * Composant `MedicationProvider` qui fournit l'état des médicaments et la fonction pour les mettre à jour à tous les composants enfants.
  */
 export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [medications, setMedications] = useState<Medication[]>([]);
+  const [medications, setMedications] = useState<Medication[] | null>(null);
   const [medToday, setMedToday] = useState<Medication[]>([]);
 
- 
   const loadMedications = async () => {
     try {
-      const storedMedications = await AsyncStorage.getItem('medications');
-      if (storedMedications) {
-        setMedications(JSON.parse(storedMedications));
+      const storedUsers = await AsyncStorage.getItem('users');
+      const lastUser = await AsyncStorage.getItem('lastUser');
+
+      if (!storedUsers || !lastUser) {
+        console.log("Aucun utilisateur trouvé");
+        return;
+      }
+
+      const users: User[] = JSON.parse(storedUsers);
+      const current = JSON.parse(lastUser);
+
+      const currentUser = users.find((user) => user.id === current.id);
+      if (currentUser?.medications) {
+        setMedications(currentUser.medications);
       }
     } catch (error) {
       console.error('Erreur lors du chargement des médicaments:', error);
@@ -51,10 +60,10 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
 
   useEffect(() => {
     loadMedications();
-  }, []); 
+  }, []);
 
   useEffect(() => {
-    if (medications.length > 0) {
+    if (medications?.length) {
       countMedicationsForToday(medications);
     }
   }, [medications]);
@@ -63,8 +72,32 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
    * Fonction pour mettre à jour les médicaments dans l'état local et dans AsyncStorage.
    */
   const updateMedications = async (newMedications: Medication[]) => {
-    setMedications(newMedications);
-    await AsyncStorage.setItem('medications', JSON.stringify(newMedications));
+    if (!newMedications) return;
+
+    try {
+      const storedUsers = await AsyncStorage.getItem('users');
+      const lastUser = await AsyncStorage.getItem('lastUser');
+      
+      if (!storedUsers || !lastUser) {
+        console.log("Aucun utilisateur trouvé");
+        return;
+      }
+      const users: User[] = JSON.parse(storedUsers);
+      const current = JSON.parse(lastUser); 
+
+      const currentUser = users.find((user) => user.id === current.id);
+      if (!currentUser) return;
+      currentUser.medications = newMedications;
+
+    
+      const updatedUsers = users.map((user) =>
+        user.id === currentUser.id ? currentUser : user
+      );
+      await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
+      setMedications(newMedications)
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour des médicaments :", error);
+    }
   };
 
   /**

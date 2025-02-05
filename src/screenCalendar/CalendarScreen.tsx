@@ -20,6 +20,7 @@ const Calendar: React.FC = () => {
 
   useEffect(() => {
     const medicationByDate: { [key: string]: AgendaItem[] } = {};
+    if (medications != null)
     medications.forEach((med) => {
       med.date.forEach((elem) => {
         if (medicationByDate[elem.date] == null) {

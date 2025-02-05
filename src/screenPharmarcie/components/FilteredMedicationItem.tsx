@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet,FlatList } from 'react-native';
-import { Medication } from '../../context/MedicationContext';
+import { Medication } from '../../type/Medication';
 import PilePlus from '../../img/ImgPilePlus';
 
 interface Props {

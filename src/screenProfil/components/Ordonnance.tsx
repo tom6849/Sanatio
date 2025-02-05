@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useMedication } from '../../context/MedicationContext'; 
-import { Medication } from '../../context/MedicationContext';
+import { Medication } from '../../type/Medication';
 
 const Ordonnance = () => {
   const { medications, setMedications } = useMedication(); 
@@ -16,29 +16,32 @@ const Ordonnance = () => {
   return (
 
     <ScrollView contentContainerStyle={styles.container}>
-      {medications.map((elem, index) => {
-        return (
-          <View key={index} style={styles.ordonnance}>
-            <Image
-              source={require('../../img/PilePlus.png')}
-              style={styles.image}
-              resizeMode="cover"
-            />
-            <View style={styles.title}>
-              <Text style={styles.medicationName} numberOfLines={1} ellipsizeMode="tail" >{elem.name}</Text>
-              <Text style={styles.medicationInfo} numberOfLines={2} ellipsizeMode="tail" >{elem.pharmaForm}</Text>
-              <Text style={styles.dateText}>{elem.isoStartDate} ➡ {elem.isoEndDate}</Text>
-            </View>
+      
+      {medications != null ? (
+  medications.map((elem, index) => (
+    <View key={index} style={styles.ordonnance}>
+      <Image
+        source={require('../../img/PilePlus.png')}
+        style={styles.image}
+        resizeMode="cover"
+      />
+      <View style={styles.title}>
+        <Text style={styles.medicationName} numberOfLines={1} ellipsizeMode="tail">{elem.name}</Text>
+        <Text style={styles.medicationInfo} numberOfLines={2} ellipsizeMode="tail">{elem.pharmaForm}</Text>
+        <Text style={styles.dateText}>{elem.isoStartDate} ➡ {elem.isoEndDate}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.activateButton}
+        onPress={() => handleActivate(elem)}
+      >
+        <Text style={styles.buttonText}>+</Text>
+      </TouchableOpacity>
+    </View>
+  ))
+) : (
+  <Text>Aucun médicament disponible</Text>
+)}
 
-            <TouchableOpacity
-              style={styles.activateButton}
-              onPress={() => handleActivate(elem)}
-            >
-              <Text style={styles.buttonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        );
-      })}
     </ScrollView>
   );
 };

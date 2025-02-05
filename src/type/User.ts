@@ -9,5 +9,5 @@ export type User = {
   username: string;
   height: string;
   weight: string;
-  med : Medication |null
+  medications: Medication[] | null;
 };
