@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderColor: '#CCC',
     borderWidth: 1,
+    width : '100%'
   },
   searchText: {
     fontSize: 16,
