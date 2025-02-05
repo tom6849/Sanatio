@@ -35,9 +35,9 @@ const SearchMed: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://192.168.1.116:8089/api/v1/cisbdpm?query=${query}&page=1`);
+      const response = await fetch(`https://api.thomas-ambroise.fr/api/v1/cisbdpm?query=${query}&page=1`);
       if (!response.ok) throw new Error('Impossible de charger les médicaments.');
-      const jsonResponse = await response.json();
+      const jsonResponse = await response.json()
       setFilteredMedications(jsonResponse.elements || []);
     } catch (err: any) {
       setError(err.message);

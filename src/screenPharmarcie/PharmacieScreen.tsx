@@ -5,6 +5,7 @@ import SearchMed from './components/SearchMed';
 import ImgScan from '../img/ImgScan';
 import ImgStock from '../img/ImgStock';
 import ImgSearchMed from '../img/ImgSearchMed';
+import Stock from './components/Stock';
 
 const PharmacyMain = ({ navigation }: { navigation: any }) => {
   const [pagePosition, setPagePosition] = useState(1);
@@ -61,7 +62,7 @@ const PharmacyMain = ({ navigation }: { navigation: any }) => {
           </View>
             
           <View style={styles.onboardingView}>
-            <Text style={styles.pageText}>Page 3</Text>
+            <Stock/>
           </View>
         </ScrollView>
       </View>

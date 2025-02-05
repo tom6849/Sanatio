@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import {Modal,View,Text,StyleSheet,Pressable,TextInput,ScrollView,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import CloseModal from '../../img/CloseModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../type/Medication';
 import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
-import {User} from './../../type/User'
-
+import { User } from './../../type/User';
 
 type MedicationModalProps = {
   visible: boolean;
@@ -15,210 +14,202 @@ type MedicationModalProps = {
   medication: Medication | null;
 };
 
-type SetShowFunction = React.Dispatch<React.SetStateAction<boolean>>;
-
-const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClose=()=>{}, medication=null }) => {
-  const { setMedications } = useMedication();
+const MedicationModal: React.FC<MedicationModalProps> = ({ visible = false, onClose = () => {}, medication = null }) => {
+  const { medications, setMedications } = useMedication();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [time, setTime] = useState<string>('');
   const [selectedDays, setSelectedDays] = useState<{ [key: string]: boolean }>({});
-  const [showStartDatePicker, setshowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setshowEndDatePicker] = useState(false);
-  const [showTimePicker, setshowTimePicker] = useState(false);
-  const [nbboite,setnbboite] = useState(0);
-  const [nbpill,setnbmedicament] = useState(0);
-  const [showPartStock,setshowPartStock] = useState(false);
-  const [showPartPrise,setshowPartPrise] = useState(false);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [nbBoite, setNbBoite] = useState(0);
+  const [nbPill, setNbPill] = useState(0);
+  const [showPartStock, setShowPartStock] = useState(false);
+  const [showPartPrise, setShowPartPrise] = useState(false);
 
   if (!medication) return null;
-
 
   const handleSelectDays = (days: { [key: string]: boolean }) => {
     setSelectedDays(days);
   };
 
-
   const convertToISODate = (date: string): string => {
     const [year, month, day] = date.split('/');
     return `${year}-${month}-${day}`;
   };
-  
+
   const generateDatesToTake = () => {
     const dates: { date: string; taken: boolean }[] = [];
     let currentDate = new Date(convertToISODate(startDate));
     const finDate = new Date(convertToISODate(endDate));
-  
+
     while (currentDate <= finDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
-  
+
       if (selectedDays[dayName]) {
         const formattedDate = currentDate.toISOString().split('T')[0];
         dates.push({ date: formattedDate, taken: false });
       }
-  
+
       currentDate.setDate(currentDate.getDate() + 1);
     }
-  
     return dates;
   };
-  
-  
-  const generateUniqueId = () => {
-    return 'med-' + new Date().getTime();  
-  };
 
+  const generateUniqueId = () => 'med-' + new Date().getTime();
 
   const addLocalPrescription = async (): Promise<void> => {
     try {
       const newMedication: Medication = {
         id: generateUniqueId(),
-        isoStartDate : startDate,
-        isoEndDate:endDate,
+        isoStartDate: startDate,
+        isoEndDate: endDate,
         name: medication.name,
         pharmaForm: medication.pharmaForm,
         administrationRoutes: medication.administrationRoutes,
-        time : time,
+        time,
         jours: selectedDays,
         date: generateDatesToTake(),
       };
-      const lastUser = await AsyncStorage.getItem('lastUser');
-      if (!lastUser) {
-        Alert.alert('Erreur', 'Aucun utilisateur connecté.');
-        return;
-      }
-      let currentUser: User = JSON.parse(lastUser);
-      const updatedMedications = currentUser.medications ? [...currentUser.medications, newMedication] : [newMedication];
-      setMedications(updatedMedications)
+      const updatedMedications = [...(medications || []), newMedication];
+      setMedications(updatedMedications);
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
-      setStartDate('');
-      setEndDate('');
-      setTime('');
-      setSelectedDays({});
+      resetForm();
       onClose();
-  
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement du médicament :", error);
+      console.error('Erreur lors de l\'enregistrement du médicament :', error);
       Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');
     }
   };
 
-  const handleAddMedication = (): void => {
-    if (!startDate || !endDate || !time) {
-      Alert.alert('Erreur', 'Tous les champs doivent être remplis.');
-      return;
-    }
-    addLocalPrescription();
+  const resetForm = () => {
+    setStartDate('');
+    setEndDate('');
+    setTime('');
+    setSelectedDays({});
   };
 
-  const onChangenb = (text:string , type:string) => {
-    const numericValue = text.replace(/[^0-9]/g, "");
-    const numberValue = numericValue ? parseInt(numericValue, 10) : 0;
-    if(type == 'medicament'){
-      setnbmedicament(numberValue);
-    }else{
-      setnbboite(numberValue);
+  const handleAddMedication = (): void => {
+    if (showPartStock) {
+      if (nbBoite === 0 || nbPill === 0) {
+        Alert.alert('Erreur', 'Veuillez spécifier le stock correctement.');
+        return;
+      }
     }
+    if (showPartPrise) {
+      if (!startDate || !endDate || !time || Object.keys(selectedDays).length === 0) {
+        Alert.alert('Erreur', 'Tous les champs de prise doivent être remplis.');
+        return;
+      }
+    }
+
+    addLocalPrescription();
   };
-  const setshow= (setShowFunc: SetShowFunction) => {
-    setShowFunc(prev => !prev);
-  }
   
+
+  const onChangenb = (text: string, type: string) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    const numberValue = numericValue ? parseInt(numericValue, 10) : 0;
+    setNbPill(numberValue);
+    setNbBoite(numberValue);
+  };
+
+  const toggleStockVisibility = () => {
+    setShowPartStock(!showPartStock);
+    setShowPartPrise(false);
+  };
+
+  const togglePriseVisibility = () => {
+    setShowPartPrise(!showPartPrise);
+    setShowPartStock(false);
+  };
 
   return (
     <Modal transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
-        <KeyboardAvoidingView
-          style={styles.modalContent}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        >
+        <KeyboardAvoidingView style={styles.modalContent}>
           <Pressable style={styles.closeButton} onPress={onClose}>
             <CloseModal size={40} color="#1e3a8a" />
           </Pressable>
 
-
           <Text style={styles.modalTitle}>{medication?.name}</Text>
           <Text style={styles.modalSubTitle}>Type(s) : {medication?.pharmaForm}</Text>
           <Text style={styles.modalSubTitle}>Endroit : {medication?.administrationRoutes}</Text>
-          
-          <ScrollView
-            contentContainerStyle={[styles.formContainer, { flexGrow: 1 }]}
-            keyboardShouldPersistTaps="handled"
-          >
-            <TouchableOpacity onPress={() => setshow(setshowPartStock)} style={styles.addButton}>
+
+          <ScrollView>
+            <TouchableOpacity onPress={toggleStockVisibility} style={styles.addButton}>
               <Text style={styles.addButtonText}>Ajouter au stock</Text>
             </TouchableOpacity>
             {showPartStock && (
               <View style={styles.bloc}>
-                <Text style={styles.label}> Nombre de boite :</Text>
-                <TextInput keyboardType="numeric" placeholder="Type numbers here" value={nbboite.toString()} onChangeText={Text=>onChangenb(Text,'boite')} style={styles.input}/>
+                <Text style={styles.label}>Nombre de boite :</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  value={nbBoite.toString()}
+                  onChangeText={(text) => onChangenb(text, 'boite')}
+                  style={styles.input}
+                />
                 <Text style={styles.label}>Nombre de médicament par boite :</Text>
-                <TextInput keyboardType="numeric" placeholder="Type numbers here" value={nbpill.toString()} onChangeText={Text=>onChangenb(Text,'medicament')} style={styles.input}/>
+                <TextInput
+                  keyboardType="numeric"
+                  value={nbPill.toString()}
+                  onChangeText={(text) => onChangenb(text, 'medicament')}
+                  style={styles.input}
+                />
               </View>
             )}
 
-            <TouchableOpacity onPress={() => setshow(setshowPartPrise)} style={styles.addButton}>
+            <TouchableOpacity onPress={togglePriseVisibility} style={styles.addButton}>
               <Text style={styles.addButtonText}>Ajouter au Prises</Text>
             </TouchableOpacity>
-            
             {showPartPrise && (
               <View style={styles.bloc}>
-                <Text style={styles.label}>Date de début (Facultatif) :</Text>
-                <TouchableOpacity onPress={() => setshow(setshowStartDatePicker)} style={styles.input}>
+                <Text style={styles.label}>Date de début :</Text>
+                <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.input}>
                   <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
                 </TouchableOpacity>
-
-
                 {showStartDatePicker && (
-                  <DatePicker
-                    mode="calendar"
-                    selected={startDate}
-                    onDateChange={(date) => {
-                      setStartDate(date);
-                      setshow(setshowStartDatePicker);
-                    }}
-                  />
+                  <DatePicker mode="calendar"  onDateChange={(date) => {
+                    setStartDate(date);  
+                    setShowStartDatePicker(false);  
+                  }} />
                 )}
 
-
-                <Text style={styles.label}>Date de fin (Facultatif) :</Text>
-                <TouchableOpacity onPress={() => setshow(setshowEndDatePicker)} style={styles.input}>
+                <Text style={styles.label}>Date de fin :</Text>
+                <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.input}>
                   <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
                 </TouchableOpacity>
-
-
                 {showEndDatePicker && (
                   <DatePicker
-                    mode="calendar"
-                    selected={endDate}
-                    onDateChange={(date) => {
-                      setEndDate(date);
-                      setshow(setshowEndDatePicker);
-                    }}
-                  />
+                  mode="calendar"
+                  onDateChange={(date) => {
+                    setEndDate(date);  
+                    setShowEndDatePicker(false);  
+                  }}
+                />
+                
                 )}
 
-
-                <Text style={styles.label}>Heure de prise (Facultatif) :</Text>
-                <TouchableOpacity onPress={() => setshow(setshowTimePicker)} style={styles.input}>
+                <Text style={styles.label}>Heure de prise :</Text>
+                <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.input}>
                   <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
                 </TouchableOpacity>
                 {showTimePicker && (
                   <DatePicker
-                    mode="time"
-                    selected={time}
-                    onTimeChange={(time) => {
-                      setTime(time);
-                      setshow(setshowTimePicker);
-                    }}
-                  />
+                  mode="time"
+                  selected={time}
+                  onTimeChange={(time) => { 
+                    setTime(time);
+                    setShowTimePicker(false);  
+                  }}
+                />
                 )}
+
                 <SelectedDay onSelectDays={handleSelectDays} />
               </View>
             )}
-            
           </ScrollView>
-
 
           <Pressable style={styles.addButton} onPress={handleAddMedication}>
             <Text style={styles.addButtonText}>Ajouter le médicament</Text>
@@ -228,7 +219,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible=false, onClos
     </Modal>
   );
 };
-
 
 const styles = StyleSheet.create({
   modalOverlay: {
@@ -257,13 +247,10 @@ const styles = StyleSheet.create({
     color: '#1e3a8a',
     marginBottom: 10,
     textAlign: 'center',
-    flexWrap: 'wrap',
-    maxWidth: '90%',
   },
   modalSubTitle: {
     fontSize: 16,
     color: '#555',
-    marginBottom: 15,
   },
   label: {
     fontSize: 16,
@@ -284,9 +271,6 @@ const styles = StyleSheet.create({
   inputText: {
     fontSize: 16,
   },
-  formContainer: {
-    padding: 10,
-  },
   addButton: {
     marginTop: 20,
     paddingVertical: 12,
@@ -302,12 +286,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   bloc: {
-    marginTop:'2%'
-  }
+    marginTop: '2%',
+  },
 });
 
-
 export default MedicationModal;
-
-
-
