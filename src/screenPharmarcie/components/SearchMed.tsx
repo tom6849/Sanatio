@@ -58,6 +58,7 @@ const SearchMed: React.FC = () => {
   const closeModal = () => {
     setModalVisible(false);
     setSelectedMed(null);
+    setSearchQuery('')
     loadStoredMedications();
   };
 
@@ -84,7 +85,7 @@ const SearchMed: React.FC = () => {
         <Text style={styles.errorText}>{error}</Text>
       ) : (
         searchQuery.trim() === '' ? (
-          <StoredMedicationItem medications={storedMedications} onPress={openModal} />
+          <StoredMedicationItem />
         ) : (
           <FilteredMedicationItem medications={filteredMedications} onPress={openModal} />
         )

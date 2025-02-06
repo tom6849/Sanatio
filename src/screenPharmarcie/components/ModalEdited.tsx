@@ -72,6 +72,7 @@ const modalEdited = ({modalVisible,selectedMedication,editedTime,editedStartDate
     medication.isoEndDate = editedEndDate;
     medication.date = generateDatesToTake()
     setMedications([medication]);
+    setModalVisible(false);
 
   })
   

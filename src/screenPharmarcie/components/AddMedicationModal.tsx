@@ -77,6 +77,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible = false, onCl
       Alert.alert('Succès', 'Le médicament a été ajouté avec succès.');
       resetForm();
       onClose();
+
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement du médicament :', error);
       Alert.alert('Erreur', 'Une erreur est survenue lors de l\'enregistrement du médicament.');

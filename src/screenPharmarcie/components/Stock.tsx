@@ -86,9 +86,12 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     backgroundColor: '#f3f4f6',
+    width : '100%'
   },
   container: {
     padding: 20,
+    width : '100%',
+    flex : 1,
   },
   medicationContainer: {
     marginBottom: 20,
