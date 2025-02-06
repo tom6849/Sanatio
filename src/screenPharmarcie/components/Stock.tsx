@@ -1,66 +1,35 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../type/Medication';
-import SelectedDay from './SelectDay';
+import ModalEdited from './ModalEdited'; 
 
 const Stock = () => {
   const { medications, setMedications } = useMedication();
-  const [editedMedication, setEditedMedication] = useState<Medication>();
-
-  const validateDate = (date: string) => {
-    const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
-    if (datePattern.test(date)) {
-      const [year, month, day] = date.split('/');
-      return `${year}-${month}-${day}`;
-    }
-    return null;
-  };
-
-  const validateTime = (time: string) => {
-    const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
-    return timePattern.test(time);
-  };
-
-  const handleSaveChanges = (medication: Medication) => {
-    if (editedMedication) {
-      const { isoStartDate, isoEndDate, time, id } = editedMedication;
-
-      if (!validateDate(isoStartDate) || !validateDate(isoEndDate)) {
-        Alert.alert('Veuillez entrer une date valide (YYYY-MM-DD)');
-        return;
-      }
-
-      if (!validateTime(time)) {
-        Alert.alert('Veuillez entrer une heure valide (HH:mm)');
-        return;
-      }
-
-      medication.time = editedMedication.time;
-      medication.isoStartDate = editedMedication.isoStartDate;
-      medication.isoEndDate = editedMedication.isoEndDate;
-      setMedications([medication]);
-    }
-  };
+  const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
+  const [editedTime, setEditedTime] = useState('');
+  const [editedStartDate, setEditedStartDate] = useState('');
+  const [editedEndDate, setEditedEndDate] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleDeleteMedication = (id: string) => {
     Alert.alert(
       "Supprimer le médicament",
       "Êtes-vous sûr de vouloir supprimer ce médicament ?",
       [
-        {
-          text: "Annuler",
-          style: "cancel"
-        },
-        {
-          text: "Supprimer",
+        { text: "Annuler", style: "cancel" },
+        { 
+          text: "Supprimer", 
           onPress: () => setMedications(medications!.filter(medication => medication.id !== id)) 
         }
       ]
     );
   };
-  
 
+  const handleEditMedication = (medication: Medication) => { 
+    setModalVisible(true);
+  };
+  
   return (
     <View style={styles.pageContainer}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -77,35 +46,32 @@ const Stock = () => {
               </TouchableOpacity>
               <Text style={styles.medicationTitle}>{medication.name}</Text>
               <Text style={styles.label}>Heure de prise :</Text>
-              <TextInput
-                style={styles.input}
-                placeholder={medication.time}
-                onChangeText={(text) =>
-                  setEditedMedication({ ...editedMedication!, time: text, id: medication.id, jours: medication.jours })
-                }
-              />
+              <Text style={styles.inputData}>{medication.time}</Text>
+
               <Text style={styles.label}>Date de début :</Text>
-              <TextInput
-                style={styles.input}
-                placeholder={medication.isoStartDate}
-                onChangeText={(text) =>
-                  setEditedMedication({ ...editedMedication!, isoStartDate: text })
-                }
-              />
+              <Text style={styles.inputData}>{medication.isoStartDate}</Text>
+
               <Text style={styles.label}>Date de fin :</Text>
-              <TextInput
-                style={styles.input}
-                placeholder={medication.isoEndDate}
-                onChangeText={(text) =>
-                  setEditedMedication({ ...editedMedication!, isoEndDate: text })
-                }
-              />
+              <Text style={styles.inputData}>{medication.isoEndDate}</Text>
+
               <TouchableOpacity
-                onPress={() => handleSaveChanges(medication)}
-                style={styles.saveButton}
+                style={styles.editButton}
+                onPress={() => handleEditMedication(medication)}
               >
-                <Text style={styles.saveButtonText}>Sauvegarder les modifications</Text>
+                <Text style={styles.editButtonText}>Éditer le médicament</Text>
               </TouchableOpacity>
+              <ModalEdited 
+                modalVisible={modalVisible}
+                selectedMedication={selectedMedication}
+                editedTime={editedTime}
+                editedStartDate={editedStartDate}
+                medication={medication}
+                editedEndDate={editedEndDate}
+                setEditedTime={setEditedTime}
+                setEditedStartDate={setEditedStartDate}
+                setEditedEndDate={setEditedEndDate}
+                setModalVisible={setModalVisible}
+      />
             </View>
           ))
         ) : (
@@ -119,36 +85,34 @@ const Stock = () => {
 const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
-    width: '100%',
+    backgroundColor: '#f3f4f6',
   },
   container: {
-    width: '100%',
+    padding: 20,
   },
   medicationContainer: {
     marginBottom: 20,
     padding: 20,
+    borderRadius: 12,
     borderWidth: 1,
-    borderRadius: 10,
     borderColor: '#ddd',
     backgroundColor: '#ffffff',
     elevation: 4,
-    position: 'relative', // To allow positioning of delete button
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 5,
+    color: '#333',
   },
   medicationTitle: {
     fontSize: 22,
     fontWeight: '700',
     marginBottom: 10,
-    color: '#7DA4F6',
-    alignSelf: 'center',
+    color: '#4C6EF5',
+    textAlign: 'center',
   },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  input: {
-    height: 45,
+  inputData: {
     backgroundColor: '#f9f9f9',
     borderRadius: 8,
     marginBottom: 15,
@@ -157,39 +121,43 @@ const styles = StyleSheet.create({
     color: '#333',
     borderColor: '#ddd',
     borderWidth: 1,
+    height: 40,
+    textAlignVertical: 'center',
   },
-  saveButton: {
-    paddingVertical: 12,
-    backgroundColor: '#1e3a8a',
-    borderRadius: 10,
+  
+  editButton: {
+    backgroundColor: '#4C6EF5',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 5,
   },
-  saveButtonText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 18,
-  },
-  noDataText: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#999',
+  editButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   deleteButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#FF5C5C',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    elevation: 3,
+    top: -15,
+    right: -15,
+    backgroundColor: 'red',
+    borderRadius: 25, 
+    width: 40, 
+    height: 40, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    padding: 0, 
   },
+  
   deleteButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
+  },
+  noDataText: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#888',
   },
 });
 

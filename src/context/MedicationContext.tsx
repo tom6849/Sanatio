@@ -61,7 +61,6 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
   useEffect(() => {
     loadMedications();
   }, []);
-
   useEffect(() => {
     if (medications?.length) {
       countMedicationsForToday(medications);
@@ -95,6 +94,7 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
       );
       await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
       setMedications(newMedications)
+      countMedicationsForToday(newMedications);
     } catch (error) {
       console.error("Erreur lors de la mise à jour des médicaments :", error);
     }
