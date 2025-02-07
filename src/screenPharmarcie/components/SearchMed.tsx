@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import StoredMedicationItem from './StoredMedicamtionItem';
 import FilteredMedicationItem from './FilteredMedicationItem';
-import MedicationModal from './AddMedicationModal';
+import MedicationModal from './ModalAdd';
 import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication } from '../../type/Medication';

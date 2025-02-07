@@ -72,33 +72,39 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
    */
   const updateMedications = async (newMedications: Medication[]) => {
     if (!newMedications) return;
-
+    setMedications(newMedications);
+    countMedicationsForToday(newMedications);
+  
     try {
       const storedUsers = await AsyncStorage.getItem('users');
       const lastUser = await AsyncStorage.getItem('lastUser');
-      
+  
       if (!storedUsers || !lastUser) {
         console.log("Aucun utilisateur trouvé");
         return;
       }
+  
       const users: User[] = JSON.parse(storedUsers);
-      const current = JSON.parse(lastUser); 
-
+      const current = JSON.parse(lastUser);
+  
       const currentUser = users.find((user) => user.id === current.id);
       if (!currentUser) return;
+  
       currentUser.medications = newMedications;
-
-    
+  
       const updatedUsers = users.map((user) =>
         user.id === currentUser.id ? currentUser : user
       );
-      await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
-      setMedications(newMedications)
-      countMedicationsForToday(newMedications);
+  
+      // Stockage en asynchrone, mais ne bloque pas le rendu
+      AsyncStorage.setItem('users', JSON.stringify(updatedUsers)).catch((error) =>
+        console.error("Erreur lors de la mise à jour des médicaments :", error)
+      );
     } catch (error) {
       console.error("Erreur lors de la mise à jour des médicaments :", error);
     }
   };
+  
 
   /**
    * Fonction pour compter les médicaments à prendre aujourd'hui et les ajouter à `medToday`.

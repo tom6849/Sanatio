@@ -7,9 +7,6 @@ import ModalEdited from './ModalEdited';
 const Stock = () => {
   const { medications, setMedications } = useMedication();
   const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
-  const [editedTime, setEditedTime] = useState('');
-  const [editedStartDate, setEditedStartDate] = useState('');
-  const [editedEndDate, setEditedEndDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleDeleteMedication = (id: string) => {
@@ -20,14 +17,13 @@ const Stock = () => {
         { text: "Annuler", style: "cancel" },
         { 
           text: "Supprimer", 
-          onPress: () => setMedications(medications!.filter(medication => medication.id !== id)) 
+          onPress: () => {
+            const updatedMedications = medications!.filter(m => m.id !== id);
+            setMedications(updatedMedications); 
+          },
         }
       ]
     );
-  };
-
-  const handleEditMedication = (medication: Medication) => { 
-    setModalVisible(true);
   };
   
   return (
@@ -56,20 +52,13 @@ const Stock = () => {
 
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={() => handleEditMedication(medication)}
+                onPress={() => setModalVisible(true)}
               >
                 <Text style={styles.editButtonText}>Éditer le médicament</Text>
               </TouchableOpacity>
               <ModalEdited 
                 modalVisible={modalVisible}
-                selectedMedication={selectedMedication}
-                editedTime={editedTime}
-                editedStartDate={editedStartDate}
                 medication={medication}
-                editedEndDate={editedEndDate}
-                setEditedTime={setEditedTime}
-                setEditedStartDate={setEditedStartDate}
-                setEditedEndDate={setEditedEndDate}
                 setModalVisible={setModalVisible}
       />
             </View>

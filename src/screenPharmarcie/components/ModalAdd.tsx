@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import CloseModal from '../../img/CloseModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMedication } from '../../context/MedicationContext';
 import { Medication } from '../../type/Medication';
 import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
-import { User } from './../../type/User';
+import TimePicker from './TimePicker';
+import DatePickers from './DatePicker';
 
 type MedicationModalProps = {
   visible: boolean;
@@ -160,52 +160,33 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible = false, onCl
                 />
               </View>
             )}
-
             <TouchableOpacity onPress={togglePriseVisibility} style={styles.addButton}>
               <Text style={styles.addButtonText}>Ajouter au Prises</Text>
             </TouchableOpacity>
             {showPartPrise && (
               <View style={styles.bloc}>
-                <Text style={styles.label}>Date de début :</Text>
-                <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.input}>
-                  <Text style={styles.inputText}>{startDate || 'Sélectionner la date'}</Text>
-                </TouchableOpacity>
-                {showStartDatePicker && (
-                  <DatePicker mode="calendar"  onDateChange={(date) => {
-                    setStartDate(date);  
-                    setShowStartDatePicker(false);  
-                  }} />
-                )}
-
-                <Text style={styles.label}>Date de fin :</Text>
-                <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.input}>
-                  <Text style={styles.inputText}>{endDate || 'Sélectionner la date'}</Text>
-                </TouchableOpacity>
-                {showEndDatePicker && (
-                  <DatePicker
-                  mode="calendar"
-                  onDateChange={(date) => {
-                    setEndDate(date);  
-                    setShowEndDatePicker(false);  
-                  }}
+                <DatePickers
+                  label="Date de début"
+                  date={startDate}
+                  onDateChange={(date) => setStartDate(date)}
+                  showDatePicker={showStartDatePicker}
+                  setShowDatePicker={setShowStartDatePicker}
                 />
-                
-                )}
 
-                <Text style={styles.label}>Heure de prise :</Text>
-                <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.input}>
-                  <Text style={styles.inputText}>{time || 'HH:MM'}</Text>
-                </TouchableOpacity>
-                {showTimePicker && (
-                  <DatePicker
-                  mode="time"
-                  selected={time}
-                  onTimeChange={(time) => { 
-                    setTime(time);
-                    setShowTimePicker(false);  
-                  }}
+                <DatePickers
+                  label="Date de fin"
+                  date={endDate}
+                  onDateChange={(date) => setEndDate(date)}
+                  showDatePicker={showEndDatePicker}
+                  setShowDatePicker={setShowEndDatePicker}
                 />
-                )}
+
+                <TimePicker
+                  time={time}
+                  onTimeChange={setTime}
+                  showTimePicker={showTimePicker}
+                  setShowTimePicker={setShowTimePicker}
+                />
 
                 <SelectedDay onSelectDays={handleSelectDays} />
               </View>
