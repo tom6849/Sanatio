@@ -6,25 +6,6 @@ import { useMedication } from '../../context/MedicationContext';
 const MedicationRecap = () => {
     const { medToday } = useMedication();
 
-    const pulseAnim = useRef(new Animated.Value(1)).current;
-
-    useEffect(() => {
-        Animated.loop(
-            Animated.sequence([
-                Animated.timing(pulseAnim, {
-                    toValue: 1.1,
-                    duration: 500,
-                    useNativeDriver: true,
-                }),
-                Animated.timing(pulseAnim, {
-                    toValue: 1,
-                    duration: 500,
-                    useNativeDriver: true,
-                }),
-            ])
-        ).start();
-    }, [pulseAnim]);
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Aujourd'hui</Text>
@@ -44,9 +25,9 @@ const MedicationRecap = () => {
                 </ScrollView>
             ) : (
                 <View style={styles.centeredContainer}>
-                    <Animated.Text style={[styles.infoMed, { transform: [{ scale: pulseAnim }] }]}>
+                    <Text style={styles.infoMed}>
                         Pas de médicament à prendre aujourd'hui
-                    </Animated.Text>
+                    </Text>
                 </View>
             )}
         </View>

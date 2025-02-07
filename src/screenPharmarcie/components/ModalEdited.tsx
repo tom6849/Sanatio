@@ -67,7 +67,6 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
               showTimePicker={showTimePicker}
               setShowTimePicker={setShowTimePicker}
             />
-
             <DatePickers
               label="Date de début"
               date={editedStartDate}
@@ -75,7 +74,6 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
               showDatePicker={showStartDatePicker}
               setShowDatePicker={setShowStartDatePicker}
             />
-
             <DatePickers
               label="Date de fin"
               date={editedEndDate}

@@ -28,7 +28,7 @@ const Stock = () => {
   
   return (
     <View style={styles.pageContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {medications === null ? (
           <Text style={styles.noDataText}>Aucune donnée de médicament disponible.</Text>
         ) : medications.length > 0 ? (
@@ -52,21 +52,26 @@ const Stock = () => {
 
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={() => setModalVisible(true)}
+                onPress={() => {
+                  setSelectedMedication(medication);
+                  setModalVisible(true);
+                }}
               >
                 <Text style={styles.editButtonText}>Éditer le médicament</Text>
               </TouchableOpacity>
-              <ModalEdited 
-                modalVisible={modalVisible}
-                medication={medication}
-                setModalVisible={setModalVisible}
-      />
             </View>
           ))
         ) : (
           <Text style={styles.noDataText}>Aucun médicament disponible pour ce jour.</Text>
         )}
       </ScrollView>
+      {selectedMedication && (
+        <ModalEdited 
+          modalVisible={modalVisible}
+          medication={selectedMedication}
+          setModalVisible={setModalVisible}
+        />
+      )}
     </View>
   );
 };
@@ -75,12 +80,11 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     backgroundColor: '#f3f4f6',
-    width : '100%'
+    width: '100%',
   },
-  container: {
-    padding: 20,
-    width : '100%',
-    flex : 1,
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 15,
   },
   medicationContainer: {
     marginBottom: 20,
@@ -116,7 +120,6 @@ const styles = StyleSheet.create({
     height: 40,
     textAlignVertical: 'center',
   },
-  
   editButton: {
     backgroundColor: '#4C6EF5',
     paddingVertical: 10,
@@ -140,7 +143,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 0, 
   },
-  
   deleteButtonText: {
     color: 'white',
     fontSize: 20,

@@ -61,8 +61,6 @@ const SearchMed: React.FC = () => {
     setSearchQuery('')
     loadStoredMedications();
   };
-
-  const medicationsToDisplay = searchQuery.trim() === '' ? storedMedications : filteredMedications;
   const headerText = searchQuery.trim() === '' ? 'Mes médicaments' : 'Recherche de "' + searchQuery.trim()+'"';
 
   return (

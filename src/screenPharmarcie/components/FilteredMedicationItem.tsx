@@ -28,27 +28,24 @@ const FilteredMedicationItem: React.FC<Props> = ({ medications, onPress }) => (
 
 const styles = StyleSheet.create({
   list: {
-    paddingVertical: 10, // Espacement entre le conteneur de la liste et les bords
+    paddingVertical: 10, 
   },
   medicationItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 10,
-    marginVertical: 8, // Ajoute un espacement entre chaque élément
+    marginVertical: 8, 
     borderRadius: 8,
-    elevation: 2, // Ombre pour Android
-    shadowColor: '#000', // Ombre pour iOS
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    elevation: 2, 
   },
   medicationIcon: {
-    width: 50, // Taille fixe pour l'icône
-    height: 50, // Taille fixe pour l'icône
-    marginRight: 10, // Ajoute un espace entre l'icône et les infos
+    width: 50,
+    height: 50,
+    marginRight: 10, 
   },
   infoMedication: {
-    flex: 1, // Prend tout l'espace restant
+    flex: 1, 
   },
   medicationName: {
     fontSize: 18,
