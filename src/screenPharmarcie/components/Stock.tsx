@@ -62,7 +62,7 @@ const Stock = () => {
             </View>
           ))
         ) : (
-          <Text style={styles.noDataText}>Aucun médicament disponible pour ce jour.</Text>
+          <Text style={styles.noDataText}>Aucun médicament disponible</Text>
         )}
       </ScrollView>
       {selectedMedication && (

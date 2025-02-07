@@ -50,7 +50,9 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
     medication.isoStartDate = editedStartDate;
     medication.isoEndDate = editedEndDate;
     medication.date = generateDatesToTake();
-    setMedications([medication]);
+    const med = medications?.filter((elem) => elem.id !== medication.id);
+  setMedications([...med!, { ...medication }]);
+
     setModalVisible(false);
   };
 
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    height: '80%',
+    maxHeight: '80%',
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,

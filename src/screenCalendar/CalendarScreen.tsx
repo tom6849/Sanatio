@@ -12,7 +12,6 @@ const Calendar: React.FC = () => {
 
   useEffect(() => {
     const medicationByDate: { [key: string]: Medication[] } = {};
-
     if (medications) {
       medications.forEach((med) => {
         med.date.forEach((elem) => {
@@ -79,7 +78,9 @@ const Calendar: React.FC = () => {
       <View style={styles.calendar}>
         <Agenda
           items={items}
-          renderItem={(item: Medication) => <Medicaments medication={item} />}
+          renderItem={(item: Medication) => (
+            <Medicaments medication={item} fromCalendar={true} calendarDate={selectedDate} />
+          )}
           showOnlySelectedDayItems={true}
           pastScrollRange={12}
           futureScrollRange={12}

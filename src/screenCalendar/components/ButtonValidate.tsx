@@ -1,66 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
-import { Medication, useMedication } from '../../context/MedicationContext';
+import { useMedication } from '../../context/MedicationContext';
+import { Medication } from '../../type/Medication';
 
-const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
-    const [message, setMessage] = useState<string>("Prendre le médicament");
-    const [isTaken, setIsTaken] = useState<boolean>(false);
-    const { medications, setMedications } = useMedication(); 
-    useEffect(() => {
-    }, [setMedications]);
+const ButtonValidate = ({ medication, date }: { medication: Medication, date: string }) => {
+    const { setMedications, medications } = useMedication();
 
-    useEffect(() => {
-        const checkIfTaken = async () => {
-            if (medications != null) {
-                const medicationIndex = medications.findIndex((med: Medication) => med.id == id);
-                if (medicationIndex !== -1) {
-                    const takenEntry = medications[medicationIndex].date.find(elem => elem.date === date);
-                    if (takenEntry) {
-                        setIsTaken(takenEntry.taken);
-                        setMessage(takenEntry.taken ? "Médicament Pris !" : "Prendre le médicament");
-                    }
+    /**
+     * Vérifie si le médicament a été pris à cette date.
+     */
+    const isTaken = useMemo(() => {
+        if (!medications) return false;
+        const updatedMed = medications.find((med) => med.id === medication.id);
+        if (!updatedMed) return false;
+        return updatedMed.date.some((entry) => entry.date === date && entry.taken);
+    }, [setMedications, medication.id, date]);
+
+    /**
+     * Définit dynamiquement le message du bouton.
+     */
+    const message = isTaken ? "Médicament Pris !" : "Prendre le médicament";
+
+    /**
+     * Fonction de mise à jour des médicaments.
+     */
+    const handlePress = useCallback(() => {
+        if (!medications) return;
+        const updatedMedications = medications.map((med) =>
+            med.id === medication.id
+                ? {
+                    ...med,
+                    date: med.date.map((entry) =>
+                        entry.date === date ? { ...entry, taken: true } : entry
+                    ),
                 }
-            }
-        };
-        checkIfTaken();
-    }, [medications, id, date]); 
-    
-    
-
-    const handlePress = async () => {
-        try {
-            if (medications) {
-                const medicationIndex = medications.findIndex((med: Medication) => med.id === id);
-                if (medicationIndex !== -1) {
-                    const updatedMedications = medications.map((med, index) => {
-                        if (index === medicationIndex) {
-                            return {
-                                ...med,
-                                date: med.date.map((entry) => 
-                                    entry.date === date ? { ...entry, taken: true } : entry
-                                )
-                            };
-                        }
-                        return med;
-                    });
-    
-                    setMedications(updatedMedications);
-                    setMessage("Médicament Pris !");
-                } else {
-                    console.log(`Médicament ${id} introuvable.`);
-                }
-            } else {
-                console.log('Aucun médicament trouvé dans le stockage');
-            }
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour du médicament :", error);
-        }
-    };
-    
+                : med
+        );
+        setMedications(updatedMedications);
+    }, [medications, medication.id, date, setMedications]);
 
     return (
-        <Pressable 
-            style={[styles.button, isTaken && styles.buttonClicked]} 
+        <Pressable
+            style={[styles.button, isTaken && styles.buttonClicked]}
             onPress={handlePress}
         >
             <Text style={styles.text}>{message}</Text>
@@ -70,19 +51,19 @@ const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
 
 const styles = StyleSheet.create({
     button: {
-        width: '100%', 
-        height: 40, 
-        backgroundColor: '#0073C5', 
+        width: '100%',
+        height: 40,
+        backgroundColor: '#0073C5',
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
     },
     buttonClicked: {
-        backgroundColor: '#28a745', 
+        backgroundColor: '#28a745',
     },
     text: {
         color: '#FFFFFF',
-        fontSize: 16, 
+        fontSize: 16,
         fontWeight: '500',
     },
 });

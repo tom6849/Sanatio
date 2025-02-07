@@ -5,8 +5,7 @@ import { Medication } from '../../type/Medication';
 import { launchCamera } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Medicaments = ({ medication }: { medication: Medication }) => {
-    const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
+const Medicaments = ({ medication, fromCalendar, calendarDate }: { medication: Medication, fromCalendar?: boolean, calendarDate: string }) => {
     const [imageUri, setImageUri] = useState<string | null>(null); 
 
     useEffect(() => {
@@ -50,7 +49,7 @@ const Medicaments = ({ medication }: { medication: Medication }) => {
     };
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, fromCalendar && styles.calendarPadding]}>
             <Text style={styles.medicineText} numberOfLines={1} ellipsizeMode="tail">
                 {medication.name}
             </Text>
@@ -67,23 +66,30 @@ const Medicaments = ({ medication }: { medication: Medication }) => {
                     <Text style={styles.route} numberOfLines={2} ellipsizeMode="tail">
                         {medication.administrationRoutes}
                     </Text>
+                    <Text style={styles.route} numberOfLines={2} ellipsizeMode="tail">
+                        {medication.pharmaForm}
+                    </Text>
                 </View>
             </View>
-            <ButtonValidate id={medication.id} date={todayIso} />
+            <ButtonValidate medication={medication} date={calendarDate} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     card: {
-        width: '80%',
+        width: 250,
         height: 200,
         borderRadius: 12,
         padding: 12,
         backgroundColor: '#FFF',
         justifyContent: 'space-between',
         elevation: 10,
-        margin : 20
+        margin : 0
+    },
+    calendarPadding: {
+        margin : 20,
+        width : '80%'
     },
     medicineText: {
         fontSize: 18,
