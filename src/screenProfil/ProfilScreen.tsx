@@ -13,8 +13,9 @@ import SettingsPage from './components/Settings';
 
 export type typeRoute = {
   Profile: undefined;
-  SettingsPage: undefined;
+  SettingsPage: { handleLogout: () => void }; 
 };
+
 
 const Stack = createStackNavigator<typeRoute>();
 

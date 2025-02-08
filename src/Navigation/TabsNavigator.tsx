@@ -15,11 +15,10 @@ import { User } from '../type/User';
 const Tab = createBottomTabNavigator();
 
 interface TabsNavigatorProps {
-  user: User | null;
   handleLogout: () => void;
 }
 
-const TabsNavigator: React.FC<TabsNavigatorProps> = ({ user, handleLogout }) => {
+const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
   const { medToday } = useMedication();
   const [count, setCount] = useState(0);
   const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
@@ -79,7 +78,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ user, handleLogout }) => 
       />
       <Tab.Screen
         name="You"
-        children={() => <ProfilScrenn handleLogout={handleLogout} />}
+        children={(props) => <ProfilScrenn {...props} handleLogout={handleLogout} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
