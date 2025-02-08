@@ -106,7 +106,7 @@ export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children
   const countMedicationsForToday = (medications: Medication[]) => {
     const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
     const medicationsForToday = medications.filter((med) =>
-      med.date.some((entry) => entry.date === todayIso)
+      med.date?.some((entry) => entry.date === todayIso)
     );
     setMedToday(medicationsForToday);
   };

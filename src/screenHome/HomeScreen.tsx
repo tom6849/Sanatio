@@ -3,8 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import HeaderHome from './components/HeaderHome';
 import MedicationRecap from './components/MedicationRecap';
 import QuickAction from './components/QuickAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {User} from '../type/User'
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {

@@ -43,7 +43,7 @@ const modalEdited = ({modalVisible,selectedMedication,editedTime,editedStartDate
     while (currentDate <= finDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
   
-      if (selectedDays[dayName]) {
+      if (selectedDays?[dayName]:null) {
         const formattedDate = currentDate.toISOString().split('T')[0];
         dates.push({ date: formattedDate, taken: false });
       }

@@ -9,7 +9,7 @@ const windowWidth = Dimensions.get('window').width;
 
 type AgendaItem = {
     name: string;
-    time: string;
+    time?: string;
     endroit: string;
     id: string;
     date: string;

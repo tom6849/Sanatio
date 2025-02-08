@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import StoredMedicationItem from './StoredMedicamtionItem';
 import FilteredMedicationItem from './FilteredMedicationItem';
-import MedicationModal from './AddMedicationModal';
+import AddMedicationModal from './AddMedicationModal';
+import InfoMedicationModal from './InfoMedicationModal';
 import Search from '../../img/ImgSearchMed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication } from '../../type/Medication';
+import { useMedication } from '../../context/MedicationContext';
+
 
 const SearchMed: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -15,6 +18,9 @@ const SearchMed: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
+  const [modalAddVisible, setModalAddVisible] = useState<boolean>(false);
+  const [modalInfoVisible, setModalInfoVisible] = useState<boolean>(false);
+  const { medications } = useMedication();
 
   const loadStoredMedications = async () => {
     try {
@@ -50,16 +56,19 @@ const SearchMed: React.FC = () => {
     loadStoredMedications();
   }, []);
 
-  const openModal = (item: Medication) => {
+  const openModal = (item: Medication, name: string) => {
     setSelectedMed(item);
-    setModalVisible(true);
+    if (name === 'info') {
+      setModalInfoVisible(true);
+    } else {
+      setModalAddVisible(true);
+    }
   };
 
   const closeModal = () => {
-    setModalVisible(false);
+    setModalAddVisible(false);
+    setModalInfoVisible(false);
     setSelectedMed(null);
-    setSearchQuery('')
-    loadStoredMedications();
   };
 
   const medicationsToDisplay = searchQuery.trim() === '' ? storedMedications : filteredMedications;
@@ -85,14 +94,19 @@ const SearchMed: React.FC = () => {
         <Text style={styles.errorText}>{error}</Text>
       ) : (
         searchQuery.trim() === '' ? (
-          <StoredMedicationItem />
+          <StoredMedicationItem  medications={medications} onPress={openModal} />
         ) : (
           <FilteredMedicationItem medications={filteredMedications} onPress={openModal} />
         )
         
       )}
-      <MedicationModal
-        visible={modalVisible}
+      <AddMedicationModal
+        visible={modalAddVisible}
+        onClose={closeModal}
+        medication={selectedMed}
+      />
+      <InfoMedicationModal
+        visible={modalInfoVisible}
         onClose={closeModal}
         medication={selectedMed}
       />

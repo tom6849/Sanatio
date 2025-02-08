@@ -17,7 +17,7 @@ const ProgressBar = () => {
         let totalMeds = 0;
         medToday.forEach((elem) => {
           const value = elem.date;
-          value.forEach((entry) => {
+          value?.forEach((entry) => {
             if (entry.date === todayIso) {
               totalMeds += 1;
               if (!entry.taken) {

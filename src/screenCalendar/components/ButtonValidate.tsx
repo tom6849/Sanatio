@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
-import { Medication, useMedication } from '../../context/MedicationContext';
+import { useMedication } from '../../context/MedicationContext';
+import {Medication} from '../../type/Medication'
 
 const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
     const [message, setMessage] = useState<string>("Prendre le médicament");
@@ -14,7 +15,7 @@ const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
             if (medications != null) {
                 const medicationIndex = medications.findIndex((med: Medication) => med.id == id);
                 if (medicationIndex !== -1) {
-                    const takenEntry = medications[medicationIndex].date.find(elem => elem.date === date);
+                    const takenEntry = medications[medicationIndex].date?.find(elem => elem.date === date);
                     if (takenEntry) {
                         setIsTaken(takenEntry.taken);
                         setMessage(takenEntry.taken ? "Médicament Pris !" : "Prendre le médicament");
@@ -36,7 +37,7 @@ const ButtonValidate = ({ id,date }: { id: string, date:string }) => {
                         if (index === medicationIndex) {
                             return {
                                 ...med,
-                                date: med.date.map((entry) => 
+                                date: med.date?.map((entry) => 
                                     entry.date === date ? { ...entry, taken: true } : entry
                                 )
                             };

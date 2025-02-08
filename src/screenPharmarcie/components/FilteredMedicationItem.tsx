@@ -5,7 +5,7 @@ import PilePlus from '../../img/ImgPilePlus';
 
 interface Props {
   medications: Medication[];
-  onPress: (item: Medication) => void;
+  onPress: (item: Medication,name:string) => void;
 }
 
 const FilteredMedicationItem: React.FC<Props> = ({ medications, onPress }) => (
@@ -14,7 +14,7 @@ const FilteredMedicationItem: React.FC<Props> = ({ medications, onPress }) => (
     style={styles.list}
     keyExtractor={(item) => item.id}
     renderItem={({ item }) => 
-      <Pressable style={styles.medicationItem}  onPress={() => onPress(item)}>
+      <Pressable style={styles.medicationItem}  onPress={() => onPress(item,'o')}>
       <View style={styles.medicationIcon}>
         <PilePlus />
       </View>

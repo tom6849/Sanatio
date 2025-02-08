@@ -97,7 +97,7 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
       username,
       height,
       weight,
-      med : null
+      medications : null
     };
     try {
       const storedUsers = await AsyncStorage.getItem('users');

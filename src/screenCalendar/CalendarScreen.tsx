@@ -6,7 +6,7 @@ import { useMedication } from './../context/MedicationContext';
 
 type AgendaItem = {
   name: string;
-  time: string;
+  time?: string;
   endroit: string;
   id : string;
   date : string
@@ -22,7 +22,7 @@ const Calendar: React.FC = () => {
     const medicationByDate: { [key: string]: AgendaItem[] } = {};
     if (medications != null)
     medications.forEach((med) => {
-      med.date.forEach((elem) => {
+      med.date?.forEach((elem) => {
         if (medicationByDate[elem.date] == null) {
           medicationByDate[elem.date] = [];
         }
