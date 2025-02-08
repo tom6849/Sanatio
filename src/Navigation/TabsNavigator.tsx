@@ -9,8 +9,8 @@ import { useMedication } from '../context/MedicationContext';
 import ImgHome from '../img/ImgHome';
 import ImgCalendar from '../img/ImgCalendar';
 import ImgPill from '../img/ImgPill';
-import ImgProfil from '..//img/ImgProfil';
-import { User } from '..//type/User';
+import ImgProfil from '../img/ImgProfil';
+import { User } from '../type/User';
 
 const Tab = createBottomTabNavigator();
 

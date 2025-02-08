@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MedicationProvider } from './src/context/MedicationContext';
 import { User } from './src/type/User';
-import TabsNavigator from './src/Navigation/TabsNavigator';
+import TabsNavigator from './src/navigation/TabsNavigator';
 import OnBoarding from './src/screenOnBoarding/OnBoarding';
 import RegisterScreen from './src/screenOnBoarding/RegisterScreen';
 import Connect from './src/screenOnBoarding/Connect';

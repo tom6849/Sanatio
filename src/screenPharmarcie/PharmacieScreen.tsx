@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
 import OcrScanner from './components/ScanOrd';
 import SearchMed from './components/SearchMed';
@@ -7,10 +7,18 @@ import ImgStock from '../img/ImgStock';
 import ImgSearchMed from '../img/ImgSearchMed';
 import Stock from './components/Stock';
 
-const PharmacyMain = ({ navigation }: { navigation: any }) => {
-  const [pagePosition, setPagePosition] = useState(1);
+const PharmacyMain = ({ navigation, route }: { navigation: any, route: any }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const pageWidth = Dimensions.get('window').width;
+  const [pagePosition, setPagePosition] = useState(1); 
+
+  useEffect(() => {
+    if (route.params?.initialIndex !== undefined) {
+      const initialIndex = route.params.initialIndex;
+      setPagePosition(initialIndex + 1);
+      scrollViewRef.current?.scrollTo({ x: initialIndex * pageWidth, animated: true });
+    }
+  }, [route.params?.initialIndex]);
 
   const onScrollHandler = (event: any) => {
     const scrollViewAbscissa = event.nativeEvent.contentOffset.x;
