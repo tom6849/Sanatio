@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient';
 import { Animated } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {User} from './type/User'
+import {User} from '../type/User'
 
 const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) => {
   const [email, setEmail] = useState("");
@@ -116,15 +116,15 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
   };
 
   const avatars = [
-    { name: 'avatar-1', source: require('./img/avatar/avatar-1.jpg') },
-    { name: 'avatar-2', source: require('./img/avatar/avatar-2.jpg') },
-    { name: 'avatar-3', source: require('./img/avatar/avatar-3.jpg') },
-    { name: 'avatar-4', source: require('./img/avatar/avatar-4.jpg') },
-    { name: 'avatar-5', source: require('./img/avatar/avatar-5.jpg') },
-    { name: 'avatar-6', source: require('./img/avatar/avatar-6.jpg') },
-    { name: 'avatar-7', source: require('./img/avatar/avatar-7.jpg') },
-    { name: 'avatar-8', source: require('./img/avatar/avatar-8.jpg') },
-    { name: 'avatar-9', source: require('./img/avatar/avatar-9.jpg') },
+    { name: 'avatar-1', source: require('../img/avatar/avatar-1.jpg') },
+    { name: 'avatar-2', source: require('../img/avatar/avatar-2.jpg') },
+    { name: 'avatar-3', source: require('../img/avatar/avatar-3.jpg') },
+    { name: 'avatar-4', source: require('../img/avatar/avatar-4.jpg') },
+    { name: 'avatar-5', source: require('../img/avatar/avatar-5.jpg') },
+    { name: 'avatar-6', source: require('../img/avatar/avatar-6.jpg') },
+    { name: 'avatar-7', source: require('../img/avatar/avatar-7.jpg') },
+    { name: 'avatar-8', source: require('../img/avatar/avatar-8.jpg') },
+    { name: 'avatar-9', source: require('../img/avatar/avatar-9.jpg') },
   ];
 
   return (
@@ -139,7 +139,7 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
           </Svg> 
         </Text>
         <View style={styles.profil}>
-          <Image source={require('./img/logo-simple.png')} style={styles.illustration} resizeMode="contain" />
+          <Image source={require('../img/logo-simple.png')} style={styles.illustration} resizeMode="contain" />
         </View>
       </LinearGradient>
 

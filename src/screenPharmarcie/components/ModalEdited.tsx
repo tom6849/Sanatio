@@ -1,33 +1,26 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Medication } from '../../type/Medication';
-import { Alert } from 'react-native';
 import { useMedication } from '../../context/MedicationContext';
+import TimePicker from './TimePicker'; 
+import DatePickers from './DatePicker';
+import SelectedDay from './SelectDay';
 
 type EditMedicationModalProps = {
   modalVisible: boolean;
-  selectedMedication: Medication | null;
-  editedTime: string;
-  editedStartDate: string;
-  editedEndDate: string;
-  medication : Medication;
-  setEditedTime: (time: string) => void;
-  setEditedStartDate: (startDate: string) => void;
-  setEditedEndDate: (endDate: string) => void;
+  medication: Medication;
   setModalVisible: (visible: boolean) => void;
 };
 
-const modalEdited = ({modalVisible,selectedMedication,editedTime,editedStartDate,editedEndDate, medication,setEditedTime,setEditedStartDate,setEditedEndDate,setModalVisible,}: EditMedicationModalProps) => {
+const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMedicationModalProps) => {
   const { medications, setMedications } = useMedication();
-  const validateDate = (date: string) => {
-    const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
-    return datePattern.test(date);
-  };
-
-  const validateTime = (time: string) => {
-    const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
-    return timePattern.test(time);
-  };
+  const [editedTime, setEditedTime] = useState('');
+  const [editedStartDate, setEditedStartDate] = useState('');
+  const [editedEndDate, setEditedEndDate] = useState('');
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [days, setDays] = useState<{ [key: string]: boolean }>({});
 
   const convertToISODate = (date: string): string => {
     const [year, month, day] = date.split('/');
@@ -38,8 +31,7 @@ const modalEdited = ({modalVisible,selectedMedication,editedTime,editedStartDate
     const dates: { date: string; taken: boolean }[] = [];
     let currentDate = new Date(convertToISODate(editedStartDate));
     const finDate = new Date(convertToISODate(editedEndDate));
-    const selectedDays = medication.jours
-  
+    const selectedDays = days;
     while (currentDate <= finDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
   
@@ -47,70 +39,61 @@ const modalEdited = ({modalVisible,selectedMedication,editedTime,editedStartDate
         const formattedDate = currentDate.toISOString().split('T')[0];
         dates.push({ date: formattedDate, taken: false });
       }
-  
+
       currentDate.setDate(currentDate.getDate() + 1);
     }
-  
+
     return dates;
   };
 
-
-  const handleSaveChanges = (() =>{
-
-    if (!validateDate(editedStartDate) || !validateDate(editedEndDate)) {
-      Alert.alert('Veuillez entrer une date valide (YYYY-MM-DD)');
-      return;
-    }
-
-    if (!validateTime(editedTime)) {
-      Alert.alert('Veuillez entrer une heure valide (HH:mm)');
-      return;
-    }
-
+  const handleSaveChanges = () => {
     medication.time = editedTime;
     medication.isoStartDate = editedStartDate;
     medication.isoEndDate = editedEndDate;
-    medication.date = generateDatesToTake()
-    setMedications([medication]);
-    setModalVisible(false);
+    medication.date = generateDatesToTake();
+    const med = medications?.filter((elem) => elem.id !== medication.id);
+  setMedications([...med!, { ...medication }]);
 
-  })
-  
+    setModalVisible(false);
+  };
+
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Modifier le médicament</Text>
 
-          <Text style={styles.label}>Heure de prise :</Text>
-          <TextInput
-            style={styles.input}
-            value={editedTime}
-            onChangeText={setEditedTime}
-          />
-
-          <Text style={styles.label}>Date de début :</Text>
-          <TextInput
-            style={styles.input}
-            value={editedStartDate}
-            onChangeText={setEditedStartDate}
-          />
-
-          <Text style={styles.label}>Date de fin :</Text>
-          <TextInput
-            style={styles.input}
-            value={editedEndDate}
-            onChangeText={setEditedEndDate}
-          />
-
-          <View style={styles.modalButtons}>
-            <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-              <Text style={styles.saveButtonText}>Sauvegarder</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Annuler</Text>
-            </TouchableOpacity>
-          </View>
+          <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled">
+            <TimePicker
+              time={editedTime}
+              onTimeChange={setEditedTime}
+              showTimePicker={showTimePicker}
+              setShowTimePicker={setShowTimePicker}
+            />
+            <DatePickers
+              label="Date de début"
+              date={editedStartDate}
+              onDateChange={setEditedStartDate}
+              showDatePicker={showStartDatePicker}
+              setShowDatePicker={setShowStartDatePicker}
+            />
+            <DatePickers
+              label="Date de fin"
+              date={editedEndDate}
+              onDateChange={setEditedEndDate}
+              showDatePicker={showEndDatePicker}
+              setShowDatePicker={setShowEndDatePicker}
+            />
+            <SelectedDay onSelectDays={(days: { [key: string]: boolean }) => setDays(days)} />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+                <Text style={styles.saveButtonText}>Sauvegarder</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </Modal>
@@ -126,6 +109,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
+    maxHeight: '80%',
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,
@@ -154,6 +138,9 @@ const styles = StyleSheet.create({
     color: '#333',
     borderColor: '#ddd',
     borderWidth: 1,
+  },
+  scrollViewContent: {
+    paddingBottom: 20,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -187,4 +174,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default modalEdited;
+export default EditMedicationModal;

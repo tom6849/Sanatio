@@ -1,34 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, Animated } from 'react-native';
-import Medicaments from './Medicaments';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import Medicaments from '../../screenCalendar/components/Medicaments'
 import { useMedication } from '../../context/MedicationContext';
 
 const MedicationRecap = () => {
     const { medToday } = useMedication();
-
-    const pulseAnim = useRef(new Animated.Value(1)).current;
-
-    useEffect(() => {
-        Animated.loop(
-            Animated.sequence([
-                Animated.timing(pulseAnim, {
-                    toValue: 1.1,
-                    duration: 500,
-                    useNativeDriver: true,
-                }),
-                Animated.timing(pulseAnim, {
-                    toValue: 1,
-                    duration: 500,
-                    useNativeDriver: true,
-                }),
-            ])
-        ).start();
-    }, [pulseAnim]);
+    const todayIso = new Date().toISOString().split('T')[0];
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Aujourd'hui</Text>
-
             {medToday.length > 0 ? (
                 <ScrollView
                     style={styles.info}
@@ -38,15 +19,15 @@ const MedicationRecap = () => {
                 >
                     {medToday.map((medicationToday) => (
                         <View style={styles.medicament} key={medicationToday.id}>
-                            <Medicaments medication={medicationToday} />
+                            <Medicaments medication={medicationToday} calendarDate={todayIso} />
                         </View>
                     ))}
                 </ScrollView>
             ) : (
                 <View style={styles.centeredContainer}>
-                    <Animated.Text style={[styles.infoMed, { transform: [{ scale: pulseAnim }] }]}>
+                    <Text style={styles.infoMed}>
                         Pas de médicament à prendre aujourd'hui
-                    </Animated.Text>
+                    </Text>
                 </View>
             )}
         </View>

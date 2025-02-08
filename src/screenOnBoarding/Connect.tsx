@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Scr
 import Svg, { Path } from "react-native-svg"; 
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {User} from './type/User'
+import {User} from '../type/User'
 
 const Connect = ({ route, navigation }: { route: any, navigation: any }) => {
   const [email, setEmail] = useState("");
@@ -51,7 +51,7 @@ const Connect = ({ route, navigation }: { route: any, navigation: any }) => {
           </Svg> 
         </Text>
         <View style={styles.profil}>
-          <Image source={require('./img/logo-simple.png')} style={styles.illustration} resizeMode="contain" />
+          <Image source={require('../img/logo-simple.png')} style={styles.illustration} resizeMode="contain" />
         </View>
       </LinearGradient>
       <View style={styles.ContainerAccount}>

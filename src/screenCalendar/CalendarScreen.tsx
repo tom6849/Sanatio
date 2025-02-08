@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
-import Item from './components/Item';
 import { useMedication } from './../context/MedicationContext';
 
 type AgendaItem = {
@@ -11,62 +10,56 @@ type AgendaItem = {
   id : string;
   date : string
 };
+import { Medication } from '../type/Medication';
+import Medicaments from './components/Medicaments';
 
 const Calendar: React.FC = () => {
   const { medications } = useMedication();
-  const [items, setItems] = useState<{ [key: string]: AgendaItem[] }>({});
-  const [date, setDate] = useState<{ [key: string]: AgendaItem[] }>({});
+  const [items, setItems] = useState<{ [key: string]: Medication[] }>({});
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    const medicationByDate: { [key: string]: AgendaItem[] } = {};
-    if (medications != null)
-    medications.forEach((med) => {
-      med.date?.forEach((elem) => {
-        if (medicationByDate[elem.date] == null) {
-          medicationByDate[elem.date] = [];
-        }
-        medicationByDate[elem.date].push({
-          name: med.name,
-          time: med.time,
-          endroit: med.administrationRoutes,
-          id: med.id,
-          date: elem.date
-        
+    const medicationByDate: { [key: string]: Medication[] } = {};
+    if (medications) {
+      medications.forEach((med) => {
+        med.date?.forEach((elem) => {
+          if (typeof elem.date === 'string' && typeof elem.taken === 'boolean') { 
+            if (!medicationByDate[elem.date]) {
+              medicationByDate[elem.date] = [];
+            }
+            medicationByDate[elem.date].push({
+              ...med,
+              date: med.date, 
+            });
+          }
         });
-        console.log(elem.date)
       });
-    });
+    }
     setItems(medicationByDate);
-  }, [medications]); 
-  
+  }, [medications]);
 
   const getMonthYear = (date: string) => {
     const options: Intl.DateTimeFormatOptions = { month: 'long', year: 'numeric' };
-    const formattedDate = new Date(date).toLocaleDateString('fr-FR', options);
-    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); 
+    return new Date(date).toLocaleDateString('fr-FR', options);
   };
 
   const handleDayPress = (day: { dateString: string }) => {
-    setSelectedDate(day.dateString); 
+    setSelectedDate(day.dateString);
   };
 
-  const renderEmptyData = () => {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Pas de Médicaments à prendre Aujourd'hui</Text>
-      </View>
-    );
-  };
+  const renderEmptyData = () => (
+    <View style={styles.emptyContainer}>
+      <Text>Pas de médicaments à prendre aujourd'hui</Text>
+    </View>
+  );
 
-  // Locale configuration
   LocaleConfig.locales['fr'] = {
     monthNames: [
-      'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 
+      'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre',
       'Octobre', 'Novembre', 'Décembre'
     ],
-    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 
-                     'Oct.', 'Nov.', 'Déc.'],
+    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.',
+                      'Oct.', 'Nov.', 'Déc.'],
     dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
     today: "Aujourd'hui"
@@ -93,7 +86,9 @@ const Calendar: React.FC = () => {
       <View style={styles.calendar}>
         <Agenda
           items={items}
-          renderItem={(item : AgendaItem) => <Item item={item} />}
+          renderItem={(item: Medication) => (
+            <Medicaments medication={item} fromCalendar={true} calendarDate={selectedDate} />
+          )}
           showOnlySelectedDayItems={true}
           pastScrollRange={12}
           futureScrollRange={12}
@@ -119,14 +114,17 @@ const styles = StyleSheet.create({
   },
   month: {
     fontSize: 22,
-    fontWeight: 'semibold',
+    fontWeight: '600',
     color: '#292F35',
   },
   calendar: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: 'white',
-    flexDirection: 'row',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

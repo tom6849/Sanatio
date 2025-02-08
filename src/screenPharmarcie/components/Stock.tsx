@@ -7,9 +7,6 @@ import ModalEdited from './ModalEdited';
 const Stock = () => {
   const { medications, setMedications } = useMedication();
   const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
-  const [editedTime, setEditedTime] = useState('');
-  const [editedStartDate, setEditedStartDate] = useState('');
-  const [editedEndDate, setEditedEndDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleDeleteMedication = (id: string) => {
@@ -20,19 +17,18 @@ const Stock = () => {
         { text: "Annuler", style: "cancel" },
         { 
           text: "Supprimer", 
-          onPress: () => setMedications(medications!.filter(medication => medication.id !== id)) 
+          onPress: () => {
+            const updatedMedications = medications!.filter(m => m.id !== id);
+            setMedications(updatedMedications); 
+          },
         }
       ]
     );
   };
-
-  const handleEditMedication = (medication: Medication) => { 
-    setModalVisible(true);
-  };
   
   return (
     <View style={styles.pageContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {medications === null ? (
           <Text style={styles.noDataText}>Aucune donnée de médicament disponible.</Text>
         ) : medications.length > 0 ? (
@@ -56,28 +52,26 @@ const Stock = () => {
 
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={() => handleEditMedication(medication)}
+                onPress={() => {
+                  setSelectedMedication(medication);
+                  setModalVisible(true);
+                }}
               >
                 <Text style={styles.editButtonText}>Éditer le médicament</Text>
               </TouchableOpacity>
-              <ModalEdited 
-                modalVisible={modalVisible}
-                selectedMedication={selectedMedication}
-                editedTime={editedTime}
-                editedStartDate={editedStartDate}
-                medication={medication}
-                editedEndDate={editedEndDate}
-                setEditedTime={setEditedTime}
-                setEditedStartDate={setEditedStartDate}
-                setEditedEndDate={setEditedEndDate}
-                setModalVisible={setModalVisible}
-      />
             </View>
           ))
         ) : (
-          <Text style={styles.noDataText}>Aucun médicament disponible pour ce jour.</Text>
+          <Text style={styles.noDataText}>Aucun médicament disponible</Text>
         )}
       </ScrollView>
+      {selectedMedication && (
+        <ModalEdited 
+          modalVisible={modalVisible}
+          medication={selectedMedication}
+          setModalVisible={setModalVisible}
+        />
+      )}
     </View>
   );
 };
@@ -86,12 +80,11 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     backgroundColor: '#f3f4f6',
-    width : '100%'
+    width: '100%',
   },
-  container: {
-    padding: 20,
-    width : '100%',
-    flex : 1,
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 15,
   },
   medicationContainer: {
     marginBottom: 20,
@@ -127,7 +120,6 @@ const styles = StyleSheet.create({
     height: 40,
     textAlignVertical: 'center',
   },
-  
   editButton: {
     backgroundColor: '#4C6EF5',
     paddingVertical: 10,
@@ -151,7 +143,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 0, 
   },
-  
   deleteButtonText: {
     color: 'white',
     fontSize: 20,

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import { useMedication } from '../../context/MedicationContext'; 
+import { Medication } from '../../type/Medication';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -16,30 +18,49 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-const data = {
-  labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-  datasets: [
-    {
-      data: [1, 5, 3, 2, 9, 0, 1],
-      color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
-      strokeWidth: 4,
-    },
-  ],
-  legend: ['Nombre de médicaments'],
-};
-
 const Stats = () => {
+  const { medications } = useMedication();
+
+  const fullLabels = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+
+
+  const labels = fullLabels.map((label) => label.slice(0, 3));
+
+
+  const data = fullLabels.map((label) => {
+
+    const medicationCount = medications?.reduce((count, med) => {
+      if (med.jours?[label]:null) {
+        return count + 1; 
+      }
+      return count;
+    }, 0) || 0;
+
+    return medicationCount; 
+  });
+
+  const chartData = {
+    labels, 
+    datasets: [
+      {
+        data, 
+        color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
+        strokeWidth: 4,
+      },
+    ],
+    legend: ['Nombre de médicaments'], 
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.chartWrapper}>
         <LineChart
-          data={data}
+          data={chartData}
           width={screenWidth - 40} 
-          height={ screenHeight * 0.25} 
+          height={screenHeight * 0.25} 
           chartConfig={chartConfig}
-          bezier
-          fromZero
+          bezier 
+          fromZero 
           style={styles.chartStyle}
         />
       </View>
@@ -62,7 +83,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   chartWrapper: {
-    width: '90%', 
+    width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
   },

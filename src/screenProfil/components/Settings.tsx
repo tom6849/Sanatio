@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Modal, TextInput, Button, Alert } from 'react-native';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, NavigationProp  } from '@react-navigation/native';
 import { typeRoute } from '../ProfilScreen'; 
 import ImgEmail from '../../img/ImgEmail';
 import ImgMdp from "../../img/ImgMdp";
@@ -11,13 +11,11 @@ import { User } from '../../type/User'
 import ImgHeight from "../../img/ImgHeight";
 import ImgArrowRight from "../../img/ImgArrowRight";
 import { Alert as RNAlert} from "react-native";
+import ImgRetour from "../../img/ImgRetour";
 
-type SettingsPageProps = {
-  route: RouteProp<typeRoute, 'SettingsPage'>;
-};
 
-const SettingsPage = ({ route }: SettingsPageProps) => {
-  const { handleLogout } = route.params;
+const SettingsPage = ({ navigation, handleLogout }: { navigation: NavigationProp<any>, handleLogout: () => void;}) => {
+
   const [user, setUser] = useState<User | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState<string>('');
@@ -72,7 +70,6 @@ const SettingsPage = ({ route }: SettingsPageProps) => {
         elem.id === user.id ? { ...elem, password: newPassword} : elem
       );
       await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
-
       setUser(updatedUser);  
       setActualPassword("")
       setNewPassword("")
@@ -83,6 +80,9 @@ const SettingsPage = ({ route }: SettingsPageProps) => {
 
   return (
     <View style={styles.screenContainer}>
+      <Text style={styles.retour} onPress={() => navigation.goBack()}> 
+        <ImgRetour/>
+      </Text>
       <View style={styles.container}>
         <Text style={styles.header}>Compte</Text>
 
@@ -272,6 +272,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  retour: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'white',
+  },
 });
+
 
 export default SettingsPage;
