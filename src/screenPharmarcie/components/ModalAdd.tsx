@@ -7,6 +7,7 @@ import DatePicker from 'react-native-modern-datepicker';
 import SelectedDay from './SelectDay';
 import TimePicker from './TimePicker';
 import DatePickers from './DatePicker';
+import Day from 'react-native-calendars/src/calendar/day';
 
 type MedicationModalProps = {
   visible: boolean;
@@ -30,9 +31,6 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible = false, onCl
 
   if (!medication) return null;
 
-  const handleSelectDays = (days: { [key: string]: boolean }) => {
-    setSelectedDays(days);
-  };
 
   const convertToISODate = (date: string): string => {
     const [year, month, day] = date.split('/');
@@ -187,8 +185,7 @@ const MedicationModal: React.FC<MedicationModalProps> = ({ visible = false, onCl
                   showTimePicker={showTimePicker}
                   setShowTimePicker={setShowTimePicker}
                 />
-
-                <SelectedDay onSelectDays={handleSelectDays} />
+                <SelectedDay onSelectDays={(days: { [key: string]: boolean }) => setSelectedDays(days)} />
               </View>
             )}
           </ScrollView>

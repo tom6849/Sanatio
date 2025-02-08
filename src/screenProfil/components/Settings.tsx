@@ -13,13 +13,9 @@ import ImgArrowRight from "../../img/ImgArrowRight";
 import { Alert as RNAlert} from "react-native";
 import ImgRetour from "../../img/ImgRetour";
 
-type SettingsPageProps = {
-  route: RouteProp<typeRoute, 'SettingsPage'>;
-  navigation: NavigationProp<any>; 
-};
 
-const SettingsPage = ({ route, navigation }: SettingsPageProps) => {
-  const { handleLogout } = route.params;
+const SettingsPage = ({ navigation, handleLogout }: { navigation: NavigationProp<any>, handleLogout: () => void;}) => {
+
   const [user, setUser] = useState<User | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState<string>('');

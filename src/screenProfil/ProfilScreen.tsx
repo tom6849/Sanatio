@@ -8,42 +8,38 @@ import Stats from './components/Stats';
 import Ordonnance from './components/Ordonnance';
 import Effets from './components/Effets';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
 import SettingsPage from './components/Settings';
 
 export type typeRoute = {
   Profile: undefined;
-  SettingsPage: { handleLogout: () => void }; 
+  SettingsPage: undefined;
 };
 
 const Stack = createStackNavigator<typeRoute>();
 
-const ProfileScreen = ({ handleLogout }: { handleLogout: () => void }) => {
+type ProfileScreenProps = {
+  navigation: NavigationProp<typeRoute>;
+  handleLogout: () => void;
+};
+
+const ProfileScreen = ({ handleLogout }: ProfileScreenProps) => {
   const [selectedButton, setSelectedButton] = useState<number | null>(0);
   const handleChoiceChange = (choice: number | null) => {
     setSelectedButton(choice);
   };
 
-  const navigation = useNavigation<NavigationProp<typeRoute>>();
-
-  const handlePress = () => {
-    navigation.navigate('SettingsPage', { handleLogout }); 
-  };
-
   return (
     <Stack.Navigator initialRouteName="Profile">
-      <Stack.Screen
-        name="Profile"
-        options={{ headerShown: false }}
-      >
-        {() => (
+      <Stack.Screen name="Profile" options={{ headerShown: false }}>
+        {({ navigation }) => (
           <View style={styles.container}>
             <LinearGradient
               colors={['#4D82F3', '#C9E0F8']}
               style={styles.linearGradient}
               start={{ x: 0.9, y: 0 }}
             >
-              <TouchableOpacity onPress={handlePress}>
+              <TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
                 <View style={styles.logo}>
                   <Settings size={34} />
                 </View>
@@ -61,11 +57,9 @@ const ProfileScreen = ({ handleLogout }: { handleLogout: () => void }) => {
           </View>
         )}
       </Stack.Screen>
-      <Stack.Screen
-        name="SettingsPage"
-        component={SettingsPage}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="SettingsPage" options={{ headerShown: false }}>
+        {(props) => <SettingsPage {...props} handleLogout={handleLogout} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

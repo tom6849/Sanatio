@@ -20,6 +20,7 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [days, setDays] = useState<{ [key: string]: boolean }>({});
 
   const convertToISODate = (date: string): string => {
     const [year, month, day] = date.split('/');
@@ -30,7 +31,7 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
     const dates: { date: string; taken: boolean }[] = [];
     let currentDate = new Date(convertToISODate(editedStartDate));
     const finDate = new Date(convertToISODate(editedEndDate));
-    const selectedDays = medication.jours;
+    const selectedDays = days;
     while (currentDate <= finDate) {
       const dayName = currentDate.toLocaleString('fr-FR', { weekday: 'long' }).toLowerCase();
 
@@ -83,7 +84,7 @@ const EditMedicationModal = ({modalVisible,medication,setModalVisible,}: EditMed
               showDatePicker={showEndDatePicker}
               setShowDatePicker={setShowEndDatePicker}
             />
-            
+            <SelectedDay onSelectDays={(days: { [key: string]: boolean }) => setDays(days)} />
             <View style={styles.modalButtons}>
               <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
                 <Text style={styles.saveButtonText}>Sauvegarder</Text>

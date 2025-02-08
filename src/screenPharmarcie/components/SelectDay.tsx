@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
-interface SelectedDayProps {
+type SelectedDayProps = {
   onSelectDays: (selectedDays: { [key: string]: boolean }) => void;
 }
 
@@ -25,36 +25,51 @@ const SelectedDay: React.FC<SelectedDayProps> = ({ onSelectDays }) => {
   };
 
   return (
-    <View>
-      <Text style={styles.title}>Selectionner les jours</Text>
-      {Object.keys(selectedDays).map((day) => (
-        <Pressable
-          key={day}
-          style={[
-            styles.dayContainer,
-            selectedDays[day] ? styles.selected : styles.unselected,
-          ]}
-          onPress={() => toggleDay(day)}
-        >
-          <Text style={selectedDays[day] ? styles.selectedText : styles.unselectedText}>
-            {day}
-          </Text>
-        </Pressable>
-      ))}
+    <View style={styles.container}>
+      <Text style={styles.title}>Sélectionner les jours</Text>
+      <View style={styles.daysContainer}>
+        {Object.keys(selectedDays).map((day) => (
+          <Pressable
+            key={day}
+            style={[
+              styles.dayButton,
+              selectedDays[day] ? styles.selected : styles.unselected,
+            ]}
+            onPress={() => toggleDay(day)}
+          >
+            <Text style={selectedDays[day] ? styles.selectedText : styles.unselectedText}>
+              {day[0].toUpperCase()}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+  },
   title: {
     fontSize: 16,
     marginBottom: 8,
     color: '#333',
+    fontWeight: 'bold',
   },
-  dayContainer: {
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
+  daysContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  dayButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   selected: {
     backgroundColor: '#4D82F3',
@@ -64,6 +79,7 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: '#FFFFFF',
+    fontWeight: 'bold',
   },
   unselectedText: {
     color: '#000000',
