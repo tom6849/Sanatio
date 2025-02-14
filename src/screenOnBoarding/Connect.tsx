@@ -10,35 +10,39 @@ const Connect = ({ route, navigation }: { route: any, navigation: any }) => {
   const [password, setPassword] = useState("");
   const { setUser } = route.params;
 
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
     if (!email.match(emailPattern)) {
       Alert.alert("Email invalide", "Veuillez entrer une adresse email valide.");
-      return;
+      return false;
     }
   
     if (password.length < 6) {
       Alert.alert("Mot de passe invalide", "Le mot de passe doit comporter au moins 6 caractères.");
-      return;
+      return false;
     }
   
     try {
-        const storedUsers = await AsyncStorage.getItem('users');
-        let users = storedUsers ? JSON.parse(storedUsers) : [];
-        const existingUser = users.find((elem: User) => elem.email === email && elem.password === password);
-        if (existingUser) {
-          setUser(existingUser);
-          return true;
-        } else {
-          Alert.alert("Échec de l'authentification", "Email ou mot de passe incorrect.");
-          return false;
-        }
-      } catch (error) {
+      const storedUser = await AsyncStorage.getItem(`users:${email}`);
+      if (!storedUser) {
+        Alert.alert("Échec de l'authentification", "Email ou mot de passe incorrect.");
+        return false;
+      }
+      const user: User = JSON.parse(storedUser);
+      if (user.password !== password) {
+        Alert.alert("Échec de l'authentification", "Email ou mot de passe incorrect.");
+        return false;
+      }
+      setUser(user);
+      return true;
+    } catch (error) {
       console.error("Erreur lors de l'authentification :", error);
       Alert.alert("Erreur", "Une erreur est survenue lors de l'authentification.");
       return false;
     }
   };
+  
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#0066CC', '#66CCFF']} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 1, y: 1 }}>
@@ -59,7 +63,7 @@ const Connect = ({ route, navigation }: { route: any, navigation: any }) => {
         <View style={styles.ContainerInput}>
             <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
             <TextInput style={styles.input} placeholder="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>Se connecter</Text>
             </TouchableOpacity>
         </View>

@@ -6,7 +6,7 @@ export type Medication = {
   pharmaForm: string;
   administrationRoutes: string;
   time?: string;
-  jours?: { [key: string]: boolean };
-  date?: { date: string; taken: boolean }[];
-  pill?:number;
+  jours: string[];
+  date: { date: string; taken: boolean }[];
+  pill:number;
 };

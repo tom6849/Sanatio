@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screenHome/HomeScreen';
-import Pharmacy from '../screenPharmarcie/PharmacieScreen';
-import CalendarScreen from '../screenCalendar/CalendarScreen';
-import ProfilScrenn from '../screenProfil/ProfilScreen';
+import HomeScreen from '../screens/HomeScreen';
+import Pharmacy from '../screens/PharmacieScreen';
+import CalendarScreen from '../screens/CalendarScreen';
+import ProfilScrenn from '../screens/ProfilScreen';
 import { useMedication } from '../context/MedicationContext';
 import ImgHome from '../img/ImgHome';
 import ImgCalendar from '../img/ImgCalendar';
 import ImgPill from '../img/ImgPill';
 import ImgProfil from '../img/ImgProfil';
-import { User } from '../type/User';
 
 const Tab = createBottomTabNavigator();
 

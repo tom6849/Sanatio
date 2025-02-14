@@ -70,18 +70,8 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
   
   const checkEmailExists = async (email: string) => {
     try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      if (storedUsers) {
-        const users: User[] = JSON.parse(storedUsers); 
-        let emailExists = false;
-        users.forEach((user) => {
-          if (user.email === email) {
-            emailExists = true; 
-          }
-        });
-        return emailExists;   
-      }
-      return false;
+      const user = await AsyncStorage.getItem(`users:${email}`);
+      return user !== null; 
     } catch (error) {
       console.error("Erreur lors de la vérification de l'email:", error);
       return false;
@@ -89,27 +79,25 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
   };
   
   const addUserBd = async () => {
-    const newUser : User = {
-      id: new Date().toISOString(), 
+    const newUser: User = {
+      id: new Date().toISOString(),
       email,
       password,
       selectedAvatar,
       username,
       height,
       weight,
-      medications : null
+      medications: null
     };
     try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      let users = storedUsers ? JSON.parse(storedUsers) : [];
-      users.push(newUser); 
-      await AsyncStorage.setItem('users', JSON.stringify(users)); 
-      setUser(newUser)
+      await AsyncStorage.setItem(`users:${email}`, JSON.stringify(newUser));
+      setUser(newUser);
     } catch (error) {
       console.error("Erreur lors de l'ajout de l'utilisateur:", error);
       Alert.alert("Une erreur est survenue.");
     }
   };
+  
 
   const chooseAvatar = (avatarName: string) => {
     setSelectedAvatar(avatarName); 

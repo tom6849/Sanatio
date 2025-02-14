@@ -1,13 +1,12 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback, useMemo } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from '../type/User';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback } from 'react';
 import { Medication } from '../type/Medication';
+import { getMedications, updateMedications } from '../services/medicationService';
 
 /**
  * Type pour le contexte des médicaments.
  */
 type MedicationContextType = {
-  medications: Medication[] | null;
+  medications: Medication[];
   setMedications: (medications: Medication[]) => void;
   medToday: Medication[];
 };
@@ -32,83 +31,54 @@ export const useMedication = (): MedicationContextType => {
  * Composant `MedicationProvider`
  */
 export const MedicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [medications, setMedications] = useState<Medication[] | null>(null);
+  const [medications, setMedicationsState] = useState<Medication[]>([]); 
 
   useEffect(() => {
     const loadMedications = async () => {
-      try {
-        const storedUsers = await AsyncStorage.getItem('users');
-        const lastUser = await AsyncStorage.getItem('lastUser');
-
-        if (!storedUsers || !lastUser) {
-          console.log("Aucun utilisateur trouvé");
-          return;
-        }
-
-        const users: User[] = JSON.parse(storedUsers);
-        const current = JSON.parse(lastUser);
-        const currentUser = users.find((user) => user.id === current.id);
-
-        if (currentUser?.medications) {
-          setMedications(currentUser.medications);
-        }
-      } catch (error) {
-        console.error('Erreur lors du chargement des médicaments:', error);
+      const meds = await getMedications(); 
+      if (meds && JSON.stringify(meds) !== JSON.stringify(medications)) {
+        setMedicationsState(meds);  
       }
     };
-
     loadMedications();
   }, []);
 
   /**
-   * Fonction pour mettre à jour les médicaments et les enregistrer dans AsyncStorage
+   * Fonction pour mettre à jour les médicaments
    */
-  const updateMedications = async (newMedications: Medication[]) => {
-    if (!newMedications) return;
-
-    setMedications([...newMedications]); 
-
-    try {
-        const storedUsers = await AsyncStorage.getItem('users');
-        const lastUser = await AsyncStorage.getItem('lastUser');
-
-        if (!storedUsers || !lastUser) {
-            console.log("Aucun utilisateur trouvé");
-            return;
-        }
-
-        const users: User[] = JSON.parse(storedUsers);
-        const current = JSON.parse(lastUser);
-
-        const currentUser = users.find((user) => user.id === current.id);
-        if (!currentUser) return;
-
-        currentUser.medications = newMedications;
-
-        const updatedUsers = users.map((user) =>
-            user.id === currentUser.id ? currentUser : user
-        );
-
-        await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
-    } catch (error) {
-        console.error("Erreur lors de la mise à jour des médicaments :", error);
-    }
-};
-
+  const setMedications = (newMedications: Medication[]) => {
+    setMedicationsState(newMedications);
+    setTimeout(() => {
+      updateMedications(newMedications).catch((error) => {
+        console.error('Erreur lors de la mise à jour des médicaments :', error);
+      });
+    }, 0); // La mise à jour se fait en arrière-plan
+  };
+  
+  
 
   /**
    * Calcule les médicaments à prendre aujourd'hui avec `useMemo`
    */
   const medToday = useMemo(() => {
-    if (!medications) return [];
     const todayIso = new Date().toISOString().split('T')[0]; 
-    return medications.filter((med) =>
-      med.date?.some((entry) => entry.date === todayIso)
-    );
+  
+    return medications
+      .filter((med) =>
+        med.date && med.date.some((entry) => entry.date === todayIso)
+      )
+      .sort((a, b) => {
+        if (!a.time) return 1; 
+        if (!b.time) return -1; 
+        return a.time.localeCompare(b.time[0]); 
+      });
   }, [medications]);
+  
+  
+  
 
   return (
-    <MedicationContext.Provider value={{ medications, setMedications: updateMedications, medToday }}>
+    <MedicationContext.Provider value={{ medications, setMedications, medToday }}>
       {children}
     </MedicationContext.Provider>
   );
