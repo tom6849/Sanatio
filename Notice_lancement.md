@@ -33,7 +33,7 @@ export HTTP_PROXY="http://srv-proxy-etu-2.iut-nantes.univ-nantes.prive:3128"
 export HTTPS_PROXY="http://srv-proxy-etu-2.iut-nantes.univ-nantes.prive:3128"
 export FTP_PROXY="http://srv-proxy-etu-2.iut-nantes.univ-nantes.prive:3128"
 export NO_PROXY="localhost,127.0.0.1,::1"
-' | sudo tee -a /etc/bash.bashrc
+' | tee -a /etc/bash.bashrc
 
 echo '
 # Proxy settings
@@ -62,8 +62,63 @@ echo '
 # JAVA_HOME
 export JAVA_HOME="/usr/lib/jvm/jdk-20"
 export PATH=$JAVA_HOME/bin:$PATH
-' | sudo tee -a /etc/bash.bashrc
-source /etc/bash.bashrc
+' | sudo tee -a $HOME/.bashrc_ubuntu-24-04
+source $HOME/.bashrc_ubuntu-24-04
+```
+
+## Installer de Android Studio
+
+Un des problèmes majeur de l'architecture de l'IUT est que l'ensemble des applications sont conteneurisées via flatpak depuis Fedora. Cela empêche différents service de se joindre car ils ne sont donc pas dans le même réseau. Le but est de créer un Android Studio dans notre VM afin que celui puisse voir le serveur.
+
+Installation de Android Studio :
+
+```bash
+cd ~
+wget "https://r1---sn-gxo5uxg-jqbl.gvt1.com/edgedl/android/studio/ide-zips/2024.3.1.13/android-studio-2024.3.1.13-linux.tar.gz"
+tar -xvzf android-studio-2024.3.1.13-linux.tar.gz
+rm android-studio-2024.3.1.13-linux.tar.gz
+cd android-studio/bin
+chmod +x studio.sh
+sudo apt update
+sudo apt full-upgrade -y
+sudo apt install libglib2.0-bin libcanberra-gtk-module libcanberra-gtk3-module libpulse0 libnss3 libxkbfile1 libxcb-xinerama0 libxcb-cursor0 libx11-xcb1 libxcb1 qt5-qmake qtbase5-dev qtchooser qt5-qmake-bin libxcb1-dev libx11-6 libvulkan1 ninja-build -y
+sudo apt install tzdata --reinstall
+./studio.sh
+```
+
+L'interface peut vous demander de configurer le proxy : \
+\
+Manual proxy configuration :
+```bash
+Host name: srv-proxy-etu-2.iut-nantes.univ-nantes.prive
+Port number: 3128
+```
+### Installation du Android SDK et configuration des variables d'environnement
+
+Dans Android Studio, en haut à droite : **Roue crantée > SDK Manager...**
+Vérifiez que **Android SDK Location** est bien **/var/home/(VOTRE USER ICI)/Android/Sdk**, par exemple :
+*/var/home/E222451U/Android/Sdk*.
+Installez le SDK que vous souhaitez.
+Puis allez dans la section **SDK Tools** et cochez :
+- Android SDK Build-Tools 36
+- NDK (Side by side)
+- Android SDK Command-line Tools (latest)
+- CMake
+- Android Emulator
+- Android SDK Platform-Tools
+
+Puis OK, continuez l'installation.
+
+Ensuite, éxecutez dans le terminal :
+
+```bash
+echo '
+# ANDROID VARIABLES
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+export ANDROID_AVD_HOME=$HOME/.config/.android/avd
+' | sudo tee -a $HOME/.bashrc_ubuntu-24-04
+source $HOME/.bashrc_ubuntu-24-04
 ```
 
 ## Installation de `Node`
