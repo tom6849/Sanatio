@@ -107,8 +107,8 @@ Manual proxy configuration :
 Host name: srv-proxy-etu-2.iut-nantes.univ-nantes.prive
 Port number: 3128
 ```
-### Installation du Android SDK et configuration des variables d'environnement
 
+### Installation du Android SDK et configuration des variables d'environnement
 Dans Android Studio, en haut à droite : **Roue crantée > SDK Manager...**
 Vérifiez que **Android SDK Location** est bien **/var/home/(VOTRE USER ICI)/Android/Sdk**, par exemple :
 */var/home/E222451U/Android/Sdk*.
@@ -123,7 +123,7 @@ Puis allez dans la section **SDK Tools** et cochez :
 
 Puis OK, continuez l'installation.
 
-Ensuite, éxecutez dans le terminal :
+Ensuite, fermer Android Studio et éxecutez dans le terminal :
 
 ```bash
 echo '
@@ -131,7 +131,7 @@ echo '
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
 export ANDROID_AVD_HOME=$HOME/.config/.android/avd
-' | sudo tee -a $HOME/.bashrc_ubuntu-24-04
+' | tee -a $HOME/.bashrc_ubuntu-24-04
 source $HOME/.bashrc_ubuntu-24-04
 ```
 
@@ -176,3 +176,9 @@ Et également donner le droit d'éxecution au fichier `gradlew`. N'oubliez pas d
 ```bash
 chmod +x gradlew
 ```
+
+# Lancement de l'application
+
+dans /mobile/android : npm install, npm start
+
+appuyer sur a dans Metro pour lancer l'application
