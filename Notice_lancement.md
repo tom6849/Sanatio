@@ -1,4 +1,3 @@
-|| <@&1257697477839294514> ||
 Réalisé Par Alexis Lambert En 2025.
 Permet le lancement d'un projet react-native sur l'ecosysteme informatique de l'IUT de Nantes.
 
@@ -7,24 +6,24 @@ Permet le lancement d'un projet react-native sur l'ecosysteme informatique de l'
 Ce wiki fournis une procédure détaillé de l'installation de l'application.  
 
 ## Installation d'une VM
-Nous allons utiliser une VM Ubuntu 24.04. Ouvrir un terminal et taper `exit` pour se placer dans le terminal `Silverblue`. Puis, taper cette commande pour créer la VM avec `distrobox` :
+Nous allons utiliser une VM Ubuntu 24.04. 
+
+- 1. Ouvrir un terminal et taper `exit` pour se placer dans le terminal `Silverblue`
+- 2. Taper cette commande pour créer la VM avec `distrobox` :
 
 ```bash
 distrobox create --name ubuntu-24-04 --image ubuntu:24.04 --additional-packages "nano git" -I -Y
 ```
 
-Puis, accédez à la VM :
+- 3. Accédez à la VM, cela peut prendre un peut de temps :
 
 ```bash
 distrobox enter ubuntu-24-04
 ```
 
-Attendez un moment que l'installation se termine.
-
 ## Configuration du proxy
-
-À l'IUT il y a un proxy et le conteneur n'en dispose pas automatiquement.
-Les commandes suivantes vous permet de le renseigner :
+À l'IUT il y a un proxy et le conteneur n'en dispose pas automatiquement.\
+Entrer les commandes suivantes pour le renseigner :
 
 ```bash
 echo '
