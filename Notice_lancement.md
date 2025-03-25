@@ -15,7 +15,7 @@ Nous allons utiliser une VM Ubuntu 24.04.
 distrobox create --name ubuntu-24-04 --image ubuntu:24.04 --additional-packages "nano git" -I -Y
 ```
 
-. Accédez à la VM, cela peut prendre un peut de temps :
+3. Accédez à la VM, cela peut prendre un peut de temps :
 
 ```bash
 distrobox enter ubuntu-24-04
@@ -49,8 +49,9 @@ Acquire::http::Proxy "http://srv-proxy-etu-2.iut-nantes.univ-nantes.prive:3128";
 Acquire::https::Proxy "http://srv-proxy-etu-2.iut-nantes.univ-nantes.prive:3128";
 ' | sudo tee /etc/apt/apt.conf.d/95proxy
 ```
+
 ## Installation du JDK
-Nous allons installer le JDK 20.
+Nous allons installer le JDK 20, entrez cette commande :
 
 ```bash
 cd ~
@@ -64,9 +65,12 @@ export PATH=$JAVA_HOME/bin:$PATH
 ' | sudo tee -a /etc/bash.bashrc
 source /etc/bash.bashrc
 ```
+
 ## Installation de `Node`
-Ensuite nous installerons `node`.  
-Exécutez chaque blocs de commandes séparement.  
+Ensuite nous installerons `node`.  \
+\
+*Exécutez chaque blocs de commandes séparement.* \
+\
 Premièrement :
 ```sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
