@@ -92,6 +92,7 @@ Vous pouvez vérifier que tout est installé en exécutant :
 node -v
 npm -v
 ```
+
 ## Configuration du proxy dans le projet android/ios
 Ne pas oublier de mettre le proxy dans le fichier `gradle.properties` dans le dossier `android` **ET/OU** `ios` :
 
