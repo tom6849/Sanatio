@@ -103,7 +103,7 @@ systemProp.https.proxyHost=srv-proxy-etu-2.iut-nantes.univ-nantes.prive
 systemProp.https.proxyPort=3128
 ```
 
-Et également donner le droit d'éxecution au fichier `gradlew`. N'oubliez pas de mettre le bon path pour le fichier :
+Et également donner le droit d'éxecution au fichier `gradlew`. N'oubliez pas de mettre le bon path pour le fichier (/mobile/android/) :
 ```bash
 chmod +x gradlew
 ```
