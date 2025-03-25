@@ -21,6 +21,20 @@ distrobox create --name ubuntu-24-04 --image ubuntu:24.04 --additional-packages 
 distrobox enter ubuntu-24-04
 ```
 
+## Création d'un script pour charger les variables d'environnement
+
+```bash
+cat <<EOF > "$HOME/.bashrc.d/ubuntu-24-04.sh"
+#!/bin/bash
+
+if [[ "$CONTAINER_ID" == "ubuntu-24-04" ]] && [ -f "$HOME/.bashrc_ubuntu-24-04" ]; then
+    source "$HOME/.bashrc_ubuntu-24-04"
+fi
+EOF
+
+chmod +x $HOME/.bashrc.d/ubuntu-24-04.sh
+```
+
 ## Configuration du proxy
 À l'IUT il y a un proxy et le conteneur n'en dispose pas automatiquement.\
 \
