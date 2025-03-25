@@ -8,14 +8,14 @@ Ce wiki fournis une procédure détaillé de l'installation de l'application.
 ## Installation d'une VM
 Nous allons utiliser une VM Ubuntu 24.04. 
 
-- 1. Ouvrir un terminal et taper `exit` pour se placer dans le terminal `Silverblue`
-- 2. Taper cette commande pour créer la VM avec `distrobox` :
+1. Ouvrir un terminal et taper `exit` pour se placer dans le terminal `Silverblue`
+2. Taper cette commande pour créer la VM avec `distrobox` :
 
 ```bash
 distrobox create --name ubuntu-24-04 --image ubuntu:24.04 --additional-packages "nano git" -I -Y
 ```
 
-- 3. Accédez à la VM, cela peut prendre un peut de temps :
+. Accédez à la VM, cela peut prendre un peut de temps :
 
 ```bash
 distrobox enter ubuntu-24-04
@@ -23,6 +23,7 @@ distrobox enter ubuntu-24-04
 
 ## Configuration du proxy
 À l'IUT il y a un proxy et le conteneur n'en dispose pas automatiquement.\
+\
 Entrer les commandes suivantes pour le renseigner :
 
 ```bash
