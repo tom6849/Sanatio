@@ -185,7 +185,8 @@ appuyer sur a dans Metro pour lancer l'application
 
 # Erreurs potentielles
 
-1. ```ninja: error: manifest 'build.ninja' still dirty after 100 tries```
+Erreur 1 :\
+```ninja: error: manifest 'build.ninja' still dirty after 100 tries```
 
 **Solution**
 
