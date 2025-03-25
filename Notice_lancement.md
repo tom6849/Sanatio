@@ -66,7 +66,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 source $HOME/.bashrc_ubuntu-24-04
 ```
 
-## Installer de Android Studio
+## Installation de Android Studio
 
 Un des problèmes majeur de l'architecture de l'IUT est que l'ensemble des applications sont conteneurisées via flatpak depuis Fedora. Cela empêche différents service de se joindre car ils ne sont donc pas dans le même réseau. Le but est de créer un Android Studio dans notre VM afin que celui puisse voir le serveur.
 
