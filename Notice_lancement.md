@@ -1,4 +1,6 @@
 || <@&1257697477839294514> ||
+Réalisé Par Alexis Lambert En 2025.
+Permet le lancement d'un projet react-native sur l'ecosysteme informatique de l'IUT de Nantes.
 
 # Installation des applications `React Native` sur les postes de l'IUT
 
@@ -100,5 +102,3 @@ Et également donner le droit d'éxecution au fichier `gradlew`. N'oubliez pas d
 ```bash
 chmod +x gradlew
 ```
-
-Réalisé Par Alexis Lambert En 2025
