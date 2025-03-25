@@ -193,6 +193,6 @@ Lorsque l'on tente de build l'application avec **react-native run-android** il e
 
 **Solution**
 
-En général il s'agit du paquet **react-native-screens** qui fait des siennes et on peut résoudre le problème en supprimant le dossier **node_modules/react-native-screens/android/.cxx**. Parfois, relancer le build permet également de résoudre le problème.
+En général il s'agit du paquet **react-native-screens** qui fait des siennes et on peut résoudre le problème en supprimant le dossier *node_modules/react-native-screens/android/.cxx*. Parfois, relancer le build permet également de résoudre le problème.
 
 ```rm -r /(CHEMIN VERS LE DOSSIER)/mobile/node_modules/react-native-screens/android/.cxx```
