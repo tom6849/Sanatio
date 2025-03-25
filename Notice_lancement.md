@@ -182,3 +182,11 @@ chmod +x gradlew
 dans /mobile/android : npm install, npm start
 
 appuyer sur a dans Metro pour lancer l'application
+
+# Erreurs potentielles
+
+1. ```ninja: error: manifest 'build.ninja' still dirty after 100 tries```
+
+**Solution**
+
+```rm -r /(CHEMIN VERS LE DOSSIER)/mobile/node_modules/react-native-screens/android/.cxx```
