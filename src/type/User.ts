@@ -10,4 +10,5 @@ export type User = {
   height: string;
   weight: string;
   medications: Medication[] | null;
+  medecin : []
 };

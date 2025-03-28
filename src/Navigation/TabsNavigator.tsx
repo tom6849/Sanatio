@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
+import Contact from '../img/contact';
 import Pharmacy from '../screens/PharmacieScreen';
 import CalendarScreen from '../screens/CalendarScreen';
+import ContactScreen from '../screens/ContactScreen';
 import ProfilScrenn from '../screens/ProfilScreen';
 import { useMedication } from '../context/MedicationContext';
 import ImgHome from '../img/ImgHome';
@@ -76,6 +78,18 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
+        name="Contact"
+        component={ContactScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <View style={[styles.iconContainer, { backgroundColor: focused ? '#C9E0F8' : 'transparent' }]}>
+              <Contact size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
         name="You"
         children={(props) => <ProfilScrenn {...props} handleLogout={handleLogout} />}
         options={{
@@ -88,6 +102,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
         }}
       />
     </Tab.Navigator>
+    
   );
 };
 
