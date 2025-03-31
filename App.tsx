@@ -25,6 +25,8 @@ const App = () => {
         if (savedUser) {
           setOnBoarding(false);
           setUser(JSON.parse(savedUser));
+        }else{
+          setOnBoarding(true)
         }
       } catch (error) {
         console.error("Erreur lors de la récupération de l'utilisateur", error);
