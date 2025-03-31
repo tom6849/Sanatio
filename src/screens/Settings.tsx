@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
-import { User } from '../type/User';
-import SettingsModal from './SettingsModal';
-import SettingsItem from './SettingsItem';
-import { getStoredUser, updateUserPassword, resetAccount } from '../services/userService';
-import { showAlert } from '../utils/AlertUtils';
-import ImgRetour from "../img/ImgRetour";
+import { User } from '../type/User.ts';
+import SettingsModal from '../components/SettingsModal.tsx';
+import SettingsItem from '../components/SettingsItem.tsx';
+import { getStoredUser, updateUserPassword, resetAccount } from '../services/userService.ts';
+import { showAlert } from '../utils/AlertUtils.ts';
+import ImgRetour from "../img/ImgRetour.tsx";
 
 const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLogout: () => void }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -56,6 +56,7 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         <SettingsItem label="Email" value={user?.email} />
         <SettingsItem label="Nom d'utilisateur" value={user?.username} />
         <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} />
+        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} />
         <SettingsItem label="Poids" value={`${user?.weight} kg`} />
         <SettingsItem label="Taille" value={`${user?.height} cm`} />
 
