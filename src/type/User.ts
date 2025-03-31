@@ -1,4 +1,5 @@
 
+import { Medecin } from "./Medecin";
 import { Medication } from "./Medication";
 
 export type User = {
@@ -10,5 +11,5 @@ export type User = {
   height: string;
   weight: string;
   medications: Medication[] | null;
-  medecin : []
+  medecin : Medecin[]
 };
