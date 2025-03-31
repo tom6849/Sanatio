@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { User } from '../type/User.ts';
-import SettingsModal from '../components/SettingsModal.tsx';
+import ChangePasswordModal from '../components/ChangePasswordModal.tsx';
+import InfoCompteModal from '../components/InfoCompteModal.tsx';
 import SettingsItem from '../components/SettingsItem.tsx';
 import { getStoredUser, updateUserPassword, resetAccount } from '../services/userService.ts';
 import { showAlert } from '../utils/AlertUtils.ts';
@@ -11,6 +12,9 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
   const [user, setUser] = useState<User | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
+  const [infoCompteModalVisible, setInfoCompteModalVisible] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [newPassword, setNewPassword] = useState('');
   const [actualPassword, setActualPassword] = useState('');
 
@@ -46,6 +50,15 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         setModalVisible(false);
       }
     }
+  };
+
+  const handleSaveInfo = async () => {
+    if (!user) return;
+
+    const updatedUser = { ...user, [selectedField]: inputValue };
+    setUser(updatedUser);
+    showAlert("Succès", `${selectedField} mis à jour !`);
+    setInfoModalVisible(false);
   };
 
   return (
@@ -104,7 +117,7 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         </View>
       </Modal>
 
-      <SettingsModal
+      <ChangePasswordModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={handleSaveChanges}
@@ -112,6 +125,15 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         setActualPassword={setActualPassword}
         newPassword={newPassword}
         setNewPassword={setNewPassword}
+      />
+
+      <InfoCompteModal
+          visible={infoModalVisible}
+          onClose={() => setInfoModalVisible(false)}
+          onSave={handleSaveInfo}
+          fieldName={selectedField}
+          value={inputValue}
+          setValue={setInputValue}
       />
     </View>
   );
