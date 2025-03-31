@@ -8,7 +8,7 @@ import Ordonnance from '../components/Ordonnance';
 import Effets from '../components/Effets';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationProp } from '@react-navigation/native';
-import SettingsPage from '../components/Settings';
+import SettingsPage from './Settings.tsx';
 import Stats from '../components/Stats';
 
 export type typeRoute = {

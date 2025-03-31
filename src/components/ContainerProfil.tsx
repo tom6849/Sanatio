@@ -32,7 +32,7 @@ const ContainerProfil = () => {
                         {user?.username}
                     </Text>
                     <Text style={styles.date}>
-                        25 / 06 / 2004
+                        {user?.birthDate}
                     </Text>
                 </View>
                 <ProgressBar/>

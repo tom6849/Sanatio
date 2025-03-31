@@ -4,7 +4,9 @@ import Svg, { Path } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient';
 import { Animated } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {User} from '../type/User'
+import {User} from '../type/User';
+import DatePicker from "react-native-modern-datepicker";
+import { getToday, getFormatedDate } from "react-native-modern-datepicker";
 
 const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) => {
   const [email, setEmail] = useState("");
@@ -14,6 +16,8 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
   const [username, setUsername] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [birthDate, setBirthDate] = useState<string>('');
+  const [showBirthDate, setShowBirthDate] = useState(false);
   const { setUser } = route.params;
   useEffect(() => {
     if (selectedAvatar != null) { 
@@ -88,7 +92,8 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
       height,
       weight,
       medications: null,
-      medecin : []
+      medecin : [],
+      birthDate
     };
     try {
       await AsyncStorage.setItem(`users:${email}`, JSON.stringify(newUser));
@@ -151,6 +156,24 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
         <View style={styles.ContainerInput}>
           <ScrollView keyboardShouldPersistTaps="handled">
             <TextInput style={styles.input} placeholder="Nom d'utilisateur" value={username} onChangeText={setUsername} autoCapitalize="words" />
+            <TouchableOpacity style={styles.input} onPress={() => setShowBirthDate(true)}>
+              <Text style={{ color: birthDate ? "black" : "grey" }}>
+                {birthDate || "Date de naissance"}
+              </Text>
+            </TouchableOpacity>
+
+            {showBirthDate && (
+                <DatePicker
+                    mode="calendar"
+                    minimumDate="1900/01/01"
+                    maximumDate={getToday()}
+                    selected={birthDate}
+                    onDateChange={(date) => {
+                      setBirthDate(date);
+                      setShowBirthDate(false);
+                    }}
+                />
+            )}
             <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
             <TextInput style={styles.input} placeholder="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
             <TextInput style={styles.input} placeholder="Taille (cm)" value={height} onChangeText={setHeight} keyboardType="numeric" />
