@@ -28,37 +28,37 @@ export const saveUser = async (user: User): Promise<void> => {
   /**
  * Met à jour le mot de passe de l'utilisateur.
  */
-export const updateUserPassword = async (userId: string, oldPassword: string, newPassword: string, email : string) => {
+  export const updateUserPassword = async (userId: string, oldPassword: string, newPassword: string, email: string) => {
     try {
       const storedUser = await getStoredUser();
-  
+
       if (!storedUser || storedUser.id !== userId) {
         return { success: false, message: "Utilisateur non trouvé." };
       }
-  
+
       if (storedUser.password !== oldPassword) {
         return { success: false, message: "L'ancien mot de passe est incorrect." };
       }
-  
+
       if (newPassword.length < 6) {
         return { success: false, message: "Le mot de passe doit contenir au moins 6 caractères." };
       }
-  
+
       if (storedUser.password === newPassword) {
         return { success: false, message: "Le nouveau mot de passe doit être différent de l'ancien." };
       }
 
-      const usersData = await AsyncStorage.getItem(`users:${email}`);
-  
+      // Récupère et met à jour les données de l'utilisateur dans AsyncStorage
       const updatedUser = { ...storedUser, password: newPassword };
-      await saveUser(updatedUser);
-      await AsyncStorage.setItem(`users:${email}`, JSON.stringify(usersData));
+      await AsyncStorage.setItem(`users:${email}`, JSON.stringify(updatedUser));
+      
       return { success: true, message: "Mot de passe mis à jour avec succès." };
     } catch (error) {
       console.error("Erreur lors de la mise à jour du mot de passe:", error);
       return { success: false, message: "Une erreur s'est produite." };
     }
 };
+
 
 
  /**
