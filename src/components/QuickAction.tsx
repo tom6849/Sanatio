@@ -7,7 +7,7 @@ const QuickAction = ({ navigation }: { navigation: any }) =>  {
         <View style={styles.container}>
                 <View style={styles.row}>
                     <Pressable style={styles.box} onPress={() => navigation.navigate('Pharmacy', { initialIndex: 0 })}>
-                        <Text style={styles.boxTitle}>Rechercher un medicament</Text>
+                        <Text style={styles.boxTitle}>Rechercher un médicament</Text>
                         <Action logo="search" />
                         
                     </Pressable>
@@ -17,9 +17,9 @@ const QuickAction = ({ navigation }: { navigation: any }) =>  {
                     </Pressable>
 
                 </View>
-                <Pressable style={styles.fullWidthBox} onPress={() => navigation.navigate('You')}>
-                    <Text style={styles.boxTitle}>Signaler un effet secondaire </Text>
-                    <Action logo="effet" />
+                <Pressable style={styles.fullWidthBox} onPress={() => navigation.navigate('Contact')}>
+                    <Text style={styles.boxTitle}>Rechercher un médecin</Text>
+                    <Action logo="doctor" />
                 </Pressable>
                
         </View>
