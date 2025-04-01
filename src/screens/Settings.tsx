@@ -4,9 +4,10 @@ import { User } from '../type/User.ts';
 import ChangePasswordModal from '../components/ChangePasswordModal.tsx';
 import InfoCompteModal from '../components/InfoCompteModal.tsx';
 import SettingsItem from '../components/SettingsItem.tsx';
-import { getStoredUser, updateUserPassword, resetAccount } from '../services/userService.ts';
+import {getStoredUser, updateUserPassword, resetAccount, updateUserInfo} from '../services/userService.ts';
 import { showAlert } from '../utils/AlertUtils.ts';
 import ImgRetour from "../img/ImgRetour.tsx";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLogout: () => void }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -19,14 +20,17 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
   const [actualPassword, setActualPassword] = useState('');
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getStoredUser();
-      if (userData) {
-        setUser(userData);
-      }
-    };
     fetchUser();
   }, [user]);
+
+
+  const fetchUser = async () => {
+    const userData = await getStoredUser();
+    if (userData) {
+      setUser(userData);
+    }
+  };
+
 
   const handleResetAccount = async () => { 
     if (user) {
@@ -53,12 +57,32 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
   };
 
   const handleSaveInfo = async () => {
-    if (!user) return;
+    if (user) {
 
-    const updatedUser = { ...user, [selectedField]: inputValue };
-    setUser(updatedUser);
-    showAlert("Succès", `${selectedField} mis à jour !`);
-    setInfoModalVisible(false);
+      const fieldMap: { [key: string]: keyof User } = {
+        "Nom d'utilisateur": "username",
+        "Date de naissance": "birthDate",
+        "Poids (kg)": "weight",
+        "Taille (cm)": "height",
+      };
+
+      const result = await updateUserInfo(user.id, fieldMap[selectedField], inputValue , user.email);
+      showAlert(result.success ? "Succès" : "Erreur", result.message);
+
+      if (result.success) {
+        setSelectedField('');
+        setInputValue('');
+        setInfoCompteModalVisible(false);
+        fetchUser()
+        console.log(user)
+      }
+    }
+  };
+
+  const handleOpenInfoModal = (field: string, value: string) => {
+    setSelectedField(field);
+    setInputValue(value);
+    setInfoCompteModalVisible(true);
   };
 
   return (
@@ -67,11 +91,11 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
       <View style={styles.container}>
         <Text style={styles.header}>Compte</Text>
         <SettingsItem label="Email" value={user?.email} />
-        <SettingsItem label="Nom d'utilisateur" value={user?.username} />
+        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username || "")} />
         <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} />
-        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} />
-        <SettingsItem label="Poids" value={`${user?.weight} kg`} />
-        <SettingsItem label="Taille" value={`${user?.height} cm`} />
+        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate || "")}/>
+        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() || "")} />
+        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() || "")}/>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Déconnexion</Text>
@@ -128,8 +152,8 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
       />
 
       <InfoCompteModal
-          visible={infoModalVisible}
-          onClose={() => setInfoModalVisible(false)}
+          visible={infoCompteModalVisible}
+          onClose={() => setInfoCompteModalVisible(false)}
           onSave={handleSaveInfo}
           fieldName={selectedField}
           value={inputValue}

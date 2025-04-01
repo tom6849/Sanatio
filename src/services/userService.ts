@@ -67,15 +67,13 @@ export const updateUserInfo = async (userId: string, field : string, newValue : 
             return { success: false, message: "Utilisateur non trouvé." };
         }
 
-        const usersData = await AsyncStorage.getItem(`users:${email}`);
-
         const updatedUser = { ...storedUser, [field]: newValue };
-        await saveUser(updatedUser);
+        await AsyncStorage.setItem(`users:${email}`, JSON.stringify(updatedUser));
+        await saveUser(updatedUser)
 
-        await AsyncStorage.setItem(`users:${email}`, JSON.stringify(usersData));
-        return { success: true, message: "Mot de passe mis à jour avec succès." };
+        return { success: true, message: "L'information a été mise à jour avec succès" };
     } catch (error) {
-        console.error("Erreur lors de la mise à jour du mot de passe:", error);
+        console.error("Erreur lors de la mise à jour de l'information:", error);
         return { success: false, message: "Une erreur s'est produite." };
     }
 };
