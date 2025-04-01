@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Medication } from '../type/Medication';
-import { User } from '../type/User';
 
 /**
  * Charge les médicaments stockés dans AsyncStorage.
@@ -21,7 +20,7 @@ export const loadStoredMedications = async (): Promise<Medication[]> => {
  */
 export const fetchMedicationsFromAPI = async (query: string): Promise<Medication[]> => {
   try {
-    const response = await fetch(`https://api.thomas-ambroise.fr/api/v1/cisbdpm?query=${query}&page=1`);
+    const response = await fetch(`http://51.254.97.66:3000/api/v1/cisbdpm?query=${query}&page=1`);
     if (!response.ok) throw new Error('Impossible de charger les médicaments.');
     const jsonResponse = await response.json();
     return jsonResponse.elements || [];

@@ -1,5 +1,6 @@
-import React from "react";
-import { Modal, Text, TextInput, TouchableOpacity, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Modal, Text, TextInput, TouchableOpacity, StyleSheet, View} from "react-native";
+import DatePicker, {getToday} from "react-native-modern-datepicker";
 
 interface EditInfoModalProps {
     visible: boolean;
@@ -11,25 +12,59 @@ interface EditInfoModalProps {
 }
 
 const InfoCompteModal: React.FC<EditInfoModalProps> = ({
- visible,
- onClose,
- onSave,
- fieldName,
- value,
- setValue
+   visible,
+   onClose,
+   onSave,
+   fieldName,
+   value,
+   setValue,
 }) => {
+
+    const transformDate = (dateString: string) => {
+        const [day, month, year] = dateString.split('/');
+        return new Date(`${year}-${month}-${day}`);
+    };
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
+
     return (
         <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalHeader}>Modifier {fieldName}</Text>
+                    {fieldName === "Date de naissance" ? (
+                        <>
+                            <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
+                                <Text style={{ color: value ? "black" : "grey" }}>
+                                    {value || "Date de naissance"}
+                                </Text>
+                            </TouchableOpacity>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder={`Nouveau ${fieldName}`}
-                        value={value}
-                        onChangeText={setValue}
-                    />
+                            {showDatePicker && (
+                                <DatePicker
+                                    mode="calendar"
+                                    minimumDate="1900/01/01"
+                                    maximumDate={getToday()}
+                                    selected={value}
+                                    onDateChange={(date) => {
+                                        setValue(date);
+                                        setShowDatePicker(false);
+                                    }}
+                                />
+                            )}
+                        </>
+                    ) : (
+                        <TextInput
+                            style={styles.input}
+                            placeholder={`Nouveau ${fieldName}`}
+                            value={value}
+                            onChangeText={setValue}
+                            keyboardType={
+                                fieldName === "Taille (cm)" || fieldName === "Poids (kg)" ? "numeric" : "default"
+                            }
+                        />
+                    )}
 
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.saveButton} onPress={onSave}>
@@ -104,7 +139,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
-    },
+    }
 });
 
 export default InfoCompteModal;
