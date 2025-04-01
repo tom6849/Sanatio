@@ -1,6 +1,7 @@
 
 import { Medecin } from "./Medecin";
 import { Medication } from "./Medication";
+import { Effet } from "../type/Effect";
 
 export type User = {
   id : string
@@ -13,4 +14,5 @@ export type User = {
   medications: Medication[] | null;
   medecin : Medecin[]
   birthDate: string;
+  effet : Effet[];
 };

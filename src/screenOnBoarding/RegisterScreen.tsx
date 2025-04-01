@@ -93,7 +93,8 @@ const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) 
       weight,
       medications: null,
       medecin : [],
-      birthDate
+      birthDate,
+      effet : []
     };
     try {
       await AsyncStorage.setItem(`users:${email}`, JSON.stringify(newUser));
