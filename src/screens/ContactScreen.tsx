@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { View, TextInput, StyleSheet, ScrollView, Text, ActivityIndicator } from 'react-native';
+import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import Contact from '../components/Contact';
-import { fetchMedecinFromAPI, getMedecinFromLocal } from '../services/medecinService';
+import { fetchMedecinFromAPI, getUserData } from '../services/medecinService';
 import { Medecin } from '../type/Medecin';
 
 const ContactScreen = ({ navigation }: { navigation: any }) => {
     const [searchText, setSearchText] = useState('');
     const [filteredMedecin, setFilteredMedecin] = useState<Medecin[]>([]);
     const [medecin, setMedecin] = useState<Medecin[]>([]);
+    const [favoriteDoctors, setFavoriteDoctors] = useState<Medecin[]>([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        loadLocalMedecins();
+    }, []);
 
     const handleSearch = async (query: string) => {
         setSearchText(query);
@@ -26,14 +31,12 @@ const ContactScreen = ({ navigation }: { navigation: any }) => {
         }
     };
 
-    useEffect(() => {
-        loadLocalMedecins();
-    }, []);
-
     const loadLocalMedecins = async () => {
-        const localMedecins = await getMedecinFromLocal();
-        setMedecin(localMedecins);
+        const localMedecins = await getUserData();  
+        setMedecin(localMedecins.medecin);          
+        setFavoriteDoctors(localMedecins.medecin);  
     };
+    
 
     return (
         <View style={styles.container}>
@@ -47,12 +50,22 @@ const ContactScreen = ({ navigation }: { navigation: any }) => {
             {loading && <ActivityIndicator size="large" color="#007BFF" style={styles.loader} />}
             <ScrollView>
                 {filteredMedecin.length > 0 ? (
-                    filteredMedecin.map((doctor, index) => (
-                        <Contact key={index} medecin={doctor} like={false} onLikeChange={loadLocalMedecins} />
+                    filteredMedecin.map((doctor) => (
+                        <Contact 
+                            key={doctor.id} 
+                            medecin={doctor} 
+                            like={favoriteDoctors.some(fav => fav.id === doctor.id)} 
+                            onLikeChange={loadLocalMedecins} 
+                        />
                     ))
                 ) : (
-                    medecin.map((doctor, index) => (
-                        <Contact key={index} medecin={doctor} like={true} onLikeChange={loadLocalMedecins} />
+                    medecin.map((doctor) => (
+                        <Contact 
+                            key={doctor.id} 
+                            medecin={doctor} 
+                            like={true} 
+                            onLikeChange={loadLocalMedecins} 
+                        />
                     ))
                 )}
             </ScrollView>

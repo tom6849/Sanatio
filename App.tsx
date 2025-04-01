@@ -10,6 +10,10 @@ import OnBoarding from './src/screenOnBoarding/OnBoarding';
 import RegisterScreen from './src/screenOnBoarding/RegisterScreen';
 import Connect from './src/screenOnBoarding/Connect';
 import Loader from './src/screenOnBoarding/Loader';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const Stack = createStackNavigator();
 
