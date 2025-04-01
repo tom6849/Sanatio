@@ -1,0 +1,24 @@
+PROJECT LICENSE
+
+Copyright (c) 2025 SAE6-SANATIO-TOM
+
+Ce logiciel a été développé dans le cadre d'un projet universitaire à L'IUT de Nantes. Il est fourni à titre éducatif et expérimental.
+
+## 1. Utilisation autorisée
+- Ce logiciel peut être utilisé, modifié et distribué uniquement à des fins académiques et de recherche.
+- Toute utilisation à des fins médicales réelles est strictement interdite.
+- Ce projet ne doit pas être utilisé dans un environnement de production ou clinique.
+
+## 2. Restrictions
+- L'utilisation commerciale du logiciel ou de toute partie de son code est interdite sans l'accord écrit des auteurs.
+- Les auteurs déclinent toute responsabilité quant à l’utilisation du logiciel.
+- Aucune garantie n'est fournie quant à la fiabilité, l'exactitude ou la sécurité du logiciel.
+
+## 3. Clause de non-responsabilité
+CE LOGICIEL EST FOURNI "TEL QUEL", SANS AUCUNE GARANTIE EXPRESSE OU IMPLICITE, Y COMPRIS MAIS SANS S'Y LIMITER LES GARANTIES DE QUALITÉ MARCHANDE, D'ADÉQUATION À UN USAGE PARTICULIER ET D'ABSENCE DE CONTREFAÇON. EN AUCUN CAS LES AUTEURS OU CONTRIBUTEURS NE POURRONT ÊTRE TENUS RESPONSABLES DES DOMMAGES DIRECTS, INDIRECTS, ACCIDENTELS, SPÉCIAUX, EXEMPLAIRES OU CONSÉCUTIFS (Y COMPRIS MAIS SANS S'Y LIMITER, LA FOURNITURE DE BIENS OU SERVICES DE SUBSTITUTION, LA PERTE D’UTILISATION, DE DONNÉES OU DE PROFITS, OU L'INTERRUPTION D'ACTIVITÉ) QUELLE QU'EN SOIT LA CAUSE ET SELON TOUTE THÉORIE DE RESPONSABILITÉ.
+
+## 4. Attribution
+Toute utilisation de ce logiciel doit inclure une mention des auteurs et du projet universitaire d’origine.
+
+## 5. Contact
+Pour toute demande, merci de contacter un owner du git https://gitlab.univ-nantes.fr/sae6-sanatio-tom/
