@@ -6,12 +6,12 @@ const QuickAction = ({ navigation }: { navigation: any }) =>  {
     return (
         <View style={styles.container}>
                 <View style={styles.row}>
-                    <Pressable style={styles.box} onPress={() => navigation.navigate('Pharmacy', { initialIndex: 0 })}>
+                    <Pressable style={styles.box} onPress={() => navigation.navigate('Pharmacie', { initialIndex: 0 })}>
                         <Text style={styles.boxTitle}>Rechercher un médicament</Text>
                         <Action logo="search" />
                         
                     </Pressable>
-                    <Pressable style={styles.box} onPress={() => navigation.navigate('Pharmacy', { initialIndex: 1 })}>
+                    <Pressable style={styles.box} onPress={() => navigation.navigate('Pharmacie', { initialIndex: 1 })}>
                         <Text style={styles.boxTitle}>Ajouter une ordonnance</Text>
                         <Action logo="photo" />
                     </Pressable>
