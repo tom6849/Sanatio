@@ -41,7 +41,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Accueil"
         component={HomeScreen}
         options={{
           headerShown: false,
@@ -54,7 +54,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
-        name="Calendar"
+        name="Calendrier"
         component={CalendarScreen}
         options={{
           headerShown: false,
@@ -66,7 +66,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
-        name="Pharmacy"
+        name="Pharmacie"
         component={Pharmacy}
         options={{
           headerShown: false,
@@ -90,7 +90,7 @@ const TabsNavigator: React.FC<TabsNavigatorProps> = ({ handleLogout }) => {
         }}
       />
       <Tab.Screen
-        name="You"
+        name="Profil"
         children={(props) => <ProfilScrenn {...props} handleLogout={handleLogout} />}
         options={{
           headerShown: false,
