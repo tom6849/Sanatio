@@ -90,12 +90,12 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
       <Text style={styles.retour} onPress={() => navigation.goBack()}> <ImgRetour/></Text>
       <View style={styles.container}>
         <Text style={styles.header}>Compte</Text>
-        <SettingsItem label="Email" value={user?.email} />
-        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username || "")} />
-        <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} />
-        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate || "")}/>
-        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() || "")} />
-        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() || "")}/>
+        <SettingsItem label="Email" value={user?.email} arrow={false} />
+        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username || "")} arrow={true}/>
+        <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} arrow={true}/>
+        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate || "")} arrow={true}/>
+        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() || "")} arrow={true}/>
+        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() || "")} arrow={true}/>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Déconnexion</Text>
