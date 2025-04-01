@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Text, TextInput, TouchableOpacity, StyleSheet, View } from "react-native";
 
-interface SettingsModalProps {
+interface ChangePasswordModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: () => void;
@@ -11,7 +11,7 @@ interface SettingsModalProps {
   setNewPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({
+const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   visible,
   onClose,
   onSave,
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsModal;
+export default ChangePasswordModal;

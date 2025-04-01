@@ -6,14 +6,15 @@ interface SettingsItemProps {
   label: string;
   value: string | undefined;
   onPress?: () => void;
+  arrow : boolean
 }
 
-const SettingsItem: React.FC<SettingsItemProps> = ({ label, value, onPress }) => {
+const SettingsItem: React.FC<SettingsItemProps> = ({ label, value, onPress, arrow }) => {
   return (
     <TouchableOpacity style={styles.information} onPress={onPress}>
       <Text style={styles.infoText}>{label}</Text>
       <Text style={styles.infoValue}>{value}</Text>
-      <ImgArrowRight size={40} color="black" />
+      {arrow ? <ImgArrowRight size={40} color="black" /> : <View style={{marginRight:30}}/> }
     </TouchableOpacity>
   );
 };

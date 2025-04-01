@@ -59,6 +59,25 @@ export const saveUser = async (user: User): Promise<void> => {
     }
 };
 
+export const updateUserInfo = async (userId: string, field : string, newValue : string, email : string) => {
+    try {
+        const storedUser = await getStoredUser();
+
+        if (!storedUser || storedUser.id !== userId) {
+            return { success: false, message: "Utilisateur non trouvé." };
+        }
+
+        const updatedUser = { ...storedUser, [field]: newValue };
+        await AsyncStorage.setItem(`users:${email}`, JSON.stringify(updatedUser));
+        await saveUser(updatedUser)
+
+        return { success: true, message: "L'information a été mise à jour avec succès" };
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'information:", error);
+        return { success: false, message: "Une erreur s'est produite." };
+    }
+};
+
 
 
  /**

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Alert} from 'react-native';
 import { User } from '../type/User.ts';
-import SettingsModal from '../components/SettingsModal.tsx';
+import ChangePasswordModal from '../components/ChangePasswordModal.tsx';
+import InfoCompteModal from '../components/InfoCompteModal.tsx';
 import SettingsItem from '../components/SettingsItem.tsx';
-import { getStoredUser, updateUserPassword, resetAccount } from '../services/userService.ts';
+import {getStoredUser, updateUserPassword, resetAccount, updateUserInfo} from '../services/userService.ts';
 import { showAlert } from '../utils/AlertUtils.ts';
 import ImgRetour from "../img/ImgRetour.tsx";
 
@@ -11,18 +12,24 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
   const [user, setUser] = useState<User | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
+  const [infoCompteModalVisible, setInfoCompteModalVisible] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [newPassword, setNewPassword] = useState('');
   const [actualPassword, setActualPassword] = useState('');
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getStoredUser();
-      if (userData) {
-        setUser(userData);
-      }
-    };
     fetchUser();
   }, [user]);
+
+
+  const fetchUser = async () => {
+    const userData = await getStoredUser();
+    if (userData) {
+      setUser(userData);
+    }
+  };
+
 
   const handleResetAccount = async () => { 
     if (user) {
@@ -48,17 +55,69 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
     }
   };
 
+  const handleSaveInfo = async () => {
+    if (!user) {
+      return;
+    }
+    if (selectedField == "Nom d'utilisateur" && inputValue.trim()) {
+      Alert.alert("Le nom d'utilisateur ne peut pas être vide.");
+      return;
+    }
+
+
+    if (selectedField== "Taille (cm)") {
+      const heightNum = parseInt(inputValue);
+
+      if (!(/^[0-9]+$/.test(inputValue.trim())) || heightNum < 50 || heightNum > 300) {
+        Alert.alert("Veuillez entrer une taille valide (entre 50 et 300 cm).");
+        return;
+      }
+    }
+
+    if (selectedField== "Poids (kg)") {
+      const weightNum = parseInt(inputValue);
+
+      if (!(/^[0-9]+$/.test(inputValue.trim())) || weightNum < 10 || weightNum > 500) {
+        Alert.alert("Veuillez entrer un poids valide (entre 10 et 500 kg).");
+        return;
+      }
+    }
+
+    const fieldMap: { [key: string]: keyof User } = {
+      "Nom d'utilisateur": "username",
+      "Date de naissance": "birthDate",
+      "Poids (kg)": "weight",
+      "Taille (cm)": "height",
+    };
+
+    const result = await updateUserInfo(user.id, fieldMap[selectedField], inputValue , user.email);
+    showAlert(result.success ? "Succès" : "Erreur", result.message);
+
+    if (result.success) {
+      setSelectedField('');
+      setInputValue('');
+      setInfoCompteModalVisible(false);
+      fetchUser()
+    }
+  };
+
+  const handleOpenInfoModal = (field: string, value: string) => {
+    setSelectedField(field);
+    setInputValue(value);
+    setInfoCompteModalVisible(true);
+  };
+
   return (
     <View style={styles.screenContainer}>
       <Text style={styles.retour} onPress={() => navigation.goBack()}> <ImgRetour/></Text>
       <View style={styles.container}>
         <Text style={styles.header}>Compte</Text>
-        <SettingsItem label="Email" value={user?.email} />
-        <SettingsItem label="Nom d'utilisateur" value={user?.username} />
-        <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} />
-        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} />
-        <SettingsItem label="Poids" value={`${user?.weight} kg`} />
-        <SettingsItem label="Taille" value={`${user?.height} cm`} />
+        <SettingsItem label="Email" value={user?.email} arrow={false} />
+        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username || "")} arrow={true}/>
+        <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} arrow={true}/>
+        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate || "")} arrow={true}/>
+        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() || "")} arrow={true}/>
+        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() || "")} arrow={true}/>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Déconnexion</Text>
@@ -104,7 +163,7 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         </View>
       </Modal>
 
-      <SettingsModal
+      <ChangePasswordModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={handleSaveChanges}
@@ -112,6 +171,15 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
         setActualPassword={setActualPassword}
         newPassword={newPassword}
         setNewPassword={setNewPassword}
+      />
+
+      <InfoCompteModal
+          visible={infoCompteModalVisible}
+          onClose={() => setInfoCompteModalVisible(false)}
+          onSave={handleSaveInfo}
+          fieldName={selectedField}
+          value={inputValue}
+          setValue={setInputValue}
       />
     </View>
   );
