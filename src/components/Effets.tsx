@@ -1,12 +1,8 @@
 // Effets.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
-import { addEffetToStorage, loadEffetsFromStorage } from '../services/effetsServices';
-
-type Effet = {
-  date: Date;
-  effet: string;
-};
+import { addEffetToStorage, getEffects } from '../services/effetsServices';
+import { Effet } from '../type/Effect';
 
 const Effets = () => {
   const [effet, setEffet] = useState<string>('');
@@ -30,8 +26,8 @@ const Effets = () => {
   };
 
   const loadingEffects = async () => {
-    const storedEffets = await loadEffetsFromStorage();
-    setEffetsList(storedEffets);
+    const storedEffets = await getEffects();
+    setEffetsList(storedEffets ?? []);
   };
 
   const handleDeleteEffet = (index: number) => {
@@ -81,7 +77,6 @@ const Effets = () => {
   );
 };
 
-// Les styles restent inchangés
 const styles = StyleSheet.create({
   content: {
     flex: 1,
