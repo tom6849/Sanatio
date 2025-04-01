@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Photo from '../img/ImgPhoto';
 import ImgSearch from '../img/ImgSearch';
-import ImgEffetSecondaire from '../img/ImgEffetSecondaire';
+import ImgDoctor from '../img/ImgDoctor';
 
 const getIcon = (logo: string): React.ReactNode => {
   switch (logo) {
@@ -10,8 +10,8 @@ const getIcon = (logo: string): React.ReactNode => {
       return <Photo />;
     case 'search':
       return <ImgSearch />;
-    case 'effet':
-      return <ImgEffetSecondaire />;
+    case 'doctor':
+      return <ImgDoctor />;
     default:
       return null;
   }
