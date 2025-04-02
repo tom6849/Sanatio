@@ -3,35 +3,20 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Bar } from 'react-native-progress';  
 const { width } = Dimensions.get('window');
 import { useMedication } from '../context/MedicationContext'; 
+import { Medication } from '../type/Medication';
 
-const ProgressBar = () => {
+const ProgressBar: React.FC = () => {
   const { medToday } = useMedication();
-  const [count, setCount] = useState(0); 
-  const todayIso = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
+  const [count, setCount] = useState<number>(0); 
+  const todayIso: string = new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-');
 
   useEffect(() => {
-    const checkMedToTake = () => {
-      if (medToday != null) {
-        let medsToTake = 0;
-        let totalMeds = 0;
-        medToday.forEach((elem) => {
-          const value = elem.date;
-          value.forEach((entry) => {
-            if (entry.date === todayIso) {
-              totalMeds += 1;
-              if (!entry.taken) {
-                medsToTake += 1;
-              }
-            }
-          });
-        });
-
-        setCount(medsToTake); 
-      }
-    };
-    checkMedToTake();
+    if (!medToday) return;
+    setCount(calculateMedsToTake(medToday, todayIso));
   }, [medToday]);
-  const progress = medToday.length > 0 ? (medToday.length - count) / medToday.length : 0;
+
+  const progress: number = medToday.length > 0 ? (medToday.length - count) / medToday.length : 0;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Médicaments pris aujourd'hui</Text>
@@ -51,6 +36,18 @@ const ProgressBar = () => {
   );
 };
 
+const calculateMedsToTake = (medications: Medication[], todayIso: string): number => {
+  let medsToTake = 0;
+  medications.forEach(({ date }) => {
+    date.forEach(({ date, taken }) => {
+      if (date === todayIso && !taken) {
+        medsToTake += 1;
+      }
+    });
+  });
+  return medsToTake;
+};
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center', 
@@ -58,14 +55,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: '#545A61',
-    paddingBottom : 5,
-    fontWeight : 'regular',
+    paddingBottom: 5,
+    fontWeight: 'normal',
   },
   subTitle: {
     fontSize: 14,
     color: 'gray', 
-    paddingTop : 5,
-    fontWeight : 'regular',
+    paddingTop: 5,
+    fontWeight: 'normal',
   },
 });
 
