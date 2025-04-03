@@ -4,7 +4,7 @@ import { useMedication } from '../context/MedicationContext';
 import { Medication } from '../type/Medication';
 
 const Ordonnance = () => {
-  const { medications, setMedications } = useMedication();
+  const { medications } = useMedication();
   const [modalVisible, setModalVisible] = useState(false);  
   const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null); 
 
