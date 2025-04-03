@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const getMedicationImage = async (medicationId: string): Promise<string | null> => {
     try {
         const storedUri = await AsyncStorage.getItem(`imageUri_${medicationId}`);
-        return storedUri || null;
+        return storedUri ?? null;
     } catch (error) {
         console.error('Erreur lors du chargement de l\'image depuis AsyncStorage', error);
         return null;

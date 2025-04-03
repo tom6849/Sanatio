@@ -113,11 +113,11 @@ const SettingsPage = ({ navigation, handleLogout }: { navigation: any, handleLog
       <View style={styles.container}>
         <Text style={styles.header}>Compte</Text>
         <SettingsItem label="Email" value={user?.email} arrow={false} />
-        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username || "")} arrow={true}/>
+        <SettingsItem label="Nom d'utilisateur" value={user?.username} onPress={() => handleOpenInfoModal("Nom d'utilisateur", user?.username ?? "")} arrow={true}/>
         <SettingsItem label="Mot de passe" value="********" onPress={() => setModalVisible(true)} arrow={true}/>
-        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate || "")} arrow={true}/>
-        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() || "")} arrow={true}/>
-        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() || "")} arrow={true}/>
+        <SettingsItem label="Date de naissance" value={`${user?.birthDate}`} onPress={() => handleOpenInfoModal("Date de naissance", user?.birthDate ?? "")} arrow={true}/>
+        <SettingsItem label="Poids (kg)" value={`${user?.weight} kg`} onPress={() => handleOpenInfoModal("Poids (kg)", user?.weight?.toString() ?? "")} arrow={true}/>
+        <SettingsItem label="Taille (cm)" value={`${user?.height} cm`} onPress={() => handleOpenInfoModal("Taille (cm)", user?.height?.toString() ?? "")} arrow={true}/>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Déconnexion</Text>

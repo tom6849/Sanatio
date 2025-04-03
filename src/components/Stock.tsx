@@ -48,13 +48,13 @@ const Stock = () => {
               </TouchableOpacity>
               <Text style={styles.medicationTitle}>{medication.name}</Text>
               <Text style={styles.label}>Heure de prise :</Text>
-              <Text style={styles.inputData}>{medication.time || 'Non définie'} </Text>
+              <Text style={styles.inputData}>{medication.time ?? 'Non définie'} </Text>
 
               <Text style={styles.label}>Date de début :</Text>
-              <Text style={styles.inputData}>{medication.isoStartDate || 'Non définie'}</Text>
+              <Text style={styles.inputData}>{medication.isoStartDate ?? 'Non définie'}</Text>
 
               <Text style={styles.label}>Date de fin :</Text>
-              <Text style={styles.inputData}>{medication.isoEndDate || 'Non définie'}</Text>
+              <Text style={styles.inputData}>{medication.isoEndDate ?? 'Non définie'}</Text>
 
               <TouchableOpacity
                 style={styles.editButton}
