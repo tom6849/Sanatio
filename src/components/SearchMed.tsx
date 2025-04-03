@@ -4,7 +4,7 @@ import StoredMedicationItem from './StoredMedicamtionItem';
 import FilteredMedicationItem from './FilteredMedicationItem';
 import MedicationModal from './ModalAdd';
 import Search from '../img/ImgSearchMed';
-import { loadStoredMedications, fetchMedicationsFromAPI } from '../services/medicationService';
+import {fetchMedicationsFromAPI } from '../services/medicationService';
 import { Medication } from '../type/Medication';
 
 const SearchMed: React.FC = () => {

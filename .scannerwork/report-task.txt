@@ -2,5 +2,5 @@ projectKey=com.example.sanatio-app
 serverUrl=http://localhost:9000
 serverVersion=25.3.0.104237
 dashboardUrl=http://localhost:9000/dashboard?id=com.example.sanatio-app
-ceTaskId=11b4d330-1722-499c-b3ef-d66fdbc5bfc8
-ceTaskUrl=http://localhost:9000/api/ce/task?id=11b4d330-1722-499c-b3ef-d66fdbc5bfc8
+ceTaskId=9acc0845-8d11-48bd-ba1b-e74f252d1569
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9acc0845-8d11-48bd-ba1b-e74f252d1569

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, Pressable, TextInput, ScrollView, Alert, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, ScrollView, Alert, KeyboardAvoidingView } from 'react-native';
 import CloseModal from '../img/CloseModal';
 import { useMedication } from '../context/MedicationContext';
 import { Medication } from '../type/Medication';

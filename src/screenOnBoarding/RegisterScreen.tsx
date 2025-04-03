@@ -6,7 +6,7 @@ import { Animated } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {User} from '../type/User';
 import DatePicker from "react-native-modern-datepicker";
-import { getToday, getFormatedDate } from "react-native-modern-datepicker";
+import { getToday } from "react-native-modern-datepicker";
 
 const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) => {
   const [email, setEmail] = useState("");

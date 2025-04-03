@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Animated, Text, View } from 'react-native';
+import { StyleSheet, Animated, View } from 'react-native';
 import Svg, { Polyline, Defs, LinearGradient, Stop, Path } from 'react-native-svg';
 import { Easing } from 'react-native';
 

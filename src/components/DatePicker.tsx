@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import DatePicker from 'react-native-modern-datepicker';
-import { Medication } from '../type/Medication';
 
 type DatePickerComponentProps = {
   label: string;

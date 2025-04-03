@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Alert } from 'react-native';
 import { Medication } from '../type/Medication';
 import { useMedication } from '../context/MedicationContext';
 import TimePicker from './TimePicker';
 import DatePickers from './DatePicker';
 import SelectedDay from './SelectDay';
-import { validateMedicationFields, addLocalPrescription , isCurrentDateBeforeEndDate } from '../utils/medicationUtils'; 
+import { addLocalPrescription , isCurrentDateBeforeEndDate } from '../utils/medicationUtils'; 
 import MedicationQuantityInput from './MedicationQuantityInput';
 
 type EditMedicationModalProps = {
