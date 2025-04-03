@@ -6,15 +6,15 @@ const FormOcr = () => {
     // State pour gérer les valeurs des champs du formulaire
     const [nomMedicament, setNomMedicament] = useState('');
     const [consigneUtilisation, setConsigneUtilisation] = useState('');
-    const [joursEntrePrise, setJoursEntrePrise] = useState('');
-    const [nombrePrise, setNombrePrise] = useState('');
+    const [joursEntrePrise] = useState('');
+    const [nombrePrise] = useState('');
     const [dateOrdonnance, setDateOrdonnance] = useState('');
     const [dureeValidite, setDureeValidite] = useState('');
     const [nomMedecin, setNomMedecin] = useState('');
-    const [metierMedecin, setMetierMedecin] = useState('');
+    const [metierMedecin] = useState('');
     const [numeroRPPS, setNumeroRPPS] = useState('');
     const [numeroAM, setNumeroAM] = useState('');
-    const [accepteTermes, setAccepteTermes] = useState(false);
+    const [accepteTermes] = useState(false);
 
     // Fonction de soumission du formulaire
     const handleSubmit = () => {

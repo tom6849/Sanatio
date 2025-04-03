@@ -11,23 +11,8 @@ interface EditInfoModalProps {
     setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const InfoCompteModal: React.FC<EditInfoModalProps> = ({
-   visible,
-   onClose,
-   onSave,
-   fieldName,
-   value,
-   setValue,
-}) => {
-
-    const transformDate = (dateString: string) => {
-        const [day, month, year] = dateString.split('/');
-        return new Date(`${year}-${month}-${day}`);
-    };
-
+const InfoCompteModal: React.FC<EditInfoModalProps> = ({visible,onClose,onSave,fieldName,value,setValue,}) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
-
-
     return (
         <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
             <View style={styles.modalContainer}>
