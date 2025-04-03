@@ -1,4 +1,3 @@
-// Effets.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import { addEffetToStorage, getEffects } from '../services/effetsServices';

@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Medicaments from '../components/Medicaments'
 import { useMedication } from '../context/MedicationContext';

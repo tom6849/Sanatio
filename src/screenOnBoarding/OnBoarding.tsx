@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 
