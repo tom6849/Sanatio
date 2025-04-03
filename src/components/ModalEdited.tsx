@@ -36,7 +36,7 @@ const EditMedicationModal = ({modalVisible, medication, setModalVisible}: EditMe
 
 
   const handleSaveChanges = async () => {
-    if (!isCurrentDateBeforeEndDate( editedStartDate || "", editedEndDate || "")) {
+    if (!isCurrentDateBeforeEndDate( editedStartDate ?? "", editedEndDate ?? "")) {
           Alert.alert(
             'Erreur',
             'La date de début ne peut pas être après la date de fin.',
@@ -76,9 +76,9 @@ const EditMedicationModal = ({modalVisible, medication, setModalVisible}: EditMe
       }
   
       const newMedication = await addLocalPrescription(
-        editedStartDate || medication.isoStartDate || "",  
-        editedEndDate || medication.isoEndDate || "",      
-        editedTime || medication.time || "",              
+        editedStartDate ?? medication.isoStartDate ?? "",  
+        editedEndDate ?? medication.isoEndDate ?? "",      
+        editedTime ?? medication.time ?? "",              
         selectedDays,
         medication,
         nbPill

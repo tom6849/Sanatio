@@ -45,8 +45,8 @@ const Contact = ({ medecin, like, onLikeChange }: {medecin: Medecin; like: boole
                         <Text style={styles.noProfession}>Profession non disponible</Text>
                     )}
                     <Text style={styles.sector}>
-                        🏥 Adresse: {medecin.address || 'Adresse non disponible'},{' '}
-                        {medecin.city || 'Ville non disponible'}, {medecin.postalCode || 'Code postal non disponible'}
+                        🏥 Adresse: {medecin.address ?? 'Adresse non disponible'},{' '}
+                        {medecin.city ?? 'Ville non disponible'}, {medecin.postalCode ?? 'Code postal non disponible'}
                     </Text>
                     {medecin.establishment && <Text style={styles.establishment}>🏢 Établissement: {medecin.establishment}</Text>}
                 </View>
