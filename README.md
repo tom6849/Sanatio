@@ -59,6 +59,17 @@ Now that you have successfully run the app, let's modify it.
 
 You've successfully run and modified your React Native App. :partying_face:
 
+# Problème avec le serveur VPS ? Utiliser une adresse IP locale
+
+Si votre application ne parvient pas à se connecter au serveur VPS, il est possible que celui-ci soit hors service ou inaccessible depuis votre réseau. Dans ce cas, vous pouvez configurer votre application pour utiliser une adresse IP locale.
+
+## Étape 1 : Vérifier la connexion au VPS
+
+Avant de modifier quoi que ce soit, vérifiez si votre VPS est bien accessible :
+
+```bash
+ping votre-vps.example.com
+
 ### Now what?
 
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
