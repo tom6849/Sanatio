@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import HeaderHome from '../components/HeaderHome';
 import MedicationRecap from '../components/MedicationRecap';
 import QuickAction from '../components/QuickAction';

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
 import OcrScanner from '../components/ocr/ScanOrd';
 import SearchMed from '../components/SearchMed';
 import ImgScan from '../img/ImgScan';

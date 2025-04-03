@@ -1,5 +1,4 @@
 import { Medication } from '../type/Medication';
-import { useMedication } from '../context/MedicationContext';
 import { Alert } from 'react-native';
 
 /**

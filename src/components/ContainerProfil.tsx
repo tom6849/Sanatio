@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import Profil from './Profil'
 import ProgressBar from './ProgessBar'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../type/User'
 import { getStoredUser } from '../services/userService';
 
