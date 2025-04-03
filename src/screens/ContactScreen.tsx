@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import React from 'react';
 import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import Contact from '../components/Contact';
 import { fetchMedecinFromAPI, getUserData } from '../services/medecinService';
