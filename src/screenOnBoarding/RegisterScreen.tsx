@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, Alert, Animated } from "react-native";
 import Svg, { Path } from "react-native-svg"; 
 import LinearGradient from 'react-native-linear-gradient';
-import { Animated } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {User} from '../type/User';
-import DatePicker from "react-native-modern-datepicker";
-import { getToday } from "react-native-modern-datepicker";
+import DatePicker, { getToday } from 'react-native-modern-datepicker';
 
 const RegisterScreen = ({ route, navigation }: { route: any, navigation: any }) => {
   const [email, setEmail] = useState("");
