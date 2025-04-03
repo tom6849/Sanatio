@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Photo from '../img/ImgPhoto';
 import ImgSearch from '../img/ImgSearch';
 import ImgDoctor from '../img/ImgDoctor';
