@@ -1,4 +1,4 @@
-Un tutoriel pour lancer l'application sur un PC de l'IUT est disponible dans le [Wiki](https://gitlab.univ-nantes.fr/sae6-sanatio-tom/mobile/-/wikis/Lancer-le-projet-sur-un-PC-de-l'IUT)
+
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
