@@ -1,150 +1,90 @@
+This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# 🛠️ Préparation de l'environnement de développement – Sanatio (React Native)
+# Getting Started
 
-Ce guide vous accompagne dans la configuration de votre environnement de développement **React Native** pour l'application **Sanatio**, que vous soyez sur **Linux** ou **Windows**.
+>**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
----
+## Step 1: Start the Metro Server
 
-## 🔗 Prérequis communs
+First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-- Node.js (version recommandée ≥ 18)
-- npm ou yarn
-- Un éditeur de code (ex: [VS Code](https://code.visualstudio.com/))
-- Git
-
----
-
-## 🐧 Linux
-
-### ☕ Java (version 17 recommandée)
-
-#### 📥 Installation
-
-**Debian / Ubuntu**
-```bash
-sudo apt-get install openjdk-17-jdk
-```
-
-**Fedora**
-```bash
-sudo dnf install -y java-17-openjdk
-sudo dnf install -y java-17-openjdk-devel
-```
-
-#### ✅ Vérification
-```bash
-java -version     # → openjdk version "17.X.X"
-javac -version    # → javac 17.X.X
-```
-
-#### 🔄 Configuration de JAVA_HOME
-
-Dans `~/.bashrc` ou `~/.zshrc` :
-```bash
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH=$JAVA_HOME/bin:$PATH
-```
-
----
-
-### 📱 Android Studio
-
-1. Installez Android Studio : [Instructions officielles](https://developer.android.com/studio/install#linux)
-2. Ajoutez Android Studio au `PATH` :
-```bash
-export PATH=/chemin/vers/android-studio/bin:$PATH
-```
-
-#### Configuration recommandée dans Android Studio
-
-- **SDK Platforms** : cochez `Android 14.0 (UpsideDownCake)`
-- **SDK Tools** :
-  - `Android SDK Build-Tools` v34.0.0
-  - `Android SDK Command-line Tools (latest)`
-- Configurez un **AVD** avec API 34
-
-#### Variables d'environnement Android
-
-Ajoutez dans votre `~/.bashrc` ou `~/.zshrc` :
+To start Metro, run the following command from the _root_ of your React Native project:
 
 ```bash
-export ANDROID_HOME=/chemin/vers/android-sdk
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-```
-
----
-
-### ⚙️ Gradle
-
-1. Téléchargez depuis [gradle.org/install](https://gradle.org/install/)
-2. Décompressez dans `/opt/gradle`
-3. Ajoutez dans `~/.bashrc` :
-```bash
-export GRADLE_HOME=/opt/gradle/gradle-X.X
-export PATH=$GRADLE_HOME/bin:$PATH
-```
-
----
-
-## 🪟 Windows
-
-### ☕ Java
-
-1. Téléchargez [OpenJDK 17 (Adoptium)](https://adoptium.net/fr/temurin/releases/?version=17)
-2. Installez et récupérez le chemin d'installation (ex: `C:\Program Files\Eclipse Adoptium\jdk-17`)
-3. Ajoutez les variables d’environnement :
-   - `JAVA_HOME` → vers le dossier d'installation de Java
-   - Ajoutez `%JAVA_HOME%\bin` au `PATH`
-
-### 📱 Android Studio
-
-1. Installez Android Studio : [Instructions Windows](https://developer.android.com/studio/install)
-2. Dans Android Studio :
-   - Installez `Android SDK`, `Command-line Tools`, et `Build-Tools` v34.0.0
-   - Dans l’onglet `SDK Platforms`, cochez `Android 14.0 (UpsideDownCake)`
-   - Créez un AVD avec API 34
-
-### 🧭 Variables d’environnement Android
-
-Ajoutez dans les variables système :
-- `ANDROID_HOME` → ex: `C:\Users\<Nom>\AppData\Local\Android\Sdk`
-- Ajoutez au `PATH` :
-  - `%ANDROID_HOME%\platform-tools`
-  - `%ANDROID_HOME%\cmdline-tools\latest\bin`
-  - `%ANDROID_HOME%\emulator`
-
-### ⚙️ Gradle
-
-1. Téléchargez Gradle ZIP : [https://gradle.org/install](https://gradle.org/install)
-2. Décompressez dans `C:\Gradle`
-3. Variables d’environnement :
-   - `GRADLE_HOME` → `C:\Gradle\gradle-X.X`
-   - Ajoutez `%GRADLE_HOME%\bin` au `PATH`
-
----
-
-## 🚀 Lancer le projet React Native
-
-1. Démarrez le serveur Metro :
-```bash
+# using npm
 npm start
+
+# OR using Yarn
+yarn start
 ```
-2. Dans un autre terminal, lancez l’application :
+
+## Step 2: Start your Application
+
+Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+
+### For Android
+
 ```bash
+# using npm
 npm run android
+
+# OR using Yarn
+yarn android
 ```
-> ✅ L’émulateur Android se lance automatiquement.
 
----
+### For iOS
 
-## 🆘 En cas de problème
-
-- Utilisez `npx react-native doctor` pour identifier les éléments manquants.
-- Rechargez les fichiers de config :
 ```bash
-source ~/.bashrc  # ou ~/.zshrc
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
 ```
+
+If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+
+This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+
+## Step 3: Modifying your App
+
+Now that you have successfully run the app, let's modify it.
+
+1. Open `App.tsx` in your text editor of choice and edit some lines.
+2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+
+   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+
+## Congratulations! :tada:
+
+You've successfully run and modified your React Native App. :partying_face:
+
+# Problème avec le serveur VPS ? Utiliser une adresse IP locale
+
+Si votre application ne parvient pas à se connecter au serveur VPS, il est possible que celui-ci soit hors service ou inaccessible depuis votre réseau. Dans ce cas, vous pouvez configurer votre application pour utiliser une adresse IP locale.
+
+## Étape 1 : Vérifier la connexion au VPS
+
+Avant de modifier quoi que ce soit, vérifiez si votre VPS est bien accessible :
+
+```bash
+ping votre-vps.example.com
+
+### Now what?
+
+- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
+- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+
+# Troubleshooting
+
+If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+
+# Learn More
+
+To learn more about React Native, take a look at the following resources:
+
+- [React Native Website](https://reactnative.dev) - learn more about React Native.
+- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
+- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
